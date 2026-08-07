@@ -67,13 +67,14 @@ function render(d) {
   const badge = $("dataBadge");
   badge.className = "market" + (state === "STALE" ? " stale" : state === "ERROR" ? " error" : "");
   badge.innerHTML = `<i></i> ${state === "FRESH" ? "DATA FRESH" : state}`;
+  // (i) 박스 = 그날의 요약 (항상 표시), 상태 경고는 색/문구로 병기
   const banner = $("stateBanner");
-  if (state !== "FRESH") {
-    banner.hidden = false;
-    banner.className = "sample-banner " + (state === "ERROR" ? "err" : "warn");
-    $("stateMsg").innerHTML = state === "STALE" ? "<b>데이터 지연</b> · 마지막 생성 이후 시간이 지났습니다. 최신이 아닐 수 있어요."
-      : state === "PARTIAL" ? "<b>일부 데이터 누락</b> · 계좌/포지션 일부가 비어 있습니다." : "<b>데이터 오류</b>";
-  } else banner.hidden = true;
+  banner.className = "sample-banner " + (state === "ERROR" ? "err" : state === "FRESH" ? "" : "warn");
+  let sum = daySummary(d);
+  if (state === "STALE") sum += "  ·  데이터 지연(최신 아닐 수 있음)";
+  else if (state === "PARTIAL") sum += "  ·  일부 데이터 누락";
+  else if (state === "ERROR") sum = "데이터 오류 — 읽기 실패";
+  $("summaryText").innerHTML = `<b>오늘의 요약</b> ${sum}`;
 
   // 모드 배지
   const mb = $("modeBadge"); const mode = (d.mode || "OFF");
@@ -83,7 +84,6 @@ function render(d) {
   const now = new Date();
   $("dateLine").textContent = `${WD[now.getDay()]} · ${String(now.getDate()).padStart(2, "0")} ${MO[now.getMonth()]} ${now.getFullYear()}`;
   $("greeting").textContent = greet(now.getHours());
-  $("daySummary").textContent = daySummary(d);
 
   // 총자산 카드
   $("equity").textContent = won(a.equity);
@@ -137,8 +137,21 @@ function render(d) {
       <td class="${sign(p.pnl)}">${(p.pnl > 0 ? "+" : "") + won(p.pnl)}</td>
       <td class="${sign(p.pnlRate)}">${pct(p.pnlRate)}</td></tr>`).join("");
 
+  // 다음 거래일 계획
+  renderPlan(d.plan || {}, d.marketDate);
+
   // 킬스위치
   $("killLabel").textContent = sys.killSwitch === "ON" ? "KILL SWITCH ON" : "Trading engine · " + mode;
+}
+
+function renderPlan(plan, marketDate) {
+  $("planDate").textContent = (plan.decisionDate || marketDate || "") + " 종가 기준";
+  const li = (arr, empty) => (arr && arr.length)
+    ? arr.map(x => `<li><b>${x.name}</b> ${x.qty ? x.qty + "주 " : ""}<small>${x.reason || x.note || ""}</small></li>`).join("")
+    : `<li class="none">${empty}</li>`;
+  $("planBuys").innerHTML = li(plan.buys, "매수 예정 없음");
+  $("planSells").innerHTML = li(plan.sells, "매도 예정 없음");
+  $("planWait").innerHTML = li(plan.waiting, "대기 종목 없음");
 }
 
 function renderChart(hist, equity, principal) {

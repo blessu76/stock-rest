@@ -32,6 +32,22 @@
 .hist-table table{min-width:0}
 .hist-table td,.hist-table th{padding:8px 10px}
 .back-link{color:var(--green);text-decoration:none;font:500 11px var(--font-geist-mono)}
+/* 다음 거래일 계획 */
+.plan-card{background:linear-gradient(145deg,#0e1d19,#0a1613);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:14px}
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.plan-col{background:#0a1613;border:1px solid var(--line);border-radius:10px;padding:14px}
+.plan-col h4{margin:0 0 10px;font-size:11px;color:#9db8ae;font-weight:600}
+.plan-col ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.plan-col li{color:#c2d3cd;display:flex;gap:7px;align-items:baseline;flex-wrap:wrap}
+.plan-col li b{font-family:var(--font-geist-sans);font-size:12px;font-weight:600}
+.plan-col li small{color:var(--muted);font-size:9px;font-family:var(--font-geist-mono)}
+.plan-col li.none{color:var(--muted);font-size:10px}
+.plan-col.buy{box-shadow:inset 3px 0 var(--green)}.plan-col.sell{box-shadow:inset 3px 0 var(--red)}.plan-col.wait{box-shadow:inset 3px 0 var(--amber)}
+@media(max-width:760px){.plan-grid{grid-template-columns:1fr}}
+/* 기간 필터 */
+.range-tabs{display:flex;gap:4px;background:#08130f;border-radius:7px;padding:3px}
+.range-tabs button{border:0;background:transparent;color:#687f77;font:500 10px var(--font-geist-mono);padding:6px 11px;border-radius:5px;cursor:pointer}
+.range-tabs button.active{background:#19342b;color:var(--green)}
 .market{font:600 10px var(--font-geist-mono);padding:9px 12px;border:1px solid var(--line);border-radius:99px;color:#9ab0a9}
 .market i,.login-note i,footer i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:7px;box-shadow:0 0 9px var(--green)}
 .badge-mode{font:700 10px var(--font-geist-mono);letter-spacing:.1em;padding:7px 11px;border-radius:99px;border:1px solid var(--line)}
@@ -134,4 +150,4 @@ footer{display:flex;justify-content:space-between;padding:18px 4px 0;font-size:8
 .visual-line{position:absolute;left:-10%;right:-10%;height:140px;top:53%;border-top:3px solid var(--green);border-radius:50%;transform:rotate(-11deg);box-shadow:0 -20px 60px #32d69b55}
 
 @media(max-width:1100px){.hero-grid{grid-template-columns:1.3fr 1fr}.risk-card{grid-column:1/-1}.risk-card ul{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.lower-grid{grid-template-columns:1fr}.activity-card{min-height:280px}}
-@media(max-width:760px){.app-shell{display:block}.sidebar{height:auto;position:relative;padding:16px;border-right:0;border-bottom:1px solid var(--line);display:flex;flex-direction:row;align-items:center}.brand{padding:0}.brand strong{display:none}.sidebar nav{display:flex;margin-left:auto}.sidebar nav a{padding:8px;font-size:0}.sidebar nav a i{font-size:14px}.sidebar nav a:not(.active){display:none}.sidebar-bottom{display:none}.content{padding:20px 16px}.topbar h1{font-size:20px}.hero-grid{grid-template-columns:1fr}.risk-card{grid-column:auto}.lower-grid{grid-template-columns:1fr}.balance{font-size:30px}.chart-card{padding:16px}.chart-wrap{height:210px}.positions{padding:16px}footer{gap:10px;flex-direction:column}.login-shell{grid-template-columns:1fr}.login-card{padding:25px 20px}.login-brand{margin-bottom:45px}.login-card h1{font-size:35px}.login-visual{display:none}}
+@media(max-width:760px){.app-shell{display:block}.sidebar{height:auto;position:relative;padding:16px;border-right:0;border-bottom:1px solid var(--line);display:flex;flex-direction:row;align-items:center}.brand{padding:0}.brand strong{display:none}.sidebar nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}.sidebar nav a{padding:9px 11px;font-size:0;background:#0c1916}.sidebar nav a i{font-size:17px}.sidebar-bottom{display:none}.content{padding:20px 16px}.topbar h1{font-size:20px}.hero-grid{grid-template-columns:1fr}.risk-card{grid-column:auto}.lower-grid{grid-template-columns:1fr}.balance{font-size:30px}.chart-card{padding:16px}.chart-wrap{height:210px}.positions{padding:16px}footer{gap:10px;flex-direction:column}.login-shell{grid-template-columns:1fr}.login-card{padding:25px 20px}.login-brand{margin-bottom:45px}.login-card h1{font-size:35px}.login-visual{display:none}}

@@ -53,14 +53,14 @@
 
   <section class="content" id="overview">
     <header class="topbar">
-      <div><p class="eyebrow" id="dateLine">—</p><h1 id="greeting">대시보드</h1><p class="day-summary" id="daySummary"></p></div>
+      <div><p class="eyebrow" id="dateLine">—</p><h1 id="greeting">대시보드</h1></div>
       <div class="top-actions">
         <span class="badge-mode" id="modeBadge">—</span>
         <span class="market" id="dataBadge"><i></i> —</span>
       </div>
     </header>
 
-    <div class="sample-banner" id="stateBanner" hidden><span>i</span><p id="stateMsg"></p></div>
+    <div class="sample-banner" id="stateBanner"><span>i</span><p id="summaryText">—</p></div>
 
     <section class="hero-grid">
       <article class="balance-card">
@@ -102,6 +102,15 @@
         <div class="status-callout"><span class="status-icon">✓</span><div><b id="cycleMsg">—</b><small id="lastCycle">—</small></div></div>
         <div class="timeline" id="timeline"></div>
       </article>
+    </section>
+
+    <section class="plan-card" id="plan">
+      <div class="section-title"><div><h2>다음 거래일 계획</h2><p>종가 기준 판단 결과 · 다음 세션 실행 예정</p></div><span class="updated" id="planDate">—</span></div>
+      <div class="plan-grid">
+        <div class="plan-col buy"><h4>🟢 매수 예정</h4><ul id="planBuys"></ul></div>
+        <div class="plan-col sell"><h4>🔴 매도 예정</h4><ul id="planSells"></ul></div>
+        <div class="plan-col wait"><h4>⏳ 반등 대기</h4><ul id="planWait"></ul></div>
+      </div>
     </section>
 
     <section class="positions" id="positions">

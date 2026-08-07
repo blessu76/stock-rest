@@ -25,12 +25,12 @@ function sparkline(rows) {
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
-function render(d) {
-  $("app").hidden = false;
-  $("asOf").innerHTML = `<i></i> ${d.marketDate || ""}`;
-  const ph = d.priceHistory || {};
+let DATA = null;
+
+function draw(days) {
+  const ph = (DATA && DATA.priceHistory) || {};
   const cards = Object.keys(ph).map(code => {
-    const item = ph[code], rows = item.rows || [];
+    const item = ph[code], rows = (item.rows || []).slice(0, days);   // rows=최신 먼저
     const body = rows.map(r => `<tr><td>${r.date}</td><td>₩${r.close.toLocaleString("ko-KR")}</td><td class="${sgn(r.chg)}">${pct(r.chg)}</td></tr>`).join("");
     return `<div class="hist-card">
       <div class="section-title"><div><h3>${item.name}</h3><span class="hcode">${code}</span></div></div>
@@ -39,6 +39,18 @@ function render(d) {
     </div>`;
   }).join("");
   $("histGrid").innerHTML = cards || "<p style='color:#7f9a91;font-size:12px'>일자별 데이터가 아직 없습니다.</p>";
+}
+
+function render(d) {
+  DATA = d;
+  $("app").hidden = false;
+  $("asOf").innerHTML = `<i></i> ${d.marketDate || ""}`;
+  draw(60);
+  document.querySelectorAll("#rangeTabs button").forEach(btn => btn.onclick = () => {
+    document.querySelectorAll("#rangeTabs button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    draw(parseInt(btn.dataset.d, 10));
+  });
   $("lockBtn").onclick = e => { e.preventDefault(); sessionStorage.removeItem("auth"); location.href = "index.html"; };
 }
 
