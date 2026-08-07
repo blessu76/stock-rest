@@ -108,7 +108,9 @@ function render(d) {
   $("marketStateLine").textContent = "시장 " + s.marketState;
   const riskLevel = { AGGRESSIVE: 1, RECOVERED: 1, REDUCED_RISK: 2, UNKNOWN: 3, BUY_PAUSED: 3, CHALLENGE_STOPPED: 5 }[s.riskState] || 3;
   [...$("riskBars").children].forEach((el, i) => el.className = i < riskLevel ? "on" : "");
-  const rd = $("riskDaily"); rd.textContent = pct(a.dailyReturnPct); rd.className = sign(a.dailyReturnPct);
+  const rd = $("riskDaily");
+  rd.textContent = `${pct(a.dailyReturnPct)} (${a.dailyPnl > 0 ? "+" : ""}${won(a.dailyPnl)})`;
+  rd.className = sign(a.dailyReturnPct);
   $("riskShort").textContent = won(a.shortfall);
   $("riskCash").textContent = a.equity ? (a.cash / a.equity * 100).toFixed(1) + "%" : "—";
   $("riskBadge").textContent = s.marketState === "RISK_ON" ? "RISK ON" : s.marketState === "RISK_OFF" ? "RISK OFF" : "UNKNOWN";
