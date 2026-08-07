@@ -48,6 +48,16 @@
 .range-tabs{display:flex;gap:4px;background:#08130f;border-radius:7px;padding:3px}
 .range-tabs button{border:0;background:transparent;color:#687f77;font:500 10px var(--font-geist-mono);padding:6px 11px;border-radius:5px;cursor:pointer}
 .range-tabs button.active{background:#19342b;color:var(--green)}
+/* 장중 현황 */
+.intraday-card{margin-top:14px}
+.intraday-card #intradaySvg{cursor:pointer}
+.legend-price{background:#c2d3cd}.legend-avg{border-top:1px dashed var(--amber)}
+.drill-hint{color:var(--green)!important}
+.avg-line{fill:none;stroke:var(--amber);stroke-width:1;stroke-dasharray:5 5;vector-effect:non-scaling-stroke}
+.price-line{fill:none;stroke-width:2.5;vector-effect:non-scaling-stroke}
+.drill{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.drill h4{margin:0 0 10px;font-size:11px;color:#9db8ae}
+.drill .hist-table{max-height:280px}
 .market{font:600 10px var(--font-geist-mono);padding:9px 12px;border:1px solid var(--line);border-radius:99px;color:#9ab0a9}
 .market i,.login-note i,footer i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:7px;box-shadow:0 0 9px var(--green)}
 .badge-mode{font:700 10px var(--font-geist-mono);letter-spacing:.1em;padding:7px 11px;border-radius:99px;border:1px solid var(--line)}

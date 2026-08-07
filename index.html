@@ -86,6 +86,14 @@
       </article>
     </section>
 
+    <section class="chart-card intraday-card" id="intraday">
+      <div class="chart-head"><div><h2>장중 현황</h2><p>10분 간격 주가 · 평단가 대비 · 차트를 클릭하면 상세</p></div><div class="tabs" id="intradayTabs"></div></div>
+      <div class="chart-summary"><b id="intradayNow">—</b><span id="intradayVs">—</span></div>
+      <div class="chart-wrap"><div class="axis" id="intradayAxis"></div><svg viewBox="0 0 620 220" id="intradaySvg" preserveAspectRatio="none"></svg></div>
+      <div class="chart-legend"><span><i class="legend-price"></i>주가</span><span><i class="legend-avg"></i>평단가</span><span class="drill-hint">↳ 클릭 시 시간대별 상세</span></div>
+      <div class="drill" id="intradayDrill" hidden></div>
+    </section>
+
     <section class="lower-grid">
       <article class="chart-card" id="performance">
         <div class="chart-head"><div><h2>자산 추이</h2><p>계좌 평가액과 목표 경로 비교</p></div></div>

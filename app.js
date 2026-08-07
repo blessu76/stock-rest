@@ -137,11 +137,72 @@ function render(d) {
       <td class="${sign(p.pnl)}">${(p.pnl > 0 ? "+" : "") + won(p.pnl)}</td>
       <td class="${sign(p.pnlRate)}">${pct(p.pnlRate)}</td></tr>`).join("");
 
+  // 장중 현황
+  renderIntradaySection(d.intraday || { stocks: {} });
+
   // 다음 거래일 계획
   renderPlan(d.plan || {}, d.marketDate);
 
   // 킬스위치
   $("killLabel").textContent = sys.killSwitch === "ON" ? "KILL SWITCH ON" : "Trading engine · " + mode;
+}
+
+// ---- 장중 현황 ----
+let INTRA = null, INTRA_SEL = null;
+function renderIntradaySection(intr) {
+  INTRA = intr || { stocks: {} };
+  const codes = Object.keys(INTRA.stocks || {});
+  const tabs = $("intradayTabs"), svg = $("intradaySvg");
+  if (!codes.length) {
+    tabs.innerHTML = ""; svg.innerHTML = ""; $("intradayAxis").innerHTML = "";
+    $("intradayNow").textContent = "—";
+    $("intradayVs").textContent = "장중 데이터 수집 전 (장 시작 후 10분마다 기록)";
+    $("intradayVs").className = ""; $("intradayDrill").hidden = true; return;
+  }
+  INTRA_SEL = (INTRA_SEL && codes.includes(INTRA_SEL)) ? INTRA_SEL : codes[0];
+  tabs.innerHTML = codes.map(c => `<button data-c="${c}">${INTRA.stocks[c].name}</button>`).join("");
+  tabs.querySelectorAll("button").forEach(b => b.onclick = () => { INTRA_SEL = b.dataset.c; $("intradayDrill").hidden = true; drawIntraday(); });
+  svg.onclick = toggleIntradayDrill;
+  drawIntraday();
+}
+function drawIntraday() {
+  const st = INTRA.stocks[INTRA_SEL], pts = st.points || [], avg = st.avg || 0;
+  $("intradayTabs").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.c === INTRA_SEL));
+  const svg = $("intradaySvg");
+  if (!pts.length) { svg.innerHTML = ""; $("intradayNow").textContent = "—"; $("intradayVs").textContent = "데이터 없음"; return; }
+  const W = 620, H = 200, prices = pts.map(p => p.price);
+  const vmin = Math.min(...prices, avg) * 0.999, vmax = Math.max(...prices, avg) * 1.001;
+  const X = i => pts.length < 2 ? W / 2 : (i / (pts.length - 1)) * W;
+  const Y = v => vmax === vmin ? H / 2 : H - ((v - vmin) / (vmax - vmin)) * H;
+  const line = prices.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
+  const col = prices[prices.length - 1] >= prices[0] ? "#f45b5b" : "#4c8dff";
+  const avgY = Y(avg).toFixed(1);
+  const tlabel = (i) => `<text x="${X(i).toFixed(1)}" y="214" fill="#526a62" font-size="8" text-anchor="middle" font-family="Geist Mono">${pts[i].t}</text>`;
+  const times = pts.length > 1 ? [tlabel(0), tlabel(Math.floor(pts.length / 2)), tlabel(pts.length - 1)].join("") : tlabel(0);
+  svg.innerHTML =
+    `<line x1="0" y1="44" x2="620" y2="44" class="grid-line"/><line x1="0" y1="99" x2="620" y2="99" class="grid-line"/><line x1="0" y1="154" x2="620" y2="154" class="grid-line"/>
+     <line x1="0" y1="${avgY}" x2="620" y2="${avgY}" class="avg-line"/>
+     <text x="616" y="${(avgY - 4)}" fill="#f5c969" font-size="9" text-anchor="end" font-family="Geist Mono">평단 ${avg.toLocaleString("ko-KR")}</text>
+     <polyline points="${line}" class="price-line" style="stroke:${col}"/>${times}`;
+  const axisV = [vmax, (vmax + vmin) / 2, vmin].map(v => `<span>${Math.round(v / 10000)}만</span>`);
+  $("intradayAxis").innerHTML = axisV.join("");
+  const last = prices[prices.length - 1], vsAvg = (last / avg - 1) * 100;
+  $("intradayNow").textContent = "₩" + last.toLocaleString("ko-KR");
+  const vs = $("intradayVs"); vs.textContent = `평단 대비 ${vsAvg > 0 ? "+" : ""}${vsAvg.toFixed(2)}%  ·  ${pts.length}틱`;
+  vs.className = vsAvg > 0 ? "positive" : vsAvg < 0 ? "negative" : "";
+}
+function toggleIntradayDrill() {
+  const d = $("intradayDrill");
+  if (!d.hidden) { d.hidden = true; return; }
+  const st = INTRA.stocks[INTRA_SEL], pts = st.points || [];
+  let rows = "";
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i], prev = i > 0 ? pts[i - 1].price : p.price;
+    const tick = (p.price / prev - 1) * 100, va = (p.price / st.avg - 1) * 100;
+    rows += `<tr><td>${p.t}</td><td>₩${p.price.toLocaleString("ko-KR")}</td><td class="${sign(tick)}">${tick > 0 ? "+" : ""}${tick.toFixed(2)}%</td><td class="${sign(va)}">${va > 0 ? "+" : ""}${va.toFixed(2)}%</td></tr>`;
+  }
+  d.innerHTML = `<h4>${st.name} 장중 상세 · ${INTRA.date || ""}</h4><div class="hist-table"><table><thead><tr><th>시각</th><th>주가</th><th>전틱</th><th>평단대비</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  d.hidden = false;
 }
 
 function renderPlan(plan, marketDate) {
