@@ -21,7 +21,7 @@ function sparkline(rows) {
   const W = 300, H = 46, min = Math.min(...vals), max = Math.max(...vals);
   const up = vals[vals.length - 1] >= vals[0];
   const pts = vals.map((v, i) => `${(i / (vals.length - 1) * W).toFixed(1)},${(H - (max === min ? H / 2 : (v - min) / (max - min) * H)).toFixed(1)}`).join(" ");
-  const col = up ? "#32d69b" : "#ff7f78";
+  const col = up ? "#f45b5b" : "#4c8dff";   // 한국식: 상승=빨강, 하락=파랑
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
 }
 

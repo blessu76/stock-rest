@@ -1,5 +1,5 @@
 /* 시안(recovery.console) 이식 — globals.css 기반 + Geist 폰트 + 상태 배지 */
-:root{--font-geist-sans:'Geist',system-ui,Arial,sans-serif;--font-geist-mono:'Geist Mono',ui-monospace,monospace;--bg:#07110f;--panel:#0c1916;--panel2:#10211d;--line:#1d312c;--text:#eef7f3;--muted:#7f9a91;--green:#32d69b;--green-soft:#103d30;--red:#ff7f78;--amber:#f5c969}
+:root{--font-geist-sans:'Geist',system-ui,Arial,sans-serif;--font-geist-mono:'Geist Mono',ui-monospace,monospace;--bg:#07110f;--panel:#0c1916;--panel2:#10211d;--line:#1d312c;--text:#eef7f3;--muted:#7f9a91;--green:#32d69b;--green-soft:#103d30;--red:#ff7f78;--amber:#f5c969;--up:#f45b5b;--down:#4c8dff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-geist-sans)}
 .eyebrow{font:600 11px var(--font-geist-mono);letter-spacing:.14em;color:#6c8a80}
 .app-shell{min-height:100vh;display:grid;grid-template-columns:220px 1fr;background:radial-gradient(circle at 52% -20%,#16362c 0,transparent 35%),var(--bg)}
@@ -42,7 +42,7 @@
 .plan-col li b{font-family:var(--font-geist-sans);font-size:12px;font-weight:600}
 .plan-col li small{color:var(--muted);font-size:9px;font-family:var(--font-geist-mono)}
 .plan-col li.none{color:var(--muted);font-size:10px}
-.plan-col.buy{box-shadow:inset 3px 0 var(--green)}.plan-col.sell{box-shadow:inset 3px 0 var(--red)}.plan-col.wait{box-shadow:inset 3px 0 var(--amber)}
+.plan-col.buy{box-shadow:inset 3px 0 var(--up)}.plan-col.sell{box-shadow:inset 3px 0 var(--down)}.plan-col.wait{box-shadow:inset 3px 0 var(--amber)}
 @media(max-width:760px){.plan-grid{grid-template-columns:1fr}}
 /* 기간 필터 */
 .range-tabs{display:flex;gap:4px;background:#08130f;border-radius:7px;padding:3px}
@@ -68,7 +68,7 @@
 .card-head em{font:500 9px var(--font-geist-mono);font-style:normal;border:1px solid var(--line);padding:5px 7px;border-radius:6px}
 .balance{font:500 34px var(--font-geist-mono);letter-spacing:-.06em;margin-top:18px}
 .day-change{display:flex;gap:10px;align-items:center;margin-top:6px}
-.day-change b{font:600 11px var(--font-geist-mono);color:var(--green)}.day-change span{font-size:10px;color:#719087}
+.day-change b{font:600 11px var(--font-geist-mono);color:#c2d3cd}.day-change span{font-size:10px;color:#719087}
 .progress-meta{display:flex;justify-content:space-between;margin-top:24px;font-size:10px;color:#799187}
 .progress-meta strong{color:#d7e8e2;font:600 11px var(--font-geist-mono)}
 .progress{height:4px;background:#193029;border-radius:9px;margin-top:8px}
@@ -93,7 +93,8 @@
 .risk-card ul{list-style:none;padding:12px 0 0;margin:12px 0 0;border-top:1px solid var(--line)}
 .risk-card li{display:flex;justify-content:space-between;padding:4px 0;font-size:10px;color:var(--muted)}
 .risk-card li b{color:#dbe9e4;font:500 10px var(--font-geist-mono)}
-.positive{color:var(--green)!important}.negative{color:var(--red)!important}
+/* 한국식 주식 색상: 상승=빨강, 하락=파랑 */
+.positive{color:var(--up)!important}.negative{color:var(--down)!important}
 .lower-grid{display:grid;grid-template-columns:1.75fr 1fr;gap:14px;margin-top:14px}
 .chart-card,.activity-card{padding:20px}
 .chart-head,.section-title{display:flex;justify-content:space-between;align-items:flex-start}
@@ -109,7 +110,7 @@
 .axis{position:absolute;left:0;top:4px;height:165px;display:flex;flex-direction:column;justify-content:space-between;font:500 8px var(--font-geist-mono);color:#526a62}
 .chart-legend{display:flex;gap:18px;justify-content:center;font-size:9px;color:var(--muted)}
 .chart-legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:6px}
-.legend-live{background:var(--green)}.legend-target{border-top:1px dashed #81948d}
+.legend-live{background:#c2d3cd}.legend-target{border-top:1px dashed #81948d}
 .section-title .updated{font:500 8px var(--font-geist-mono);color:var(--muted)}
 .status-callout{display:flex;gap:10px;align-items:center;background:#102b23;border:1px solid #1a4b3a;padding:11px;border-radius:9px;margin:18px 0}
 .status-icon{width:28px;height:28px;border-radius:50%;background:#1b503c;color:var(--green);display:grid;place-items:center;flex:none}
@@ -119,7 +120,7 @@
 .timeline i{width:8px;height:8px;border-radius:50%;margin-top:2px;position:relative}
 .timeline i:after{content:"";position:absolute;width:1px;height:38px;background:var(--line);left:3px;top:9px}
 .timeline>div:last-child i:after{display:none}
-.timeline .done{background:var(--green)}.timeline .muted{border:1px solid #587068}.timeline .sell{background:var(--red)}.timeline .buy{background:var(--green)}
+.timeline .done{background:var(--green)}.timeline .muted{border:1px solid #587068}.timeline .sell{background:var(--down)}.timeline .buy{background:var(--up)}
 .timeline p{margin:0}.timeline p b,.timeline p small{display:block}.timeline p b{font-size:10px}.timeline p small{font-size:8px;color:var(--muted);margin-top:4px}
 .positions{padding:20px;margin-top:14px}.updated{font:500 8px var(--font-geist-mono);color:var(--muted)}
 .table-wrap{overflow-x:auto;margin-top:14px}

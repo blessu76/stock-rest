@@ -166,12 +166,14 @@ function renderChart(hist, equity, principal) {
   const X = i => (i / (n - 1)) * W;
   const Y = v => H - ((v - min) / (max - min)) * H;
   const poly = arr => arr.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
+  // 한국식: 기간 상승=빨강, 하락=파랑
+  const col = liveR[liveR.length - 1] >= liveR[0] ? "#f45b5b" : "#4c8dff";
   $("chartSvg").innerHTML =
-    `<defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#32d69b" stop-opacity=".28"/><stop offset="1" stop-color="#32d69b" stop-opacity="0"/></linearGradient></defs>
+    `<defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".26"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
      <line x1="0" y1="44" x2="620" y2="44" class="grid-line"/><line x1="0" y1="99" x2="620" y2="99" class="grid-line"/><line x1="0" y1="154" x2="620" y2="154" class="grid-line"/>
      <polyline points="${poly(target)}" class="target-line"/>
      <polygon points="${poly(liveR)} 620,220 0,220" fill="url(#area)"/>
-     <polyline points="${poly(liveR)}" class="asset-line"/>`;
+     <polyline points="${poly(liveR)}" class="asset-line" style="stroke:${col}"/>`;
   const lo = Math.round(max / 10000), hi = Math.round(min / 10000);
   $("axis").innerHTML = [lo, Math.round((lo + hi) / 2), hi].map(v => `<span>${v}만</span>`).join("");
 }
