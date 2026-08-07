@@ -57,7 +57,8 @@ function sideNav(active) {
     <a ${active==='risk'?'class="active"':''} href="risk.html"><i>◇</i>Risk monitor</a>
   </nav>
   <div class="sidebar-bottom">
-    <a href="#" id="lockBtn"><i>⚙</i>잠금</a>
+    <a ${active==='settings'?'class="active"':''} href="settings.html"><i>⚙</i>설정</a>
+    <a href="#" id="lockBtn"><i>⏻</i>로그아웃</a>
     <div class="profile"><span>DK</span><div><b>Davy Kim</b><small>Private account</small></div></div>
   </div>`;
 }

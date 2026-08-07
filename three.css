@@ -96,5 +96,27 @@
 .comp-list li{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
 .comp-list b{font:500 10px var(--font-geist-mono);color:#d5e2dd}
 .alert-banner{border:1px solid #5a2320;background:#210e0c;color:#f3b6b1;padding:12px 16px;border-radius:10px;font-size:12px;margin-bottom:14px}
+/* 설정 > 종목관리 */
+.uni-search{position:relative;max-width:520px;margin-bottom:16px}
+.uni-results{position:absolute;top:52px;left:0;right:0;background:#0c1916;border:1px solid var(--line);border-radius:10px;z-index:20;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.uni-hit{display:flex;gap:10px;align-items:center;padding:11px 14px;cursor:pointer;border-bottom:1px solid #142a22}
+.uni-hit:last-child{border-bottom:0}
+.uni-hit:hover{background:#11231e}
+.uni-hit b{font-size:12px}
+.uni-hit .hcode{font:500 9px var(--font-geist-mono);color:var(--muted)}
+.uni-hit em{margin-left:auto}
+.uni-hit.none{color:var(--muted);font-size:11px;cursor:default}
+.uni-pick{border:1px solid #24513f;background:#0e241e;border-radius:12px;padding:16px;margin-bottom:20px;max-width:640px}
+.uni-pick-head{display:flex;gap:10px;align-items:baseline;margin-bottom:8px}
+.uni-pick-head b{font-size:15px}
+.uni-note{color:#9db8ae;font-size:10px;margin:0 0 10px;line-height:1.6}
+.cmdbox{display:flex;gap:8px;align-items:center;background:#07110f;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.cmdbox code{font:500 10px var(--font-geist-mono);color:#c9ded6;overflow-x:auto;white-space:nowrap;flex:1}
+.cmdbox button,.mini-copy{border:0;border-radius:7px;background:var(--green);color:#052118;font:700 10px var(--font-geist-mono);padding:8px 12px;cursor:pointer;flex:none}
+.mini-copy{background:#173c2f;color:var(--green);font-weight:600}
+.uni-copied{color:var(--green);font-size:10px;margin:8px 0 0}
+.uni-subtitle{font-size:12px;color:#9db8ae;margin:20px 0 8px}
+.uni-row{grid-template-columns:70px 1fr 90px 110px 150px;min-width:560px}
+.logout-btn{max-width:220px}
 @media(max-width:1100px){.cards3{grid-template-columns:1fr}.stats.four{grid-template-columns:repeat(2,1fr)}.risk-grid3{grid-template-columns:1fr}.split3{grid-template-columns:1fr}}
 @media(max-width:760px){.stats.four{grid-template-columns:1fr 1fr}.risk-hero3{grid-template-columns:1fr}.risk-hero3>aside{border-left:0;border-top:1px solid var(--line)}.page-head h1{font-size:24px}}

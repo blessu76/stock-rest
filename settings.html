@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>설정 — recovery.console</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="three.css">
+</head>
+<body>
+<main class="app-shell" id="app" hidden>
+  <aside class="sidebar" id="sideNav"></aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">SETTINGS</p><h1>설정</h1><span>종목 관리 · 계정</span></div>
+      <span class="date-pill" id="metaDate"><i></i> —</span>
+    </header>
+
+    <section class="panel3">
+      <div class="panel-title"><div><h2>종목 관리</h2><p>KOSPI·KOSDAQ 전 종목 검색 → 추가 명령 복사 → 실행하면 DB에 즉시 등록</p></div><span class="health" id="masterInfo"><i></i> —</span></div>
+      <div class="uni-search">
+        <input id="q" class="login-input" placeholder="종목명 또는 코드 검색 (예: 네이버, 035420)" autocomplete="off">
+        <div id="results" class="uni-results" hidden></div>
+      </div>
+      <div id="pickBox" class="uni-pick" hidden>
+        <div class="uni-pick-head"><b id="pickName">—</b><span class="hcode" id="pickMeta">—</span></div>
+        <p class="uni-note">아래 명령을 복사해 맥미니 터미널(또는 Claude)에 붙여넣으면 DB에 등록됩니다. 다음 사이클(10분 내)부터 전 화면에 자동 반영됩니다.</p>
+        <div class="cmdbox"><code id="cmdText">—</code><button id="copyBtn">복사</button></div>
+        <p class="uni-copied" id="copiedMsg" hidden>✓ 복사됨 — 터미널에 붙여넣어 실행하세요</p>
+      </div>
+
+      <h4 class="uni-subtitle">현재 등록 종목</h4>
+      <div class="order-table">
+        <div class="order-row header uni-row"><span>상태</span><span>종목</span><span>시장</span><span>등록일</span><span>제거 명령</span></div>
+        <div id="uniRows"></div>
+      </div>
+    </section>
+
+    <section class="panel3">
+      <div class="panel-title"><div><h2>계정</h2><p>세션은 브라우저 탭 기준이며 로그아웃 시 비밀번호 재입력이 필요합니다</p></div></div>
+      <button class="login-button logout-btn" id="logoutBtn">로그아웃 <span>⏻</span></button>
+    </section>
+
+    <footer><span><i></i> READ-ONLY 대시보드 · 등록 실행은 서버(맥미니)에서</span><p>본 화면은 모니터링 도구이며 수익을 보장하지 않습니다.</p></footer>
+  </section>
+</main>
+<script src="common.js"></script>
+<script src="settings.js"></script>
+</body>
+</html>
