@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk monitor — recovery.console</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="three.css">
+</head>
+<body>
+<main class="app-shell" id="app" hidden>
+  <aside class="sidebar" id="sideNav"></aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">SAFETY LAYER</p><h1>리스크 모니터</h1><span>손실 방어선과 주문 허용 상태</span></div>
+      <span class="date-pill" id="metaDate"><i></i> —</span>
+    </header>
+    <div class="sample-banner"><span>i</span><p id="sampleNote">—</p></div>
+    <div class="alert-banner" id="stateAlert" hidden></div>
+    <section class="risk-hero3">
+      <article>
+        <div class="gauge" id="gauge"><div><b id="riskScore">—</b><small>/ 100</small></div></div>
+        <div><p class="eyebrow">ACCOUNT RISK</p><h2 id="riskLevelKo">—</h2><span id="riskDesc">—</span>
+          <ul class="comp-list" id="compList"></ul></div>
+      </article>
+      <aside><small>현재 전략 모드</small><b id="stratMode">—</b><em class="pill green" id="mktPill">—</em></aside>
+    </section>
+    <section class="stats four" id="riskStats"></section>
+    <section class="split3 risk-grid3">
+      <article class="panel3"><div class="panel-title"><div><h2>계좌 손실 방어선</h2><p>현재 평가액과 자동 대응 기준</p></div></div>
+        <div class="risk-table">
+          <div class="risk-row header"><span>규칙</span><span>현재</span><span>기준</span><span>상태</span></div>
+          <div id="defenseRows"></div>
+        </div></article>
+      <article class="panel3"><div class="panel-title"><div><h2>주문 허용 게이트</h2><p>현재 사이클의 정책 판단 · UNKNOWN=매수 차단</p></div></div>
+        <ul class="gates" id="gateList"></ul></article>
+    </section>
+    <footer><span><i></i> READ-ONLY</span><p>본 화면은 모니터링 도구이며 수익을 보장하지 않습니다.</p></footer>
+  </section>
+</main>
+<script src="common.js"></script>
+<script src="risk.js"></script>
+</body>
+</html>

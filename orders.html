@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orders — recovery.console</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="three.css">
+</head>
+<body>
+<main class="app-shell" id="app" hidden>
+  <aside class="sidebar" id="sideNav"></aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">EXECUTION</p><h1>오더</h1><span>주문 의도부터 체결·취소까지 추적</span></div>
+      <span class="date-pill" id="metaDate"><i></i> —</span>
+    </header>
+    <div class="sample-banner"><span>i</span><p id="sampleNote">—</p></div>
+    <section class="stats four" id="ordStats"></section>
+    <section class="panel3">
+      <div class="panel-title"><div><h2>주문 타임라인</h2><p>주문 생명주기와 결정 근거 · 의도(intent)와 브로커 주문 구분</p></div>
+        <div class="filters" id="ordFilters">
+          <button class="active" data-f="all">전체</button>
+          <button data-f="filled">체결</button>
+          <button data-f="open">미체결</button>
+          <button data-f="blocked">차단·거절</button>
+          <button data-f="cancelled">취소</button>
+        </div></div>
+      <div class="order-table">
+        <div class="order-row header"><span>시간</span><span>종목</span><span>주문</span><span>상태</span><span>결정 근거</span></div>
+        <div id="ordRows"></div>
+      </div>
+    </section>
+    <section class="split3">
+      <article class="panel3"><div class="panel-title"><div><h2>주문 정합성</h2><p>브로커와 로컬 상태 대조</p></div><span class="health" id="reconHealth"><i></i> —</span></div>
+        <ul class="checklist" id="reconList"></ul></article>
+      <article class="panel3 warning" id="policyCard" hidden>
+        <p class="eyebrow">ORDER POLICY</p><h2 id="policyTitle">—</h2><p class="body" id="policyBody">—</p><span id="policyCode"></span></article>
+    </section>
+    <footer><span><i></i> READ-ONLY · 주문 생성/취소 기능 없음</span><p>본 화면은 모니터링 도구이며 수익을 보장하지 않습니다.</p></footer>
+  </section>
+</main>
+<script src="common.js"></script>
+<script src="orders.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Positions — recovery.console</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="three.css">
+</head>
+<body>
+<main class="app-shell" id="app" hidden>
+  <aside class="sidebar" id="sideNav"></aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">PORTFOLIO</p><h1>포지션</h1><span>보유 종목의 수익과 전략 상태</span></div>
+      <span class="date-pill" id="metaDate"><i></i> —</span>
+    </header>
+    <div class="sample-banner"><span>i</span><p id="sampleNote">—</p></div>
+    <section class="stats four" id="posStats"></section>
+    <section class="panel3">
+      <div class="panel-title"><div><h2>현재 보유 종목</h2><p>종가 기준 · 전략 상태 포함</p></div><span class="health" id="reconBadge"><i></i> RECONCILED</span></div>
+      <div class="cards3" id="posCards"></div>
+    </section>
+    <footer><span><i></i> READ-ONLY</span><p>본 화면은 모니터링 도구이며 수익을 보장하지 않습니다.</p></footer>
+  </section>
+</main>
+<script src="common.js"></script>
+<script src="positions.js"></script>
+</body>
+</html>
