@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>stock() — 원금 회복 대시보드</title>
+<meta name="description" content="ipe Studio 원금 회복형 자동매매 대시보드">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">stock()</span>
+      <span class="tag">// 원금 회복 대시보드</span>
+    </div>
+    <div class="meta">
+      <span id="mode" class="badge">MODE</span>
+      <span id="risk" class="badge">RISK</span>
+      <span id="asOf" class="asof">—</span>
+    </div>
+  </header>
+
+  <section class="hero panel">
+    <div class="hero-left">
+      <div class="hero-label">원금 회복률</div>
+      <div id="recoveryRate" class="hero-big">—</div>
+      <div class="hero-sub">목표 원금까지 <span id="needReturn" class="accent">—</span> 필요</div>
+    </div>
+    <div class="hero-right">
+      <div class="bar-row"><span>시작 <b id="startEquity">—</b></span><span>목표 <b id="principal">—</b></span></div>
+      <div class="bar"><div id="barFill" class="bar-fill"></div><div id="barNow" class="bar-now"></div></div>
+      <div class="bar-cur">현재 총자산 <b id="equityInline" class="accent">—</b></div>
+    </div>
+  </section>
+
+  <section class="kpis">
+    <div class="panel kpi"><div class="kpi-l">총자산</div><div id="equity" class="kpi-v">—</div><div id="equityBreak" class="kpi-s">—</div></div>
+    <div class="panel kpi"><div class="kpi-l">목표 원금</div><div id="principal2" class="kpi-v">—</div><div class="kpi-s">누적 순입금</div></div>
+    <div class="panel kpi"><div class="kpi-l">평가손익</div><div id="pnl" class="kpi-v">—</div><div id="pnlRate" class="kpi-s">—</div></div>
+    <div class="panel kpi"><div class="kpi-l">부족액</div><div id="shortfall" class="kpi-v">—</div><div class="kpi-s">원금까지</div></div>
+    <div class="panel kpi"><div class="kpi-l">당일손익</div><div id="dailyPnl" class="kpi-v">—</div><div class="kpi-s">전일 대비</div></div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel">
+      <h2 class="ph">3개월 회복 경로 <span class="ph-s">(참고선 · 명세 §3)</span></h2>
+      <div id="pathChart" class="chart"></div>
+    </section>
+    <section class="panel">
+      <h2 class="ph">보유 종목</h2>
+      <div class="table-wrap">
+        <table class="holdings">
+          <thead><tr><th>종목</th><th>수량</th><th>평단</th><th>현재가</th><th>평가손익</th><th>수익률</th></tr></thead>
+          <tbody id="holdingsBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <span id="note">READ-ONLY 스냅샷 · 주문 미실행</span>
+    <span class="sig">ipe(); // be still</span>
+  </footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
