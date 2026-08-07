@@ -37,6 +37,26 @@ function enterApp(data) { $("login").hidden = true; $("app").hidden = false; try
 const WD = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 const MO = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
+function greet(h) {
+  const t = h < 5 ? "늦은 밤이네요" : h < 8 ? "이른 아침입니다" : h < 12 ? "좋은 아침입니다"
+    : h < 14 ? "점심 잘 챙기세요" : h < 18 ? "좋은 오후입니다" : h < 22 ? "좋은 저녁입니다" : "편안한 밤 되세요";
+  return `${t}, Davy.`;
+}
+
+function daySummary(d) {
+  const a = d.account, s = d.strategy;
+  const mkt = { RISK_ON: "매수 가능 국면", RISK_OFF: "관망 국면", UNKNOWN: "데이터 확인 중" }[s.marketState] || s.marketState;
+  const parts = [`시장 ${mkt}`];
+  if (a.dailyPnl) parts.push(`오늘 ${a.dailyReturnPct > 0 ? "+" : ""}${a.dailyReturnPct}%`);
+  const filled = (d.orders || []).filter(o => o.state === "FILLED");
+  if (filled.length) parts.push(`${filled.length}건 체결`);
+  else if ((d.pendingTrims || []).length) parts.push(`${d.pendingTrims.length}종목 반등 매도 대기`);
+  else parts.push("신규 주문 없음");
+  if (d.system.killSwitch === "ON") parts.push("⚠️ 킬스위치 ON");
+  if (d.dataState === "STALE") parts.push("데이터 지연");
+  return parts.join("  ·  ");
+}
+
 function render(d) {
   const a = d.account, s = d.strategy, sys = d.system;
 
@@ -59,11 +79,11 @@ function render(d) {
   const mb = $("modeBadge"); const mode = (d.mode || "OFF");
   mb.textContent = mode; mb.className = "badge-mode " + mode.toLowerCase();
 
-  // 상단
-  const md = new Date(d.marketDate + "T00:00:00");
-  $("dateLine").textContent = `${WD[md.getDay()]} · ${String(md.getDate()).padStart(2, "0")} ${MO[md.getMonth()]} ${md.getFullYear()}`;
-  const h = new Date().getHours();
-  $("greeting").textContent = `좋은 ${h < 11 ? "아침" : h < 18 ? "오후" : "저녁"}입니다, Davy.`;
+  // 상단 — 날짜/인사말은 '실제 현재 시각'(KST) 기준, 데이터 거래일(marketDate)과 별개
+  const now = new Date();
+  $("dateLine").textContent = `${WD[now.getDay()]} · ${String(now.getDate()).padStart(2, "0")} ${MO[now.getMonth()]} ${now.getFullYear()}`;
+  $("greeting").textContent = greet(now.getHours());
+  $("daySummary").textContent = daySummary(d);
 
   // 총자산 카드
   $("equity").textContent = won(a.equity);

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>일자별 등락 — recovery.console</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app-shell" id="app" hidden>
+  <aside class="sidebar">
+    <div class="brand"><span>R</span><strong>recovery<br>.console</strong></div>
+    <nav aria-label="주 메뉴">
+      <a href="index.html"><i>⌁</i>Overview</a>
+      <a class="active" href="history.html"><i>↗</i>일자별 등락</a>
+      <a href="index.html#positions"><i>▦</i>Positions</a>
+      <a href="index.html#orders"><i>⇄</i>Orders</a>
+      <a href="index.html#risk"><i>◇</i>Risk monitor</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="#" id="lockBtn"><i>⚙</i>잠금</a>
+      <div class="profile"><span>DK</span><div><b>Davy Kim</b><small>Private account</small></div></div>
+    </div>
+  </aside>
+  <section class="content">
+    <header class="topbar">
+      <div><p class="eyebrow"><a class="back-link" href="index.html">← Overview</a></p><h1>일자별 등락</h1><p class="day-summary" id="sub">종목별 최근 거래일 종가와 등락률</p></div>
+      <div class="top-actions"><span class="market" id="asOf"><i></i> —</span></div>
+    </header>
+    <div class="hist-grid" id="histGrid"></div>
+    <footer><span><i></i> READ-ONLY</span><p>일자별 시세는 토스 API 일봉 기준이며 투자 판단을 보조하는 자료입니다.</p></footer>
+  </section>
+</main>
+<script src="history.js"></script>
+</body>
+</html>

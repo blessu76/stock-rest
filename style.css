@@ -20,7 +20,18 @@
 .content{padding:30px 36px 22px;max-width:1600px;width:100%;margin:0 auto}
 .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
 .topbar h1{font-size:24px;letter-spacing:-.04em;margin:6px 0 0}.topbar p{margin:0}
+.day-summary{margin:8px 0 0;font:500 11px var(--font-geist-mono);color:#8fb0a5;letter-spacing:.01em}
 .top-actions{display:flex;gap:12px;align-items:center}
+/* 일자별 등락 페이지 */
+.hist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:6px}
+.hist-card{background:linear-gradient(145deg,#0e1d19,#0a1613);border:1px solid var(--line);border-radius:14px;padding:18px}
+.hist-card h3{margin:0;font-size:14px}.hist-card .hcode{font:500 9px var(--font-geist-mono);color:var(--muted)}
+.hist-spark{margin:12px 0;height:46px}
+.hist-spark svg{width:100%;height:46px;overflow:visible}
+.hist-table{max-height:340px;overflow-y:auto}
+.hist-table table{min-width:0}
+.hist-table td,.hist-table th{padding:8px 10px}
+.back-link{color:var(--green);text-decoration:none;font:500 11px var(--font-geist-mono)}
 .market{font:600 10px var(--font-geist-mono);padding:9px 12px;border:1px solid var(--line);border-radius:99px;color:#9ab0a9}
 .market i,.login-note i,footer i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:7px;box-shadow:0 0 9px var(--green)}
 .badge-mode{font:700 10px var(--font-geist-mono);letter-spacing:.1em;padding:7px 11px;border-radius:99px;border:1px solid var(--line)}
