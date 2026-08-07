@@ -3,70 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>stock() — 원금 회복 대시보드</title>
-<meta name="description" content="ipe Studio 원금 회복형 자동매매 대시보드">
+<title>Stock Recovery Dashboard</title>
+<meta name="description" content="자동매매 원금 회복 과정을 확인하는 개인용 대시보드">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
-  <header class="topbar">
-    <div class="brand">
-      <span class="logo">stock()</span>
-      <span class="tag">// 원금 회복 대시보드</span>
-    </div>
-    <div class="meta">
-      <span id="mode" class="badge">MODE</span>
-      <span id="risk" class="badge">RISK</span>
-      <span id="asOf" class="asof">—</span>
-    </div>
-  </header>
 
-  <section class="hero panel">
-    <div class="hero-left">
-      <div class="hero-label">원금 회복률</div>
-      <div id="recoveryRate" class="hero-big">—</div>
-      <div class="hero-sub">목표 원금까지 <span id="needReturn" class="accent">—</span> 필요</div>
-    </div>
-    <div class="hero-right">
-      <div class="bar-row"><span>시작 <b id="startEquity">—</b></span><span>목표 <b id="principal">—</b></span></div>
-      <div class="bar"><div id="barFill" class="bar-fill"></div><div id="barNow" class="bar-now"></div></div>
-      <div class="bar-cur">현재 총자산 <b id="equityInline" class="accent">—</b></div>
-    </div>
+<!-- LOGIN -->
+<main class="login-shell" id="login">
+  <section class="login-card">
+    <div class="login-brand"><span>R</span> recovery.console</div>
+    <p class="eyebrow">AUTOMATED TRADING MONITOR</p>
+    <h1>원금 회복 과정을<br>매일, 한눈에.</h1>
+    <p class="login-copy">자동매매의 성과와 위험 신호를 조용하고 정확하게 확인하는 개인용 대시보드입니다.</p>
+    <label class="input-label" for="uid">아이디</label>
+    <input class="login-input" id="uid" autocomplete="username" aria-label="아이디" placeholder="davy.kim">
+    <label class="input-label" for="pw">비밀번호</label>
+    <input class="login-input" id="pw" type="password" autocomplete="current-password" aria-label="비밀번호">
+    <button class="login-button" id="loginBtn">대시보드 열기 <span>→</span></button>
+    <p class="login-note" id="loginErr"><i></i> 아이디와 비밀번호를 입력하세요.</p>
   </section>
+  <aside class="login-visual" aria-hidden="true">
+    <div class="visual-grid"></div>
+    <div class="visual-copy"><b id="visualPct">—</b><span>원금 회복 진행률</span></div>
+    <div class="visual-line"></div>
+  </aside>
+</main>
 
-  <section class="kpis">
-    <div class="panel kpi"><div class="kpi-l">총자산</div><div id="equity" class="kpi-v">—</div><div id="equityBreak" class="kpi-s">—</div></div>
-    <div class="panel kpi"><div class="kpi-l">목표 원금</div><div id="principal2" class="kpi-v">—</div><div class="kpi-s">누적 순입금</div></div>
-    <div class="panel kpi"><div class="kpi-l">평가손익</div><div id="pnl" class="kpi-v">—</div><div id="pnlRate" class="kpi-s">—</div></div>
-    <div class="panel kpi"><div class="kpi-l">부족액</div><div id="shortfall" class="kpi-v">—</div><div class="kpi-s">원금까지</div></div>
-    <div class="panel kpi"><div class="kpi-l">당일손익</div><div id="dailyPnl" class="kpi-v">—</div><div class="kpi-s">전일 대비</div></div>
-  </section>
+<!-- DASHBOARD -->
+<main class="app-shell" id="app" hidden>
+  <aside class="sidebar">
+    <div class="brand"><span>R</span><strong>recovery<br>.console</strong></div>
+    <nav aria-label="주 메뉴">
+      <a class="active" href="#overview"><i>⌁</i>Overview</a>
+      <a href="#performance"><i>↗</i>Performance</a>
+      <a href="#positions"><i>▦</i>Positions</a>
+      <a href="#orders"><i>⇄</i>Orders</a>
+      <a href="#risk"><i>◇</i>Risk monitor</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="#" id="lockBtn"><i>⚙</i>잠금</a>
+      <div class="profile"><span>DK</span><div><b>Davy Kim</b><small>Private account</small></div></div>
+    </div>
+  </aside>
 
-  <div class="grid2">
-    <section class="panel">
-      <h2 class="ph">3개월 회복 경로 <span class="ph-s">(참고선 · 명세 §3)</span></h2>
-      <div id="pathChart" class="chart"></div>
-    </section>
-    <section class="panel">
-      <h2 class="ph">보유 종목</h2>
-      <div class="table-wrap">
-        <table class="holdings">
-          <thead><tr><th>종목</th><th>수량</th><th>평단</th><th>현재가</th><th>평가손익</th><th>수익률</th></tr></thead>
-          <tbody id="holdingsBody"></tbody>
-        </table>
+  <section class="content" id="overview">
+    <header class="topbar">
+      <div><p class="eyebrow" id="dateLine">—</p><h1 id="greeting">대시보드</h1></div>
+      <div class="top-actions">
+        <span class="badge-mode" id="modeBadge">—</span>
+        <span class="market" id="dataBadge"><i></i> —</span>
       </div>
-    </section>
-  </div>
+    </header>
 
-  <footer class="foot">
-    <span id="note">READ-ONLY 스냅샷 · 주문 미실행</span>
-    <span class="sig">ipe(); // be still</span>
-  </footer>
-</div>
+    <div class="sample-banner" id="stateBanner" hidden><span>i</span><p id="stateMsg"></p></div>
+
+    <section class="hero-grid">
+      <article class="balance-card">
+        <div class="card-head"><span>현재 총자산</span><em>KRW</em></div>
+        <div class="balance" id="equity">—</div>
+        <div class="day-change"><b id="dailyPnl">—</b><span id="dailyRate">—</span></div>
+        <div class="progress-meta"><span>원금 회복 진행률</span><strong id="recoveryPct">—</strong></div>
+        <div class="progress"><i id="progressFill" style="width:0%"></i></div>
+        <div class="balance-foot"><div><small>회복 목표</small><b id="principal">—</b></div><div><small>남은 금액</small><b id="shortfall">—</b></div></div>
+      </article>
+
+      <article class="challenge-card">
+        <div class="card-head"><span>3개월 회복 도전</span><em class="green-dot">ACTIVE</em></div>
+        <div class="challenge-main"><div class="ring" id="ring"><span><b id="daysLeft">—</b><small>days left</small></span></div><div><small>목표일까지 필요 수익률</small><b id="needReturn">—</b><p id="monthlyNeed">—</p></div></div>
+        <div class="checkpoint"><span>1차 체크포인트</span><strong id="ckptAmt">—</strong><small id="ckptDate">—</small></div>
+      </article>
+
+      <article class="risk-card" id="risk">
+        <div class="card-head"><span>위험 상태</span><em class="safe-dot" id="riskBadge">—</em></div>
+        <div class="risk-score"><strong id="riskState">—</strong><span id="marketStateLine">—</span></div>
+        <div class="risk-bars" id="riskBars"><i></i><i></i><i></i><i></i><i></i></div>
+        <ul><li><span>일일 손익</span><b id="riskDaily">—</b></li><li><span>회복까지</span><b id="riskShort">—</b></li><li><span>현금</span><b id="riskCash">—</b></li></ul>
+      </article>
+    </section>
+
+    <section class="lower-grid">
+      <article class="chart-card" id="performance">
+        <div class="chart-head"><div><h2>자산 추이</h2><p>계좌 평가액과 목표 경로 비교</p></div></div>
+        <div class="chart-summary"><b id="chartEquity">—</b><span>회복률 <strong id="chartRate">—</strong></span></div>
+        <div class="chart-wrap">
+          <div class="axis" id="axis"></div>
+          <svg viewBox="0 0 620 220" role="img" aria-label="자산 추이" preserveAspectRatio="none" id="chartSvg"></svg>
+          <div class="chart-legend"><span><i class="legend-live"></i>계좌 평가액</span><span><i class="legend-target"></i>목표 경로</span></div>
+        </div>
+      </article>
+
+      <article class="activity-card" id="orders">
+        <div class="section-title"><div><h2>자동매매 활동</h2><p id="ordersDate">—</p></div><span class="updated" id="ordersMode">—</span></div>
+        <div class="status-callout"><span class="status-icon">✓</span><div><b id="cycleMsg">—</b><small id="lastCycle">—</small></div></div>
+        <div class="timeline" id="timeline"></div>
+      </article>
+    </section>
+
+    <section class="positions" id="positions">
+      <div class="section-title"><div><h2>전략 대상 종목</h2><p>보유 현황과 손익</p></div><span class="updated" id="posUpdated">—</span></div>
+      <div class="table-wrap"><table><thead><tr><th>종목</th><th>수량</th><th>평단</th><th>현재가</th><th>평가손익</th><th>수익률</th></tr></thead><tbody id="posBody"></tbody></table></div>
+    </section>
+
+    <footer><span><i></i> <span id="killLabel">Trading engine</span></span><p>본 화면은 모니터링 도구이며 수익을 보장하지 않습니다. READ-ONLY.</p></footer>
+  </section>
+</main>
+
 <script src="app.js"></script>
 </body>
 </html>

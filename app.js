@@ -1,140 +1,160 @@
-// stock() 대시보드 — data.json fetch 후 렌더 (외부 의존성 없음)
-const won = n => (n == null ? '—' : (n < 0 ? '-' : '') + Math.abs(Math.round(n)).toLocaleString('ko-KR') + '원');
-const pct = n => (n == null ? '—' : (n > 0 ? '+' : '') + n.toFixed(2) + '%');
-const sign = n => (n > 0 ? 'up' : n < 0 ? 'down' : '');
+// recovery.console 대시보드 — 로그인(davy.kim + 패스프레이즈) → 암호화 data.json 복호화 → 스키마 v1.0 렌더
+const USERNAME = "davy.kim";
 const $ = id => document.getElementById(id);
+const won = n => (n == null ? "—" : (n < 0 ? "-₩" : "₩") + Math.abs(Math.round(n)).toLocaleString("ko-KR"));
+const pct = n => (n == null ? "—" : (n > 0 ? "+" : "") + Number(n).toFixed(2) + "%");
+const sign = n => (n > 0 ? "positive" : n < 0 ? "negative" : "");
+let ENVELOPE = null;
 
-// ---- 복호화 (WebCrypto, export의 PBKDF2-SHA256 + AES-GCM 과 호환) ----
+// ---- 복호화 (export의 PBKDF2-SHA256 + AES-GCM 호환) ----
 async function decryptEnvelope(env, passphrase) {
   const dec = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-  const baseKey = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(passphrase), 'PBKDF2', false, ['deriveKey']);
+  const baseKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(passphrase), "PBKDF2", false, ["deriveKey"]);
   const key = await crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt: dec(env.salt), iterations: env.iter, hash: 'SHA-256' },
-    baseKey, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
-  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: dec(env.iv) }, key, dec(env.ct));
+    { name: "PBKDF2", salt: dec(env.salt), iterations: env.iter, hash: "SHA-256" },
+    baseKey, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: dec(env.iv) }, key, dec(env.ct));
   return JSON.parse(new TextDecoder().decode(pt));
 }
 
-function showLock(env, err) {
-  document.querySelector('.wrap').style.filter = 'blur(6px)';
-  let ov = document.getElementById('lock');
-  if (!ov) {
-    ov = document.createElement('div'); ov.id = 'lock';
-    ov.innerHTML = `<div class="lockbox">
-      <div class="locklogo">stock()</div>
-      <div class="lockmsg">비밀번호를 입력하세요</div>
-      <input id="pw" type="password" autocomplete="current-password" placeholder="passphrase">
-      <button id="pwbtn">열기</button>
-      <div id="pwerr" class="lockerr"></div></div>`;
-    document.body.appendChild(ov);
-    const tryOpen = async () => {
-      const pw = document.getElementById('pw').value;
-      try {
-        const payload = await decryptEnvelope(env, pw);
-        sessionStorage.setItem('pw', pw);
-        ov.remove(); document.querySelector('.wrap').style.filter = '';
-        render(payload);
-      } catch (e) {
-        document.getElementById('pwerr').textContent = '비밀번호가 올바르지 않습니다';
-        sessionStorage.removeItem('pw');
-      }
-    };
-    document.getElementById('pwbtn').onclick = tryOpen;
-    document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryOpen(); });
-  }
-  if (err) document.getElementById('pwerr').textContent = err;
-  document.getElementById('pw').focus();
+function loginError(m) { const n = $("loginErr"); n.textContent = m; n.classList.add("err"); }
+
+async function tryLogin() {
+  const uid = $("uid").value.trim();
+  const pw = $("pw").value;
+  if (uid !== USERNAME) return loginError("아이디가 올바르지 않습니다.");
+  if (!ENVELOPE || !ENVELOPE.encrypted) return loginError("데이터를 불러올 수 없습니다.");
+  try {
+    const data = await decryptEnvelope(ENVELOPE, pw);
+    sessionStorage.setItem("auth", JSON.stringify({ u: uid, p: pw }));
+    enterApp(data);
+  } catch (e) { loginError("비밀번호가 올바르지 않습니다."); }
 }
 
-async function load() {
-  let d;
-  try {
-    const r = await fetch('data.json?t=' + Date.now());
-    d = await r.json();
-  } catch (e) {
-    document.body.innerHTML = '<p style="font-family:monospace;color:#E5534B;padding:40px">data.json 로드 실패: ' + e + '</p>';
-    return;
-  }
-  if (d && d.encrypted) {
-    const saved = sessionStorage.getItem('pw');
-    if (saved) {
-      try { return render(await decryptEnvelope(d, saved)); }
-      catch (e) { sessionStorage.removeItem('pw'); }
-    }
-    return showLock(d);
-  }
-  render(d);
-}
+function enterApp(data) { $("login").hidden = true; $("app").hidden = false; try { render(data); } catch (e) { console.warn("render 오류"); } }
+
+// ---- 렌더 ----
+const WD = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+const MO = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
 function render(d) {
-  const a = d.account;
+  const a = d.account, s = d.strategy, sys = d.system;
 
-  // badges / meta
-  $('asOf').textContent = d.asOf || '—';
-  const mode = $('mode'); mode.textContent = 'MODE ' + (d.mode || '—');
-  mode.classList.add(d.mode === 'LIVE' ? 'live' : 'off');
-  $('risk').textContent = d.riskState || '—';
-  $('note').textContent = d.note || '';
+  // 상태/신선도
+  let state = d.dataState || "FRESH";
+  const ageH = (Date.now() - Date.parse(d.generatedAt)) / 3.6e6;
+  if (state === "FRESH" && ageH > 20) state = "STALE";
+  const badge = $("dataBadge");
+  badge.className = "market" + (state === "STALE" ? " stale" : state === "ERROR" ? " error" : "");
+  badge.innerHTML = `<i></i> ${state === "FRESH" ? "DATA FRESH" : state}`;
+  const banner = $("stateBanner");
+  if (state !== "FRESH") {
+    banner.hidden = false;
+    banner.className = "sample-banner " + (state === "ERROR" ? "err" : "warn");
+    $("stateMsg").innerHTML = state === "STALE" ? "<b>데이터 지연</b> · 마지막 생성 이후 시간이 지났습니다. 최신이 아닐 수 있어요."
+      : state === "PARTIAL" ? "<b>일부 데이터 누락</b> · 계좌/포지션 일부가 비어 있습니다." : "<b>데이터 오류</b>";
+  } else banner.hidden = true;
 
-  // hero
-  $('recoveryRate').textContent = a.recoveryRate != null ? a.recoveryRate.toFixed(1) + '%' : '—';
-  $('needReturn').textContent = a.needReturnPct != null ? '+' + a.needReturnPct.toFixed(1) + '%' : '—';
-  $('startEquity').textContent = won(a.startEquity);
-  $('principal').textContent = won(a.principal);
-  $('equityInline').textContent = won(a.equity);
+  // 모드 배지
+  const mb = $("modeBadge"); const mode = (d.mode || "OFF");
+  mb.textContent = mode; mb.className = "badge-mode " + mode.toLowerCase();
 
-  // recovery bar: 목표 원금 대비 현재 총자산(=회복률)만큼 채움, 시작 지점 마커 표시
-  const fillPct = Math.max(0, Math.min(100, (a.equity / a.principal) * 100));
-  $('barFill').style.width = fillPct + '%';
-  const startPos = Math.max(0, Math.min(100, (a.startEquity / a.principal) * 100));
-  $('barNow').style.left = startPos + '%';
+  // 상단
+  const md = new Date(d.marketDate + "T00:00:00");
+  $("dateLine").textContent = `${WD[md.getDay()]} · ${String(md.getDate()).padStart(2, "0")} ${MO[md.getMonth()]} ${md.getFullYear()}`;
+  const h = new Date().getHours();
+  $("greeting").textContent = `좋은 ${h < 11 ? "아침" : h < 18 ? "오후" : "저녁"}입니다, Davy.`;
 
-  // kpis
-  $('equity').textContent = won(a.equity);
-  $('equityBreak').textContent = '주식 ' + won(a.stockValue) + ' + 예수금 ' + won(a.settledCash);
-  $('principal2').textContent = won(a.principal);
-  const pnlEl = $('pnl'); pnlEl.textContent = won(a.pnl); pnlEl.className = 'kpi-v ' + sign(a.pnl);
-  const prEl = $('pnlRate'); prEl.textContent = pct(a.totalPnlRate); prEl.className = 'kpi-s ' + sign(a.totalPnlRate);
-  $('shortfall').textContent = won(a.shortfall);
-  const dEl = $('dailyPnl'); dEl.textContent = won(a.dailyPnl); dEl.className = 'kpi-v ' + sign(a.dailyPnl);
+  // 총자산 카드
+  $("equity").textContent = won(a.equity);
+  const dp = $("dailyPnl"); dp.textContent = (a.dailyPnl > 0 ? "+" : "") + won(a.dailyPnl); dp.className = sign(a.dailyPnl);
+  $("dailyRate").textContent = pct(a.dailyReturnPct) + " 오늘";
+  $("recoveryPct").textContent = a.recoveryPct + "%";
+  $("progressFill").style.width = Math.min(100, a.recoveryPct) + "%";
+  $("principal").textContent = won(a.principal);
+  $("shortfall").textContent = won(a.shortfall);
 
-  renderPath(d.path || [], a.equity);
-  renderHoldings(d.holdings || []);
+  // 도전 카드
+  $("daysLeft").textContent = s.daysRemaining;
+  $("needReturn").textContent = pct(a.needReturnPct);
+  const monthly = a.needReturnPct != null ? (Math.pow(1 + a.needReturnPct / 100, 1 / 3) - 1) * 100 : null;
+  $("monthlyNeed").textContent = monthly != null ? `월평균 ${monthly > 0 ? "+" : ""}${monthly.toFixed(1)}% 필요` : "";
+  $("ckptAmt").textContent = won(s.nextCheckpointAmount);
+  $("ckptDate").textContent = (s.nextCheckpointDate || "").replace(/-/g, ". ");
+  $("ring").style.background = `conic-gradient(var(--green) 0 ${Math.min(100, a.recoveryPct)}%,#193028 ${Math.min(100, a.recoveryPct)}%)`;
+
+  // 위험 카드
+  $("riskState").textContent = s.riskState;
+  $("marketStateLine").textContent = "시장 " + s.marketState;
+  const riskLevel = { AGGRESSIVE: 1, RECOVERED: 1, REDUCED_RISK: 2, UNKNOWN: 3, BUY_PAUSED: 3, CHALLENGE_STOPPED: 5 }[s.riskState] || 3;
+  [...$("riskBars").children].forEach((el, i) => el.className = i < riskLevel ? "on" : "");
+  const rd = $("riskDaily"); rd.textContent = pct(a.dailyReturnPct); rd.className = sign(a.dailyReturnPct);
+  $("riskShort").textContent = won(a.shortfall);
+  $("riskCash").textContent = a.equity ? (a.cash / a.equity * 100).toFixed(1) + "%" : "—";
+  $("riskBadge").textContent = s.marketState === "RISK_ON" ? "RISK ON" : s.marketState === "RISK_OFF" ? "RISK OFF" : "UNKNOWN";
+
+  // 차트
+  $("chartEquity").textContent = won(a.equity);
+  $("chartRate").textContent = a.recoveryPct + "%";
+  renderChart(d.assetHistory || [], a.equity, a.principal);
+
+  // 활동 타임라인
+  $("ordersDate").textContent = d.marketDate + " 실행 결과";
+  $("ordersMode").textContent = mode + " · " + (sys.cycleState || "");
+  $("cycleMsg").textContent = sys.cycleState === "OK" ? "사이클 정상 종료" : sys.cycleState === "FAIL_CLOSED" ? "FAIL_CLOSED (신규매수 차단)" : "대기";
+  $("lastCycle").textContent = "마지막 사이클 " + (sys.lastCycleAt || "—");
+  const orders = d.orders || [];
+  $("timeline").innerHTML = orders.length ? orders.slice(0, 6).map(o => {
+    const cls = o.state === "FILLED" ? (o.side === "SELL" ? "sell" : "buy") : "muted";
+    return `<div><span class="time">${o.side}</span><i class="${cls}"></i><p><b>${o.code} ${o.qty}주 ${o.side === "SELL" ? "매도" : "매수"}</b><small>${o.state}</small></p></div>`;
+  }).join("") : `<div><span class="time">—</span><i class="muted"></i><p><b>주문 없음</b><small>기존 포지션 유지</small></p></div>`;
+
+  // 종목
+  $("posUpdated").textContent = "업데이트 " + d.marketDate;
+  $("posBody").innerHTML = (d.positions || []).map(p => `
+    <tr><td><b>${p.name}</b><small>${p.code}</small></td><td>${p.qty}</td>
+      <td>₩${p.avg.toLocaleString("ko-KR")}</td><td>₩${p.price.toLocaleString("ko-KR")}</td>
+      <td class="${sign(p.pnl)}">${(p.pnl > 0 ? "+" : "") + won(p.pnl)}</td>
+      <td class="${sign(p.pnlRate)}">${pct(p.pnlRate)}</td></tr>`).join("");
+
+  // 킬스위치
+  $("killLabel").textContent = sys.killSwitch === "ON" ? "KILL SWITCH ON" : "Trading engine · " + mode;
 }
 
-function renderPath(path, equity) {
-  if (!path.length) return;
-  const W = 460, H = 200, pad = 34;
-  const vals = path.map(p => p.value);
-  const min = Math.min(...vals, equity) * 0.98, max = Math.max(...vals) * 1.02;
-  const x = i => pad + (i * (W - pad * 2)) / (path.length - 1);
-  const y = v => H - pad - ((v - min) / (max - min)) * (H - pad * 2);
-  let line = '', dots = '', labels = '';
-  path.forEach((p, i) => {
-    line += (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p.value).toFixed(1) + ' ';
-    dots += `<circle cx="${x(i).toFixed(1)}" cy="${y(p.value).toFixed(1)}" r="3.5" fill="#C9A84C"/>`;
-    labels += `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8B93A1" font-size="10" text-anchor="middle" font-family="JetBrains Mono">${p.label}</text>`;
-    labels += `<text x="${x(i).toFixed(1)}" y="${(y(p.value) - 10).toFixed(1)}" fill="#8FAF8F" font-size="9" text-anchor="middle" font-family="JetBrains Mono">${(p.value/10000).toFixed(0)}만</text>`;
-  });
-  // 현재 총자산 기준선
-  const eqY = y(equity).toFixed(1);
-  const nowLine = `<line x1="${pad}" y1="${eqY}" x2="${W-pad}" y2="${eqY}" stroke="#E5534B" stroke-dasharray="4 3" stroke-width="1"/>
-    <text x="${W-pad}" y="${eqY-5}" fill="#E5534B" font-size="9" text-anchor="end" font-family="JetBrains Mono">현재 ${(equity/10000).toFixed(0)}만</text>`;
-  $('pathChart').innerHTML =
-    `<svg viewBox="0 0 ${W} ${H}"><path d="${line}" fill="none" stroke="#C9A84C" stroke-width="2"/>${dots}${nowLine}${labels}</svg>`;
+function renderChart(hist, equity, principal) {
+  const W = 620, H = 200;
+  const live = hist.length >= 2 ? hist.slice() : [equity, equity];
+  const n = Math.max(live.length, 11);
+  const start = live[0];
+  const target = Array.from({ length: n }, (_, i) => start * Math.pow(principal / start, i / (n - 1)));
+  const liveR = Array.from({ length: n }, (_, i) => live[Math.min(i, live.length - 1)]);
+  const all = liveR.concat(target);
+  const min = Math.min(...all) * 0.98, max = Math.max(...all) * 1.02;
+  const X = i => (i / (n - 1)) * W;
+  const Y = v => H - ((v - min) / (max - min)) * H;
+  const poly = arr => arr.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
+  $("chartSvg").innerHTML =
+    `<defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#32d69b" stop-opacity=".28"/><stop offset="1" stop-color="#32d69b" stop-opacity="0"/></linearGradient></defs>
+     <line x1="0" y1="44" x2="620" y2="44" class="grid-line"/><line x1="0" y1="99" x2="620" y2="99" class="grid-line"/><line x1="0" y1="154" x2="620" y2="154" class="grid-line"/>
+     <polyline points="${poly(target)}" class="target-line"/>
+     <polygon points="${poly(liveR)} 620,220 0,220" fill="url(#area)"/>
+     <polyline points="${poly(liveR)}" class="asset-line"/>`;
+  const lo = Math.round(max / 10000), hi = Math.round(min / 10000);
+  $("axis").innerHTML = [lo, Math.round((lo + hi) / 2), hi].map(v => `<span>${v}만</span>`).join("");
 }
 
-function renderHoldings(rows) {
-  $('holdingsBody').innerHTML = rows.map(h => `
-    <tr>
-      <td>${h.name}<br><span style="color:#8B93A1;font-size:11px;font-family:'JetBrains Mono'">${h.code}</span></td>
-      <td>${h.qty}</td>
-      <td>${h.avg.toLocaleString('ko-KR')}</td>
-      <td>${h.price.toLocaleString('ko-KR')}</td>
-      <td class="${sign(h.pnl)}">${won(h.pnl)}</td>
-      <td class="${sign(h.pnlRate)}">${pct(h.pnlRate)}</td>
-    </tr>`).join('');
+// ---- init ----
+async function init() {
+  try { ENVELOPE = await (await fetch("data.json?t=" + Date.now())).json(); }
+  catch (e) { loginError("데이터 로드 실패 (ERROR)"); return; }
+  const saved = sessionStorage.getItem("auth");
+  if (saved && ENVELOPE.encrypted) {
+    try { const { u, p } = JSON.parse(saved); if (u === USERNAME) return enterApp(await decryptEnvelope(ENVELOPE, p)); }
+    catch (e) { sessionStorage.removeItem("auth"); }
+  }
+  $("loginBtn").onclick = tryLogin;
+  $("pw").addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
+  $("uid").addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
+  $("lockBtn").onclick = e => { e.preventDefault(); sessionStorage.removeItem("auth"); location.reload(); };
 }
-
-load();
+init();
