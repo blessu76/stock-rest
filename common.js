@@ -55,6 +55,7 @@ function sideNav(active) {
     <a ${active==='positions'?'class="active"':''} href="positions.html"><i>▦</i>Positions</a>
     <a ${active==='orders'?'class="active"':''} href="orders.html"><i>⇄</i>Orders</a>
     <a ${active==='risk'?'class="active"':''} href="risk.html"><i>◇</i>Risk monitor</a>
+    <a ${active==='lotto'?'class="active"':''} href="lotto.html"><i>◎</i>로또</a>
   </nav>
   <div class="sidebar-bottom">
     <a ${active==='settings'?'class="active"':''} href="settings.html"><i>⚙</i>설정</a>
