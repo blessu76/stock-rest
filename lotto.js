@@ -78,17 +78,31 @@ function render(d) {
     const pred = preds[r.round] || preds[String(r.round)];
     if (r.round >= 1236 && pred) {
       const actual = new Set(r.nums);
+      let best = 0;
       const items = PRED_KINDS.map(k => {
         const nums = pred[k.key] || [];
         const m = nums.filter(n => actual.has(n)).length;
+        if (m > best) best = m;
         const bonusHit = nums.includes(r.bonus);
         return `<div class="pred-sg-item"><span class="pred-sg-label">${k.label}</span>` +
           `<div class="lotto-balls sm">${nums.map(n => ball(n, actual.has(n))).join("") || "—"}</div>` +
           `<span class="pred-sg-rate">적중 ${m}/6${bonusHit ? ` <i class="bh">+보너스</i>` : ""}</span></div>`;
       }).join("");
-      row += `<tr class="pred-row"><td colspan="4"><div class="pred-sg-title">🎯 ${r.round}회 예측번호 채점</div><div class="pred-subgrid">${items}</div></td></tr>`;
+      const summary = best > 0 ? `최고 ${best}개 적중` : "적중 없음";
+      row += `<tr class="pred-row"><td colspan="4">` +
+        `<button class="pred-sg-toggle"><span class="chev">▶</span> 🎯 ${r.round}회 예측번호 채점` +
+        `<span class="pred-sg-best${best > 0 ? " hit" : ""}">${summary}</span></button>` +
+        `<div class="pred-subgrid">${items}</div></td></tr>`;
     }
     return row;
   }).join("") || `<tr><td colspan="4" class="empty-note">이력이 없습니다.</td></tr>`;
+  // 채점 서브그리드 접기/펼치기
+  document.querySelectorAll(".pred-sg-toggle").forEach(btn => {
+    btn.onclick = () => {
+      btn.classList.toggle("open");
+      const grid = btn.parentElement.querySelector(".pred-subgrid");
+      if (grid) grid.classList.toggle("open");
+    };
+  });
 }
 guardAndLoad(render);

@@ -149,8 +149,14 @@
 .pred-fixed{font:500 9px var(--font-geist-mono);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 6px}
 .lb.hit{outline:2px solid #ffd34d;outline-offset:1px;box-shadow:0 0 8px rgba(255,211,77,.85);font-weight:700}
 .pred-row td{background:rgba(255,211,77,.05);padding:10px 12px!important}
+.pred-sg-toggle{display:flex;align-items:center;gap:6px;width:100%;background:none;border:0;cursor:pointer;padding:0;font:600 11px var(--font-geist-mono);color:#ffd34d;text-align:left}
+.pred-sg-toggle .chev{display:inline-block;transition:transform .15s;font-size:9px}
+.pred-sg-toggle.open .chev{transform:rotate(90deg)}
+.pred-sg-best{margin-left:auto;font:600 10px var(--font-geist-mono);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.pred-sg-best.hit{color:#ffd34d;border-color:rgba(255,211,77,.5)}
 .pred-sg-title{font:600 11px var(--font-geist-mono);color:#ffd34d;margin-bottom:8px}
-.pred-subgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pred-subgrid{display:none;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.pred-subgrid.open{display:grid}
 .pred-sg-item{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line);border-radius:8px}
 .pred-sg-label{font:600 10px var(--font-geist-mono);color:var(--muted)}
 .pred-sg-rate{font-weight:600;font-size:11px}
