@@ -48,18 +48,18 @@ function metaBadge(d) {
 
 function sideNav(active) {
   return `<div class="brand"><span>R</span><strong>recovery<br>.console</strong></div>
-  <nav aria-label="주 메뉴">
+  <nav aria-label="Main menu">
     <a ${active==='overview'?'class="active"':''} href="index.html"><i>⌁</i>Overview</a>
-    <a ${active==='history'?'class="active"':''} href="history.html"><i>↗</i>일자별 등락</a>
-    <a ${active==='pnl'?'class="active"':''} href="pnl.html"><i>Σ</i>일일손익 이력</a>
+    <a ${active==='history'?'class="active"':''} href="history.html"><i>↗</i>Daily changes</a>
+    <a ${active==='pnl'?'class="active"':''} href="pnl.html"><i>Σ</i>Daily P&L</a>
     <a ${active==='positions'?'class="active"':''} href="positions.html"><i>▦</i>Positions</a>
     <a ${active==='orders'?'class="active"':''} href="orders.html"><i>⇄</i>Orders</a>
     <a ${active==='risk'?'class="active"':''} href="risk.html"><i>◇</i>Risk monitor</a>
-    <a ${active==='lotto'?'class="active"':''} href="lotto.html"><i>◎</i>로또</a>
+    <a ${active==='lotto'?'class="active"':''} href="lotto.html"><i>◎</i>Lotto</a>
   </nav>
   <div class="sidebar-bottom">
-    <a ${active==='settings'?'class="active"':''} href="settings.html"><i>⚙</i>설정</a>
-    <a href="#" id="lockBtn"><i>⏻</i>로그아웃</a>
+    <a ${active==='settings'?'class="active"':''} href="settings.html"><i>⚙</i>Settings</a>
+    <a href="#" id="lockBtn"><i>⏻</i>Log out</a>
     <div class="profile"><span>DK</span><div><b>Davy Kim</b><small>Private account</small></div></div>
   </div>`;
 }
