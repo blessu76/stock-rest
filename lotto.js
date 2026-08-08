@@ -13,11 +13,12 @@ const PRED_LABELS = {
   statBand: "⚖️ 구간균형형",
   statHotDue: "🔥 핫·미출현형",
   statCooc: "🔗 동반출현형",
+  statExcl: "🚫 미출현제외형",
   statFun: "📊 통계형(재미)",   // 구버전(1236 등) 호환
   statTop: "① 많이나온숫자",
   statAvg: "② 평균값",
 };
-const PRED_ORDER = ["algo", "statFreq", "statBand", "statHotDue", "statCooc", "statFun", "statTop", "statAvg"];
+const PRED_ORDER = ["algo", "statFreq", "statBand", "statHotDue", "statCooc", "statExcl", "statFun", "statTop", "statAvg"];
 // 특정 예측객체가 실제로 보유한 기법만 순서대로
 function predKinds(pred) {
   return PRED_ORDER.filter(k => Array.isArray(pred[k]) && pred[k].length).map(k => ({ key: k, label: PRED_LABELS[k] }));
