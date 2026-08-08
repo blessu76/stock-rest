@@ -172,6 +172,8 @@ footer{display:flex;justify-content:space-between;align-items:center;gap:12px;pa
 
 /* 모바일 햄버거 + 좌측 드로어 (데스크톱 숨김) */
 #navToggle,#navDim{display:none}
+/* 로그인 화면(app 숨김)에선 햄버거·딤 숨김 */
+.app-shell[hidden] ~ #navToggle,.app-shell[hidden] ~ #navDim{display:none!important}
 
 @media(max-width:1100px){.hero-grid{grid-template-columns:1.3fr 1fr}.risk-card{grid-column:1/-1}.risk-card ul{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.lower-grid{grid-template-columns:1fr}.activity-card{min-height:280px}}
 @media(max-width:760px){.app-shell{display:block}
