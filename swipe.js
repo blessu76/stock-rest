@@ -13,13 +13,11 @@
       const s = shell();
       if (!s) return;
       s.style.transition = "none";
-      s.style.transform = `translateX(${dir === "left" ? "" : "-"}64px)`;
-      s.style.opacity = ".3";
+      s.style.transform = `translateX(${dir === "left" ? "" : "-"}30vw)`;
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        s.style.transition = "transform .24s ease-out, opacity .24s ease-out";
+        s.style.transition = "transform .26s ease-out";
         s.style.transform = "translateX(0)";
-        s.style.opacity = "1";
-        setTimeout(() => { s.style.transition = ""; s.style.transform = ""; s.style.opacity = ""; }, 300);
+        setTimeout(() => { s.style.transition = ""; s.style.transform = ""; }, 320);
       }));
     };
     (document.readyState === "loading") ? document.addEventListener("DOMContentLoaded", boot) : boot();
@@ -69,11 +67,10 @@
     const go = Math.abs(dx) > Math.min(90, window.innerWidth * 0.24) && next >= 0 && next < PAGES.length;
     if (go) {
       // 현재 페이지 슬라이드 아웃 → 다음 페이지가 반대편에서 슬라이드 인
-      s.style.transition = "transform .16s ease-in, opacity .16s ease-in";
-      s.style.transform = `translateX(${dx < 0 ? "-" : ""}55vw)`;
-      s.style.opacity = ".25";
+      s.style.transition = "transform .18s ease-in";
+      s.style.transform = `translateX(${dx < 0 ? "-" : ""}100vw)`;
       sessionStorage.setItem("swipeDir", dx < 0 ? "left" : "right");
-      setTimeout(() => { location.href = PAGES[next]; }, 140);
+      setTimeout(() => { location.href = PAGES[next]; }, 160);
     } else {
       // 스냅백
       s.style.transition = "transform .22s cubic-bezier(.2,.8,.3,1)";
