@@ -163,13 +163,15 @@
 .pred-sg-item .lotto-balls{gap:7px;margin-top:2px}
 .pred-sg-item .lotto-balls .lb{width:16px;height:16px;font-size:8px;box-shadow:none}
 /* 지난회차 표: 각 열을 내용폭에 맞춤(당첨번호=공6개 딱맞게) */
-.hist{width:auto;min-width:0}
+.hist{width:100%;min-width:0}
 .hist th,.hist td{white-space:nowrap}
 .hist th:nth-child(1),.hist td:nth-child(1),.hist th:nth-child(2),.hist td:nth-child(2){padding-right:16px}
 .hist td:nth-child(3) .lotto-balls{flex-wrap:nowrap;gap:5px}
 .hist td:nth-child(3) .lb{width:22px;height:22px;font-size:10px}
+/* 당첨금 안내 표: 640 min-width 해제 → 패널에 꽉 차게, 스크롤 없음 */
+.prize{width:100%;min-width:0}
 /* 그리드 자식 블로우아웃 방지(넓은 표는 자체 overflow-x 스크롤러라 무관) — 전 페이지 폭 통일 */
 .split3>*,.risk-grid3>*,.cards3>*,.hero-grid>*,.plan-grid>*,.stats>*,.pnl-hero>*,.risk-hero3>*,.level>*{min-width:0}
-@media(max-width:760px){.freq-grid{grid-template-columns:repeat(9,1fr)}.stat-summary{grid-template-columns:1fr}.pred-subgrid{grid-template-columns:1fr}}
+@media(max-width:760px){.freq-grid{grid-template-columns:repeat(9,1fr)}.stat-summary{grid-template-columns:1fr}.pred-subgrid{grid-template-columns:1fr}.hist{width:auto}}
 @media(max-width:1100px){.cards3{grid-template-columns:1fr}.stats.four{grid-template-columns:repeat(2,1fr)}.risk-grid3{grid-template-columns:1fr}.split3{grid-template-columns:1fr}}
 @media(max-width:760px){.stats.four{grid-template-columns:1fr 1fr}.risk-hero3{grid-template-columns:1fr}.risk-hero3>aside{border-left:0;border-top:1px solid var(--line)}.page-head h1{font-size:24px}.content{padding:64px 16px 24px}.page-head{padding-top:0}}
