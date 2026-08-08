@@ -141,6 +141,20 @@
 .pos-item .pos-label{font-size:9px;color:var(--muted)}
 .pos-item small{font:500 9px var(--font-geist-mono);color:var(--muted)}
 .pos-item .pos-avg{color:var(--green)}
-@media(max-width:760px){.freq-grid{grid-template-columns:repeat(9,1fr)}.stat-summary{grid-template-columns:1fr}}
+/* 로또 예측번호 세트 + 채점 */
+.pred-list{display:flex;flex-direction:column;gap:10px}
+.pred-item{padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.pred-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.pred-label{font-weight:600;font-size:12px}
+.pred-fixed{font:500 9px var(--font-geist-mono);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 6px}
+.lb.hit{outline:2px solid #ffd34d;outline-offset:1px;box-shadow:0 0 8px rgba(255,211,77,.85);font-weight:700}
+.pred-row td{background:rgba(255,211,77,.05);padding:10px 12px!important}
+.pred-sg-title{font:600 11px var(--font-geist-mono);color:#ffd34d;margin-bottom:8px}
+.pred-subgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pred-sg-item{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line);border-radius:8px}
+.pred-sg-label{font:600 10px var(--font-geist-mono);color:var(--muted)}
+.pred-sg-rate{font-weight:600;font-size:11px}
+.pred-sg-rate .bh{color:#ffd34d;font-style:normal;font-size:9px}
+@media(max-width:760px){.freq-grid{grid-template-columns:repeat(9,1fr)}.stat-summary{grid-template-columns:1fr}.pred-subgrid{grid-template-columns:1fr}}
 @media(max-width:1100px){.cards3{grid-template-columns:1fr}.stats.four{grid-template-columns:repeat(2,1fr)}.risk-grid3{grid-template-columns:1fr}.split3{grid-template-columns:1fr}}
 @media(max-width:760px){.stats.four{grid-template-columns:1fr 1fr}.risk-hero3{grid-template-columns:1fr}.risk-hero3>aside{border-left:0;border-top:1px solid var(--line)}.page-head h1{font-size:24px}.content{padding:64px 16px 24px}.page-head{padding-top:0}}
