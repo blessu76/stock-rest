@@ -6,14 +6,22 @@ function ball(n, hit) {
   return `<span class="lb${hit ? " hit" : ""}" style="background:${ballColor(n)}">${n}</span>`;
 }
 
-// 예측 4종 (서버 lotto_predictions 에서 생성, 여기선 표시만)
-const PRED_KINDS = [
-  { key: "algo",     label: "🎲 알고리즘형" },
-  { key: "statFun",  label: "📊 통계형(재미)" },
-  { key: "statFreq", label: "📊 통계형(빈도)" },
-  { key: "statTop",  label: "① 많이나온숫자" },
-  { key: "statAvg",  label: "② 평균값" },
-];
+// 예측 기법 라벨(서버 lotto_predictions 생성, 여기선 표시만) — 신규 5종 + 구버전 호환
+const PRED_LABELS = {
+  algo: "🎲 알고리즘형",
+  statFreq: "📊 통계형(빈도)",
+  statBand: "⚖️ 구간균형형",
+  statHotDue: "🔥 핫·미출현형",
+  statCooc: "🔗 동반출현형",
+  statFun: "📊 통계형(재미)",   // 구버전(1236 등) 호환
+  statTop: "① 많이나온숫자",
+  statAvg: "② 평균값",
+};
+const PRED_ORDER = ["algo", "statFreq", "statBand", "statHotDue", "statCooc", "statFun", "statTop", "statAvg"];
+// 특정 예측객체가 실제로 보유한 기법만 순서대로
+function predKinds(pred) {
+  return PRED_ORDER.filter(k => Array.isArray(pred[k]) && pred[k].length).map(k => ({ key: k, label: PRED_LABELS[k] }));
+}
 
 function render(d) {
   document.getElementById("sideNav").innerHTML = sideNav("lotto");
@@ -28,7 +36,7 @@ function render(d) {
   // 이번 회차 예측번호 (서버 생성값 표시)
   document.getElementById("predRound").textContent = `${targetRound}회`;
   if (target) {
-    document.getElementById("predList").innerHTML = PRED_KINDS.map(k => {
+    document.getElementById("predList").innerHTML = predKinds(target).map(k => {
       const nums = target[k.key] || [];
       return `<div class="pred-item"><div class="pred-head"><span class="pred-label">${k.label}</span><span class="pred-fixed">고정</span></div>` +
         `<div class="lotto-balls">${nums.map(n => ball(n)).join("") || "—"}</div></div>`;
@@ -79,7 +87,7 @@ function render(d) {
     if (r.round >= 1236 && pred) {
       const actual = new Set(r.nums);
       let best = 0;
-      const items = PRED_KINDS.map(k => {
+      const items = predKinds(pred).map(k => {
         const nums = pred[k.key] || [];
         const m = nums.filter(n => actual.has(n)).length;
         if (m > best) best = m;
