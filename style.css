@@ -168,5 +168,26 @@ footer{display:flex;justify-content:space-between;align-items:center;gap:12px;pa
 .visual-copy b{font:500 76px var(--font-geist-mono);letter-spacing:-.08em;color:#dffff2}.visual-copy span{font:500 10px var(--font-geist-mono);color:#86aa9d;letter-spacing:.12em}
 .visual-line{position:absolute;left:-10%;right:-10%;height:140px;top:53%;border-top:3px solid var(--green);border-radius:50%;transform:rotate(-11deg);box-shadow:0 -20px 60px #32d69b55}
 
+/* 모바일 햄버거 + 좌측 드로어 (데스크톱 숨김) */
+#navToggle,#navDim{display:none}
+
 @media(max-width:1100px){.hero-grid{grid-template-columns:1.3fr 1fr}.risk-card{grid-column:1/-1}.risk-card ul{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.lower-grid{grid-template-columns:1fr}.activity-card{min-height:280px}}
-@media(max-width:760px){.app-shell{display:block}.sidebar{height:auto;position:relative;padding:16px;border-right:0;border-bottom:1px solid var(--line);display:flex;flex-direction:row;align-items:center}.brand{padding:0}.brand strong{display:none}.sidebar nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}.sidebar nav a{padding:9px 11px;font-size:0;background:#0c1916}.sidebar nav a i{font-size:17px}.sidebar-bottom{display:none}.content{padding:20px 16px}.topbar h1{font-size:20px}.hero-grid{grid-template-columns:1fr}.risk-card{grid-column:auto}.lower-grid{grid-template-columns:1fr}.balance{font-size:30px}.chart-card{padding:16px}.chart-wrap{height:210px}.positions{padding:16px}footer{gap:10px;flex-direction:column}.login-shell{grid-template-columns:1fr}.login-card{padding:25px 20px}.login-brand{margin-bottom:45px}.login-card h1{font-size:35px}.login-visual{display:none}}
+@media(max-width:760px){.app-shell{display:block}
+/* 사이드바 = 좌측 오프캔버스 드로어 */
+.sidebar{position:fixed;top:0;left:0;height:100vh;width:250px;z-index:120;flex-direction:column;padding:22px 18px;border-right:1px solid var(--line);border-bottom:0;background:#08130f;transform:translateX(-100%);transition:transform .28s ease;overflow-y:auto}
+body.nav-open .sidebar{transform:translateX(0);box-shadow:14px 0 44px rgba(0,0,0,.55)}
+.brand{padding:0 8px 26px}.brand strong{display:block}
+.sidebar nav{display:grid;gap:6px;margin:0}
+.sidebar nav a{padding:12px;font-size:14px;background:transparent}
+.sidebar nav a i{font-size:16px}
+.sidebar-bottom{display:block;margin-top:auto}
+/* 햄버거(좌상단 고정) */
+#navToggle{display:flex;flex-direction:column;justify-content:center;gap:5px;position:fixed;top:13px;left:13px;z-index:130;width:42px;height:42px;padding:0 10px;border:1px solid var(--line);border-radius:11px;background:rgba(12,25,22,.92);backdrop-filter:blur(4px);cursor:pointer}
+#navToggle span{display:block;height:2px;background:var(--green);border-radius:2px;transition:.25s}
+body.nav-open #navToggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+body.nav-open #navToggle span:nth-child(2){opacity:0}
+body.nav-open #navToggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* 딤 오버레이 */
+#navDim{display:block;position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .28s}
+body.nav-open #navDim{opacity:1;pointer-events:auto}
+.content{padding:64px 16px 24px}.topbar h1{font-size:20px}.hero-grid{grid-template-columns:1fr}.risk-card{grid-column:auto}.lower-grid{grid-template-columns:1fr}.balance{font-size:30px}.chart-card{padding:16px}.chart-wrap{height:210px}.positions{padding:16px}footer{gap:10px;flex-direction:column}.login-shell{grid-template-columns:1fr}.login-card{padding:25px 20px}.login-brand{margin-bottom:45px}.login-card h1{font-size:35px}.login-visual{display:none}}

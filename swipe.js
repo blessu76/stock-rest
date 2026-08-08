@@ -33,6 +33,7 @@
 
   document.addEventListener("touchstart", e => {
     if (window.innerWidth > 760) return;
+    if (document.body.classList.contains("nav-open")) return;   // 드로어 열림 중 스와이프 무시
     const login = document.getElementById("login");
     if (login && !login.hidden) return;
     if (blockedTarget(e.target)) { st = 0; return; }
