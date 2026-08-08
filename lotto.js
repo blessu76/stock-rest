@@ -77,7 +77,7 @@ function render(d) {
       document.getElementById("topNumCount").textContent = `${stats.topNumber.count}회 출현`;
     }
     document.getElementById("posTop").innerHTML = (stats.posTop || []).map(p =>
-      `<div class="pos-item"><span class="pos-label">${p.pos}번째</span><span class="lb sm" style="background:${ballColor(p.number)}">${p.number}</span><small>${p.count}회</small></div>`).join("");
+      `<div class="pos-item"><span class="pos-label">${p.pos}번째</span><span class="lb sm" style="background:${ballColor(p.number)}">${p.number}</span><small>최다 ${p.count}회</small>${p.avg != null ? `<small class="pos-avg">평균 ${p.avg}</small>` : ""}</div>`).join("");
     // 빈도표
     document.getElementById("freqCard").hidden = false;
     const mx = Math.max(...Object.values(stats.freq));
