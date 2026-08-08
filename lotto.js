@@ -69,6 +69,15 @@ function render(d) {
     document.getElementById("statMeta").textContent = "빈도 가중 랜덤 · 재미용";
     drawStat();
     document.getElementById("genStat").onclick = drawStat;
+    // 통계 요약: 최다 번호 + 자리별 최다
+    document.getElementById("statSummary").hidden = false;
+    document.getElementById("statSummarySub").textContent = `${stats.count}회 데이터 · 예측력 없음, 참고용`;
+    if (stats.topNumber) {
+      document.getElementById("topNumBall").innerHTML = ball(stats.topNumber.number);
+      document.getElementById("topNumCount").textContent = `${stats.topNumber.count}회 출현`;
+    }
+    document.getElementById("posTop").innerHTML = (stats.posTop || []).map(p =>
+      `<div class="pos-item"><span class="pos-label">${p.pos}번째</span><span class="lb sm" style="background:${ballColor(p.number)}">${p.number}</span><small>${p.count}회</small></div>`).join("");
     // 빈도표
     document.getElementById("freqCard").hidden = false;
     const mx = Math.max(...Object.values(stats.freq));
