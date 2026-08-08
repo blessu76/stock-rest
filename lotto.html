@@ -20,7 +20,7 @@
       <div><p class="eyebrow">LOTTO 6/45</p><h1>로또</h1><span>대한민국 동행복권 당첨번호</span></div>
       <span class="date-pill" id="metaDate"><i></i> —</span>
     </header>
-    <div class="sample-banner"><span>i</span><p id="lottoNote">동행복권 공개 데이터 · 참고용</p></div>
+    <div class="sample-banner warn"><span>!</span><p><b>재미·참고용입니다.</b> 로또는 완전 무작위 추첨이며, 아래 추천 번호가 당첨 확률을 높이지 않습니다(모든 조합 동일 확률).</p></div>
 
     <section class="panel3" id="latestCard" hidden>
       <div class="panel-title"><div><h2 id="latestRound">—</h2><p id="latestDate">—</p></div><span class="health"><i></i> 최신</span></div>
@@ -28,6 +28,24 @@
     </section>
 
     <div class="empty-note" id="pending" hidden>아직 로또 데이터가 없습니다. 사이트 정상화/다음 추첨(매주 토) 후 자동으로 채워집니다.</div>
+
+    <section class="split3">
+      <article class="panel3">
+        <div class="panel-title"><div><h2>🎲 알고리즘형 번호</h2><p>구간 균형·합계·연속수 규칙으로 생성(과거데이터 불필요)</p></div><button class="mini-copy" id="genAlgo">다시 뽑기</button></div>
+        <div class="lotto-balls" id="algoBalls"></div>
+        <p class="uni-note" id="algoMeta">—</p>
+      </article>
+      <article class="panel3">
+        <div class="panel-title"><div><h2>📊 통계형 번호</h2><p>과거 출현 빈도 가중 추천 · <span id="statCount">데이터 없음</span></p></div><button class="mini-copy" id="genStat">다시 뽑기</button></div>
+        <div class="lotto-balls" id="statBalls"></div>
+        <p class="uni-note" id="statMeta">과거 당첨 데이터가 쌓이면 활성화됩니다.</p>
+      </article>
+    </section>
+
+    <section class="panel3" id="freqCard" hidden>
+      <div class="panel-title"><div><h2>번호별 출현 빈도</h2><p>hot(자주)·cold(드묾) · 예측력 없음, 참고용</p></div></div>
+      <div class="freq-grid" id="freqGrid"></div>
+    </section>
 
     <section class="panel3">
       <div class="panel-title"><div><h2>지난 회차</h2><p>최근 당첨번호 이력</p></div></div>
