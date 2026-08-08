@@ -8,10 +8,11 @@ function ball(n, hit) {
 
 // 예측 4종 (서버 lotto_predictions 에서 생성, 여기선 표시만)
 const PRED_KINDS = [
-  { key: "algo",    label: "🎲 알고리즘형" },
-  { key: "statFun", label: "📊 통계형(재미)" },
-  { key: "statTop", label: "① 많이나온숫자" },
-  { key: "statAvg", label: "② 평균값" },
+  { key: "algo",     label: "🎲 알고리즘형" },
+  { key: "statFun",  label: "📊 통계형(재미)" },
+  { key: "statFreq", label: "📊 통계형(빈도)" },
+  { key: "statTop",  label: "① 많이나온숫자" },
+  { key: "statAvg",  label: "② 평균값" },
 ];
 
 function render(d) {
