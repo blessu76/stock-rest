@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="three.css">
 </head>
 <body>
 <main class="app-shell" id="app" hidden>
@@ -30,9 +31,9 @@
     </div>
   </aside>
   <section class="content">
-    <header class="topbar">
-      <div><p class="eyebrow"><a class="back-link" href="index.html">← Overview</a></p><h1>일일손익 이력</h1><p class="day-summary">보유 종목별 일일손익과 누적 합계</p></div>
-      <div class="top-actions"><span class="market" id="asOf"><i></i> —</span></div>
+    <header class="page-head">
+      <div><p class="eyebrow">DAILY P&amp;L</p><h1>일일손익 이력</h1><span>보유 종목별 일일손익과 누적 합계</span></div>
+      <span class="date-pill" id="asOf"><i></i> —</span>
     </header>
     <section class="hero-grid pnl-hero" id="pnlTotals"></section>
     <div class="hist-grid" id="pnlGrid"></div>
@@ -40,5 +41,6 @@
   </section>
 </main>
 <script src="pnl.js"></script>
+<script src="swipe.js"></script>
 </body>
 </html>

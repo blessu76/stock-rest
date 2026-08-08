@@ -4,6 +4,7 @@
 .page-head>div>span{color:var(--muted);font-size:13px}
 .date-pill{border:1px solid var(--line);border-radius:99px;padding:11px 16px;color:#a9bcb5;font:500 11px var(--font-geist-mono)}
 .date-pill i{display:inline-block;width:7px;height:7px;background:var(--green);border-radius:50%;margin-right:8px;box-shadow:0 0 10px var(--green)}
+.head-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .stats{display:grid;gap:12px;margin-bottom:14px}
 .stats.four{grid-template-columns:repeat(4,1fr)}
 .stats>div{border:1px solid var(--line);background:linear-gradient(145deg,#0e1d19,#0a1613);border-radius:14px;padding:16px}
