@@ -2,10 +2,10 @@
 :root{--font-geist-sans:'Geist',system-ui,Arial,sans-serif;--font-geist-mono:'Geist Mono',ui-monospace,monospace;--bg:#07110f;--panel:#0c1916;--panel2:#10211d;--line:#1d312c;--text:#eef7f3;--muted:#7f9a91;--green:#32d69b;--green-soft:#103d30;--red:#ff7f78;--amber:#f5c969;--up:#f45b5b;--down:#4c8dff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-geist-sans)}
 .eyebrow{font:600 11px var(--font-geist-mono);letter-spacing:.14em;color:#6c8a80}
-.app-shell{min-height:100vh;display:grid;grid-template-columns:220px 1fr;background:radial-gradient(1400px 640px at 58% -14%,#16362c 0,transparent 62%),var(--bg)}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:220px 1fr;background:linear-gradient(180deg,#14291f 0,rgba(11,22,18,0) 240px),var(--bg)}
 .app-shell[hidden]{display:none}
-/* 데스크톱: 사이드바 컬럼 배경·구분선을 문서 전체 높이로(스티키 메뉴 아래도 이어짐) */
-@media(min-width:761px){.app-shell{background:linear-gradient(90deg,#08130f 0 219px,var(--line) 219px 220px,transparent 220px),radial-gradient(1400px 640px at 58% -14%,#16362c 0,transparent 62%),var(--bg)}}
+/* 데스크톱: 사이드바 컬럼 배경·구분선을 문서 전체 높이로(스티키 메뉴 아래도 이어짐). 상단 글로우는 전체 폭 세로 페이드(우측 경계 없음) */
+@media(min-width:761px){.app-shell{background:linear-gradient(90deg,#08130f 0 219px,var(--line) 219px 220px,transparent 220px),linear-gradient(180deg,#14291f 0,rgba(11,22,18,0) 240px),var(--bg)}}
 .sidebar{height:100vh;position:sticky;top:0;border-right:1px solid var(--line);padding:28px 18px;display:flex;flex-direction:column;background:#08130f}
 .brand{display:flex;align-items:center;gap:10px;padding:0 8px 38px}
 .brand>span,.login-brand>span{display:grid;place-items:center;width:34px;height:34px;border:1px solid #3bdca4;color:var(--green);border-radius:10px;font:700 18px var(--font-geist-mono);box-shadow:inset 0 0 20px #32d69b16}
