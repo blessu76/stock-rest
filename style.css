@@ -157,7 +157,7 @@ footer{display:flex;justify-content:space-between;align-items:center;gap:12px;pa
 .login-card h1{font-size:42px;line-height:1.12;letter-spacing:-.06em;margin:12px 0 18px}
 .login-copy{color:#82a097;font-size:13px;line-height:1.7;margin:0 0 34px;max-width:340px}
 .input-label{display:block;color:#799087;font-size:10px;margin:14px 0 7px}
-.login-input{width:100%;height:46px;border:1px solid var(--line);border-radius:9px;background:#0b1814;color:#e9f4ef;padding:0 13px;outline:none;font-family:var(--font-geist-mono)}
+.login-input{width:100%;height:46px;border:1px solid var(--line);border-radius:9px;background:#0b1814;color:#e9f4ef;padding:0 13px;outline:none;font-family:var(--font-geist-mono);font-size:16px}
 .login-input:focus{border-color:#2e8e6d;box-shadow:0 0 0 3px #32d69b12}
 .login-button{width:100%;height:48px;border:0;border-radius:9px;background:var(--green);color:#052118;font-weight:700;margin-top:22px;display:flex;justify-content:space-between;align-items:center;padding:0 17px;cursor:pointer}
 .login-note{font-size:9px;color:#627b72;margin-top:16px}.login-note i{width:5px;height:5px;display:inline-block;border-radius:50%;background:var(--green);margin-right:6px}
@@ -184,9 +184,7 @@ body.nav-open .sidebar{transform:translateX(0);box-shadow:14px 0 44px rgba(0,0,0
 /* 햄버거(좌상단 고정) */
 #navToggle{display:flex;flex-direction:column;justify-content:center;gap:5px;position:fixed;top:13px;left:13px;z-index:130;width:42px;height:42px;padding:0 10px;border:1px solid var(--line);border-radius:11px;background:rgba(12,25,22,.92);backdrop-filter:blur(4px);cursor:pointer}
 #navToggle span{display:block;height:2px;background:var(--green);border-radius:2px;transition:.25s}
-body.nav-open #navToggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-body.nav-open #navToggle span:nth-child(2){opacity:0}
-body.nav-open #navToggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+body.nav-open #navToggle{opacity:0;pointer-events:none}
 /* 딤 오버레이 */
 #navDim{display:block;position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .28s}
 body.nav-open #navDim{opacity:1;pointer-events:auto}
