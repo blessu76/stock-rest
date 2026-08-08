@@ -87,17 +87,17 @@ function render(d) {
     const pred = preds[r.round] || preds[String(r.round)];
     if (r.round >= 1236 && pred) {
       const actual = new Set(r.nums);
-      let best = 0;
+      let best = -1, bestLabel = "";
       const items = predKinds(pred).map(k => {
         const nums = pred[k.key] || [];
         const m = nums.filter(n => actual.has(n)).length;
-        if (m > best) best = m;
+        if (m > best) { best = m; bestLabel = k.label; }
         const bonusHit = nums.includes(r.bonus);
         return `<div class="pred-sg-item"><span class="pred-sg-label">${k.label}</span>` +
           `<div class="lotto-balls sm">${nums.map(n => ball(n, actual.has(n))).join("") || "—"}</div>` +
           `<span class="pred-sg-rate">적중 ${m}/6${bonusHit ? ` <i class="bh">+보너스</i>` : ""}</span></div>`;
       }).join("");
-      const summary = best > 0 ? `최고 ${best}개 적중` : "적중 없음";
+      const summary = best > 0 ? `${bestLabel} ${best}/6` : "적중 없음";
       row += `<tr class="pred-row"><td colspan="4">` +
         `<button class="pred-sg-toggle"><span class="chev">▶</span> 🎯 ${r.round}회 예측번호 채점` +
         `<span class="pred-sg-best${best > 0 ? " hit" : ""}">${summary}</span></button>` +
