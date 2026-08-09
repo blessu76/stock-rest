@@ -49,8 +49,12 @@ function pick(s) {
 function drawUniverse() {
   $("uniRows").innerHTML = ADMIN.length ? ADMIN.map(u => {
     const rmCmd = `${UNI_CLI} ${u.enabled ? "disable" : "enable"} ${u.code}`;
+    const role = u.role || "core";
+    const roleBadge = role === "free"
+      ? `<em class="pill muted" title="프리슬롯: 전량매도 자유">FREE</em>`
+      : `<em class="pill green" title="코어: 최소 1주 보유·물타기">CORE</em>`;
     return `<div class="order-row uni-row">
-      <span><em class="pill ${u.enabled ? "green" : "muted"}">${u.enabled ? "활성" : "비활성"}</em></span>
+      <span><em class="pill ${u.enabled ? "green" : "muted"}">${u.enabled ? "활성" : "비활성"}</em> ${roleBadge}</span>
       <span><b>${u.name}</b><small>${u.code}</small></span>
       <span class="mono">${u.market}</span>
       <span class="mono">${u.added_at || "—"}</span>
