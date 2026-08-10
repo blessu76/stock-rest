@@ -181,8 +181,12 @@ function renderIntradaySection(intr) {
     $("intradayVs").className = ""; $("intradayDrill").hidden = true; return;
   }
   INTRA_SEL = (INTRA_SEL && codes.includes(INTRA_SEL)) ? INTRA_SEL : codes[0];
-  tabs.innerHTML = codes.map(c => `<button data-c="${c}">${INTRA.stocks[c].name}</button>`).join("");
-  tabs.querySelectorAll("button").forEach(b => b.onclick = () => { INTRA_SEL = b.dataset.c; $("intradayDrill").hidden = true; drawIntraday(); });
+  tabs.innerHTML = codes.map(c => `<button data-c="${c}" class="${c === INTRA_SEL ? "active" : ""}">${INTRA.stocks[c].name}</button>`).join("");
+  tabs.querySelectorAll("button").forEach(b => b.onclick = () => {
+    INTRA_SEL = b.dataset.c;
+    tabs.querySelectorAll("button").forEach(x => x.classList.toggle("active", x.dataset.c === INTRA_SEL));
+    $("intradayDrill").hidden = true; drawIntraday();
+  });
   svg.onclick = toggleIntradayDrill;
   drawIntraday();
 }
