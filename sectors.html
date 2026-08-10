@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>업종 RS — recovery.console</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="three.css">
+<link rel="stylesheet" href="sectors.css">
+</head>
+<body>
+<main class="app-shell" id="app" hidden>
+  <aside class="sidebar" id="sideNav"></aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">SECTORS</p><h1>업종 상대강도(RS)</h1><span>어느 업종에 순풍이 부나 — 리딩 업종 안에서 종목을 고르는 탑다운 근거</span></div>
+      <span class="date-pill" id="metaDate"><i></i> —</span>
+    </header>
+    <div class="sample-banner"><span>i</span><p id="sampleNote">전 코스피 업종의 20/60/120일 상대강도를 데이터로 랭킹 — 확률(승률) 높은 자리를 찾는 참고 자료입니다. 매매·교체는 직접 결정합니다.</p></div>
+
+    <section class="stats three" id="sectorStats"></section>
+
+    <section class="panel3">
+      <div class="panel-title"><div><h2>업종 RS 랭킹</h2><p>60일 기준 정렬 · 리딩 업종 상단 · 상승=빨강</p></div>
+        <div class="sort-tabs" id="sortTabs"><button data-k="rs20">20일</button><button class="active" data-k="rs60">60일</button><button data-k="rs120">120일</button></div></div>
+      <div class="table-wrap"><table id="sectorTable"></table></div>
+    </section>
+
+    <section class="panel3">
+      <div class="panel-title"><div><h2>업종 RS 막대</h2><p id="barCaption">60일 상대강도 · 클릭하면 구성 종목</p></div></div>
+      <div class="chart-wrap sector-bars"><svg viewBox="0 0 620 300" preserveAspectRatio="none" id="sectorBars" style="width:100%;display:block"></svg></div>
+    </section>
+
+    <section class="panel3" id="drillPanel">
+      <div class="panel-title"><div><h2 id="drillTitle">구성 종목 드릴다운</h2><p id="drillSub">업종을 클릭하면 대표 대형주의 개별 추세·RS가 나타납니다</p></div></div>
+      <div class="table-wrap"><table id="constTable"></table></div>
+    </section>
+
+    <footer><span><i></i> READ-ONLY</span><p>업종 RS는 대표 섹터 ETF(실패 시 대형주 바스켓)의 일봉 수익률 기준 · 매 거래일 장마감 후 자동 계산됩니다. 순수 조사·표시용.</p><div class="foot-brand"><span>R</span>recovery.console</div></footer>
+  </section>
+</main>
+<script src="common.js?v=20260810"></script>
+<script src="sectors.js?v=20260810"></script>
+<script src="drawer.js"></script>
+<script src="swipe.js"></script>
+</body>
+</html>

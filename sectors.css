@@ -1,0 +1,21 @@
+/* Sectors 페이지 스코프 스타일 — 업종 RS 랭킹·막대·드릴다운. 기존 토큰 재사용. */
+.sort-tabs{display:flex;gap:4px;background:#08130f;border-radius:7px;padding:3px}
+.sort-tabs button{border:0;background:transparent;color:#687f77;font:500 10px var(--font-geist-mono);padding:6px 11px;border-radius:5px;cursor:pointer}
+.sort-tabs button.active{background:#19342b;color:var(--green)}
+
+/* 랭킹 표 */
+#sectorTable td,#sectorTable th{padding:9px 12px}
+#sectorTable tr[data-sec]:hover{background:#0e1d19}
+#sectorTable .sel-row{background:#122420;box-shadow:inset 3px 0 var(--green)}
+#constTable td,#constTable th{padding:9px 12px}
+.proxy small{font:500 10px var(--font-geist-mono);color:var(--muted)}
+.pk{font-style:normal;font-size:8px;padding:2px 6px;border-radius:99px;margin-right:6px;background:#1d2c27;color:#91a59e;display:inline-block;vertical-align:middle}
+.pk.etf{background:#103d2f;color:var(--green)}
+
+/* MA60 상하 pill / 추세 판단 */
+.pill.up-pill{background:#3d2020;color:var(--up)}
+.pill.down-pill{background:#16283d;color:var(--down)}
+
+/* 막대 차트 — 가로스크롤 없음, 세로로 업종 나열(반응형 SVG) */
+.chart-wrap.sector-bars{height:auto;padding-left:0;margin-top:8px}
+.chart-wrap.sector-bars svg{height:auto;overflow:visible}
