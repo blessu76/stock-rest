@@ -35,20 +35,36 @@ function render(d) {
      <div><small>어제 증감</small>${chgCell(yChg, yPct)}</div>
      <div><small>목표까지 잔여</small><b class="${sgnK(-shortfall)}">${won0(shortfall)}</b><em>회복률 ${Number(today.recoveryPct || 0).toFixed(2)}%</em></div>`;
 
-  // 테이블: 날짜 | 총자산 | 전일대비(₩) | 전일대비(%) | 회복률 | [종목별 N개] | 현금
+  // 테이블: 날짜 | 총자산 | 전일대비(₩) | 전일대비(%) | 회복률 | [종목별 N개] | 현금 — 월별 필터
   const head = `<thead><tr>
     <th>날짜</th><th>총자산</th><th>전일대비</th><th>전일대비%</th><th>회복률</th>` +
     codes.map(c => `<th>${c.name}</th>`).join("") +
     `<th>현금</th></tr></thead>`;
-  const body = rows.map((r, i) => {
-    const cls = i === 0 ? ' class="today-row"' : "";
-    const chg = r.change == null ? "—" : `<span class="${sgnK(r.change)}">${wonS(r.change)}</span>`;
-    const chgP = r.changePct == null ? "—" : `<span class="${sgnK(r.changePct)}">${pctS(r.changePct)}</span>`;
-    const per = codes.map(c => `<td>${won0((r.perStock || {})[c.code] || 0)}</td>`).join("");
-    return `<tr${cls}><td><b>${r.date}</b></td><td>${won0(r.equity)}</td>
-      <td>${chg}</td><td>${chgP}</td><td>${Number(r.recoveryPct || 0).toFixed(2)}%</td>
-      ${per}<td>${won0(r.cash)}</td></tr>`;
-  }).join("");
-  $("assetTable").innerHTML = head + `<tbody>${body}</tbody>`;
+  const todayDate = today.date;
+  const months = [...new Set(rows.map(r => r.date.slice(0, 7)))];   // 이미 최신순(desc)
+  let selMonth = months[0];
+
+  function renderTable() {
+    const mrows = rows.filter(r => r.date.slice(0, 7) === selMonth);
+    const body = mrows.map(r => {
+      const cls = r.date === todayDate ? ' class="today-row"' : "";
+      const chg = r.change == null ? "—" : `<span class="${sgnK(r.change)}">${wonS(r.change)}</span>`;
+      const chgP = r.changePct == null ? "—" : `<span class="${sgnK(r.changePct)}">${pctS(r.changePct)}</span>`;
+      const per = codes.map(c => `<td>${won0((r.perStock || {})[c.code] || 0)}</td>`).join("");
+      return `<tr${cls}><td><b>${r.date}</b></td><td>${won0(r.equity)}</td>
+        <td>${chg}</td><td>${chgP}</td><td>${Number(r.recoveryPct || 0).toFixed(2)}%</td>
+        ${per}<td>${won0(r.cash)}</td></tr>`;
+    }).join("");
+    $("assetTable").innerHTML = head + `<tbody>${body || `<tr><td colspan="${6 + codes.length}" style="color:#7f9a91">해당 월 데이터 없음</td></tr>`}</tbody>`;
+  }
+
+  $("monthTabs").innerHTML = months.map(m =>
+    `<button data-m="${m}" class="${m === selMonth ? "active" : ""}">${m.replace("-", ".")}</button>`).join("");
+  $("monthTabs").querySelectorAll("button").forEach(b => b.onclick = () => {
+    selMonth = b.dataset.m;
+    $("monthTabs").querySelectorAll("button").forEach(x => x.classList.toggle("active", x.dataset.m === selMonth));
+    renderTable();
+  });
+  renderTable();
 }
 guardAndLoad(render);
