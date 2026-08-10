@@ -34,6 +34,11 @@ function render(d) {
         <span>60일선 <b>${p.aboveMa60 == null ? "—" : p.aboveMa60 ? "위" : "아래"}</b></span>
         <span>60일선까지 <b class="${sgnK(p.distToMa60)}">${p.distToMa60 == null ? "—" : pctS(p.distToMa60)}</b></span>
       </div>
+      ${p.grid ? `<div class="level" title="코어 그리드(1주 오실레이션): 기준가 위·아래 ±폭에서 1주씩 매도/재매수">
+        <span>그리드 기준가 <b>${won0(p.grid.anchor)}</b></span>
+        <span>▲매도 <b class="pos">${won0(p.grid.sellTrigger)}</b> · ▼매수 <b class="neg">${won0(p.grid.buyTrigger)}</b></span>
+        <span>누적재매수 <b>${p.grid.extra}/${p.grid.maxExtra}</b></span>
+      </div>` : ""}
       <footer><span class="pill ${pillTone}">${p.decision}</span><span class="mono" style="color:#75968a;font-size:9px">${p.code}</span></footer>
     </article>`;
   }).join("") || `<p class="empty-note">보유 종목이 없습니다.</p>`;
