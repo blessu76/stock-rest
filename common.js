@@ -52,6 +52,7 @@ function sideNav(active) {
     <a ${active==='overview'?'class="active"':''} href="index.html"><i>⌁</i>Overview</a>
     <a ${active==='history'?'class="active"':''} href="history.html"><i>↗</i>Daily changes</a>
     <a ${active==='pnl'?'class="active"':''} href="pnl.html"><i>Σ</i>Daily P&L</a>
+    <a ${active==='assets'?'class="active"':''} href="assets.html"><i>₩</i>Assets</a>
     <a ${active==='positions'?'class="active"':''} href="positions.html"><i>▦</i>Positions</a>
     <a ${active==='orders'?'class="active"':''} href="orders.html"><i>⇄</i>Orders</a>
     <a ${active==='risk'?'class="active"':''} href="risk.html"><i>◇</i>Risk monitor</a>

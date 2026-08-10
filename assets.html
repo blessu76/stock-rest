@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자산 원장 — recovery.console</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="three.css">
+</head>
+<body>
+<main class="app-shell" id="app" hidden>
+  <aside class="sidebar" id="sideNav"></aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">ASSETS</p><h1>자산 원장</h1><span>총자산의 일별 증감 · 종목별 평가액 · 현금</span></div>
+      <span class="date-pill" id="metaDate"><i></i> —</span>
+    </header>
+    <div class="sample-banner"><span>i</span><p id="sampleNote">—</p></div>
+    <section class="stats three" id="assetStats"></section>
+    <section class="panel3">
+      <div class="panel-title"><div><h2>총자산 일별 원장</h2><p>종가 기준 · 최신이 위로</p></div></div>
+      <div class="table-wrap"><table id="assetTable"></table></div>
+    </section>
+    <footer><span><i></i> READ-ONLY</span><p id="assetCaption">보유수량 불변 가정(PAPER) · 자산은 종가로 재구성됩니다.</p><div class="foot-brand"><span>R</span>recovery.console</div></footer>
+  </section>
+</main>
+<script src="common.js"></script>
+<script src="assets.js"></script>
+<script src="drawer.js"></script>
+<script src="swipe.js"></script>
+</body>
+</html>

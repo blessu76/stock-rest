@@ -18,6 +18,9 @@
 .head-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .stats{display:grid;gap:12px;margin-bottom:14px}
 .stats.four{grid-template-columns:repeat(4,1fr)}
+.stats.three{grid-template-columns:repeat(3,1fr)}
+tr.today-row td{background:#0f251d;color:#eaf6f0}
+tr.today-row td:first-child b{color:var(--green)}
 .stats>div{border:1px solid var(--line);background:linear-gradient(145deg,#0e1d19,#0a1613);border-radius:14px;padding:16px}
 .stats small,.stats b,.stats em{display:block}
 .stats small{color:var(--muted);font-size:10px}
@@ -191,4 +194,4 @@
 .hist td:nth-child(3) .lb{width:13px;height:13px;font-size:7px}
 .hist td:nth-child(4) .lb{width:15px;height:15px;font-size:8px}}
 @media(max-width:1100px){.cards3{grid-template-columns:1fr}.stats.four{grid-template-columns:repeat(2,1fr)}.risk-grid3{grid-template-columns:1fr}.split3{grid-template-columns:1fr}}
-@media(max-width:760px){.stats.four{grid-template-columns:1fr 1fr}.risk-hero3{grid-template-columns:1fr}.risk-hero3>aside{border-left:0;border-top:1px solid var(--line)}.page-head h1{font-size:24px}.content{padding:64px 16px 24px}.page-head{padding-top:0}}
+@media(max-width:760px){.stats.four{grid-template-columns:1fr 1fr}.stats.three{grid-template-columns:1fr}.risk-hero3{grid-template-columns:1fr}.risk-hero3>aside{border-left:0;border-top:1px solid var(--line)}.page-head h1{font-size:24px}.content{padding:64px 16px 24px}.page-head{padding-top:0}}
