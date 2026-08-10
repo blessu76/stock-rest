@@ -9,7 +9,7 @@ function render(d) {
     <div><small>총 평가금액</small><b>${won0(s.marketValue || 0)}</b><em>현금 제외</em></div>
     <div><small>평가손익</small><b class="${sgnK(s.unrealizedPnl)}">${wonS(s.unrealizedPnl || 0)}</b><em class="${sgnK(s.unrealizedPnlRate)}">${pctS(s.unrealizedPnlRate || 0)}</em></div>
     <div><small>현금 비중</small><b>${s.cashWeight}%</b><em>최소 ${s.minCashWeight}% 이상</em></div>
-    <div><small>최대 집중도</small><b>${s.maxPositionWeight}%</b><em>한도 ${s.maxWeightLimit}%</em></div>`;
+    <div><small>최대 집중도</small><b>${s.maxPositionWeight}%</b><em>한도 ${s.maxWeightLimit}% · 추천슬롯 ${s.maxFreeWeight || 25}%</em></div>`;
 
   const badge = $("reconBadge");
   badge.className = "health" + (pp.reconciled ? "" : " warn");
@@ -18,7 +18,7 @@ function render(d) {
   $("posCards").innerHTML = (pp.positions || []).map(p => {
     const pillTone = p.tone === "green" ? "green" : p.tone === "amber" ? "amber" : "red";
     const roleBadge = p.role === "free"
-      ? `<em class="pill muted" title="프리슬롯: 전량매도 자유(0주 가능)">FREE</em>`
+      ? `<em class="pill muted" title="프리슬롯(추천종목): 전량매도 자유(0주 가능) · 최대 비중 25% 상한">FREE</em>`
       : `<em class="pill green" title="코어: 최소 1주 항상 보유·평단 낮추기">CORE</em>`;
     return `<article class="position">
       <div class="ticker"><div><h3>${p.name} ${roleBadge}</h3><small>${p.code}</small></div><span>RS ${p.rsRank ?? "—"}</span></div>
