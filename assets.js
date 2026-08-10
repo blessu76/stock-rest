@@ -58,13 +58,9 @@ function render(d) {
     $("assetTable").innerHTML = head + `<tbody>${body || `<tr><td colspan="${6 + codes.length}" style="color:#7f9a91">해당 월 데이터 없음</td></tr>`}</tbody>`;
   }
 
-  $("monthTabs").innerHTML = months.map(m =>
-    `<button data-m="${m}" class="${m === selMonth ? "active" : ""}">${m.replace("-", ".")}</button>`).join("");
-  $("monthTabs").querySelectorAll("button").forEach(b => b.onclick = () => {
-    selMonth = b.dataset.m;
-    $("monthTabs").querySelectorAll("button").forEach(x => x.classList.toggle("active", x.dataset.m === selMonth));
-    renderTable();
-  });
+  const sel = $("monthSelect");
+  sel.innerHTML = months.map(m => `<option value="${m}"${m === selMonth ? " selected" : ""}>${m.replace("-", ".")}</option>`).join("");
+  sel.onchange = () => { selMonth = sel.value; renderTable(); };
   renderTable();
 }
 guardAndLoad(render);

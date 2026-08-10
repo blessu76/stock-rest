@@ -21,6 +21,10 @@
 .stats.three{grid-template-columns:repeat(3,1fr)}
 tr.today-row td{background:#0f251d;color:#eaf6f0}
 tr.today-row td:first-child b{color:var(--green)}
+/* 월 선택 셀렉트 */
+.month-select{background:#08130f;color:#cdddd5;border:1px solid var(--line);border-radius:7px;padding:7px 30px 7px 12px;font:500 11px var(--font-geist-mono);cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a968b' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.month-select:focus{outline:none;border-color:var(--green)}
+.month-select option{background:#0c1a15;color:#cdddd5}
 .stats>div{border:1px solid var(--line);background:linear-gradient(145deg,#0e1d19,#0a1613);border-radius:14px;padding:16px}
 .stats small,.stats b,.stats em{display:block}
 .stats small{color:var(--muted);font-size:10px}
