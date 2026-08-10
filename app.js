@@ -54,6 +54,11 @@ function daySummary(d) {
   else parts.push("신규 주문 없음");
   if (d.system.killSwitch === "ON") parts.push("⚠️ 킬스위치 ON");
   if (d.dataState === "STALE") parts.push("데이터 지연");
+  // 장중 코어 그리드 왕복 실현손익(재원) — 있으면 요약에 병기
+  const ig = d.intradayGrid;
+  if (ig && ig.enabled && ig.harvestedTotal) {
+    parts.push(`그리드 실현 ${ig.harvestedTotal > 0 ? "+" : ""}${ig.harvestedTotal.toLocaleString("ko-KR")}원`);
+  }
   return parts.join("  ·  ");
 }
 

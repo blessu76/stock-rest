@@ -34,7 +34,11 @@ function render(d) {
         <span>60일선 <b>${p.aboveMa60 == null ? "—" : p.aboveMa60 ? "위" : "아래"}</b></span>
         <span>60일선까지 <b class="${sgnK(p.distToMa60)}">${p.distToMa60 == null ? "—" : pctS(p.distToMa60)}</b></span>
       </div>
-      ${p.grid ? `<div class="level" title="코어 그리드(1주 오실레이션): 기준가 위·아래 ±폭에서 1주씩 매도/재매수">
+      ${p.intradayGrid ? `<div class="level" title="장중 코어 그리드: 앵커(전일종가, 당일 계단식) 위 +2%서 1주매도 / 아래 −3%서 1주매수. 판 뒤 못 산 주수=미복원, 왕복 실현손익=재원.">
+        <span>장중그리드 기준가 <b>${won0(p.intradayGrid.anchor)}</b></span>
+        <span>▲매도 <b class="pos">${won0(p.intradayGrid.sellTrigger)}</b> · ▼매수 <b class="neg">${p.intradayGrid.buyTrigger == null ? "—" : won0(p.intradayGrid.buyTrigger)}</b></span>
+        <span>미복원 <b>${p.intradayGrid.backlog}</b>주 · 실현 <b class="${sgnK(p.intradayGrid.harvestedPnl)}">${wonS(p.intradayGrid.harvestedPnl)}</b></span>
+      </div>` : p.grid ? `<div class="level" title="코어 그리드(1주 오실레이션): 기준가 위·아래 ±폭에서 1주씩 매도/재매수">
         <span>그리드 기준가 <b>${won0(p.grid.anchor)}</b></span>
         <span>▲매도 <b class="pos">${won0(p.grid.sellTrigger)}</b> · ▼매수 <b class="neg">${won0(p.grid.buyTrigger)}</b></span>
         <span>누적재매수 <b>${p.grid.extra}/${p.grid.maxExtra}</b></span>
