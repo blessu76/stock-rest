@@ -1,6 +1,15 @@
 // Assets — 총자산 일별 원장. 종가로 재구성(PAPER·수량 불변). 읽기 전용.
 function render(d) {
-  document.getElementById("sideNav").innerHTML = sideNav("assets");
+  try { renderAssets(d); }
+  catch (e) {
+    console.error("assets render error:", e);
+    const s = document.getElementById("assetStats");
+    if (s) s.innerHTML = `<div><small>표시 오류</small><b>—</b><em>새로고침(Cmd+Shift+R) 후에도 계속되면 알려주세요</em></div>`;
+  }
+}
+function renderAssets(d) {
+  const sn = document.getElementById("sideNav");
+  if (sn) sn.innerHTML = sideNav("assets");
   wireLock(); metaBadge(d);
 
   const led = d.assetLedger || { codes: [], rows: [], target: 0 };
@@ -59,8 +68,10 @@ function render(d) {
   }
 
   const sel = $("monthSelect");
-  sel.innerHTML = months.map(m => `<option value="${m}"${m === selMonth ? " selected" : ""}>${m.replace("-", ".")}</option>`).join("");
-  sel.onchange = () => { selMonth = sel.value; renderTable(); };
+  if (sel) {
+    sel.innerHTML = months.map(m => `<option value="${m}"${m === selMonth ? " selected" : ""}>${m.replace("-", ".")}</option>`).join("");
+    sel.onchange = () => { selMonth = sel.value; renderTable(); };
+  }
   renderTable();
 }
 guardAndLoad(render);

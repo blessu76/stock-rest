@@ -28,7 +28,7 @@ async function guardAndLoad(render) {
     if (u !== USERNAME) throw 0;
     const data = await decryptEnvelope(env, p);
     document.getElementById("app").hidden = false;
-    render(data);
+    try { render(data); } catch (re) { console.error("render failed:", re); }   // 렌더 에러로 로그아웃하지 않음
   } catch (e) { sessionStorage.removeItem("auth"); location.href = "index.html"; }
 }
 
