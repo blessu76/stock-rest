@@ -23,6 +23,12 @@
     <div class="sample-banner"><span>i</span><p id="sampleNote">—</p></div>
     <section class="stats three" id="assetStats"></section>
     <section class="panel3">
+      <div class="panel-title"><div><h2>총자산 추이 · 구성</h2><p>주별 · 총자산=라인 · 종목·현금=스택 막대</p></div>
+        <div class="week-range"><input type="week" id="chartFrom" aria-label="시작 주"><span>~</span><input type="week" id="chartTo" aria-label="종료 주"></div></div>
+      <div class="chart-wrap"><svg viewBox="0 0 620 240" preserveAspectRatio="none" id="assetChart" style="width:100%;height:240px;display:block"></svg></div>
+      <div class="asset-legend" id="assetChartLegend"></div>
+    </section>
+    <section class="panel3">
       <div class="panel-title"><div><h2>총자산 일별 원장</h2><p>종가 기준 · 최신이 위로 · 월별 선택</p></div><select class="month-select" id="monthSelect" aria-label="월 선택"></select></div>
       <div class="table-wrap"><table id="assetTable"></table></div>
     </section>
