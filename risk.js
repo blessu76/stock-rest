@@ -23,6 +23,7 @@ function render(d) {
   $("riskDesc").textContent = breached ? `방어선 ${breached}개 위반 — 자동 대응 작동` : "모든 계좌 방어선까지 여유가 있습니다.";
   $("compList").innerHTML = (rp.components || []).map(c => `<li><span>${c.name}</span><b>+${c.score}</b></li>`).join("");
   $("stratMode").textContent = rp.strategyMode || "—";
+  attachModeTip("stratMode");
   const mp = $("mktPill");
   mp.textContent = rp.marketState || "—";
   mp.className = "pill " + (rp.marketState === "RISK_ON" ? "green" : rp.marketState === "RISK_OFF" ? "blue" : "amber");

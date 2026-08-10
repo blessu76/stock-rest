@@ -63,3 +63,24 @@ function sideNav(active) {
     <div class="profile"><span>DK</span><div><b>Davy Kim</b><small>Private account</small></div></div>
   </div>`;
 }
+
+// 전략 모드 설명 툴팁 (Overview·Risk 공용, 단일 소스)
+const MODE_TIP = `<b>전략 모드 — 총자산 수준별 자동 전환</b>` +
+  `<span class="mt-row"><i class="mt-dot g"></i><b>AGGRESSIVE</b> 정상 매수(100%)</span>` +
+  `<span class="mt-row"><i class="mt-dot y"></i><b>REDUCED_RISK</b> 자산 418만↓ · 매수 50% 축소</span>` +
+  `<span class="mt-row"><i class="mt-dot o"></i><b>BUY_PAUSED</b> 자산 400만↓ 또는 월 −6% · 신규매수·물타기 중단</span>` +
+  `<span class="mt-row"><i class="mt-dot r"></i><b>CHALLENGE_STOPPED</b> 자산 391.5만↓ · 도전종료·자본보존</span>` +
+  `<span class="mt-row"><i class="mt-dot b"></i><b>RECOVERED</b> 원금 682만 회복 · 매수중단(수익보존)</span>` +
+  `<span class="mt-note">※ 손절·추적매도는 모든 모드에서 작동. 실제 매수는 시장 RISK_ON일 때만. 물타기는 AGGRESSIVE·REDUCED에서만.</span>`;
+
+function attachModeTip(afterElId) {
+  const el = document.getElementById(afterElId);
+  if (!el || (el.parentElement && el.parentElement.querySelector(".mode-tip"))) return;
+  const tip = document.createElement("span");
+  tip.className = "mode-tip";
+  tip.tabIndex = 0;
+  tip.setAttribute("role", "button");
+  tip.setAttribute("aria-label", "전략 모드 설명 보기");
+  tip.innerHTML = `ⓘ<span class="mode-pop">${MODE_TIP}</span>`;
+  el.insertAdjacentElement("afterend", tip);
+}

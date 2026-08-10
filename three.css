@@ -1,4 +1,15 @@
 /* Positions/Orders/Risk 페이지 — 시안(three-pages-v2) 이식, 기존 디자인 시스템 위에 추가 */
+/* 전략 모드 설명 툴팁 */
+.mode-tip{position:relative;display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:7px;border-radius:50%;border:1px solid var(--line);color:var(--muted);font:600 10px/1 var(--font-geist-mono);cursor:pointer;vertical-align:middle;flex:none;outline:none;user-select:none}
+.mode-tip:hover,.mode-tip:focus{color:#fff;border-color:var(--green)}
+.mode-pop{display:none;position:absolute;z-index:60;top:150%;right:0;left:auto;width:290px;max-width:78vw;padding:12px 14px;background:#0c1a15;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 28px rgba(0,0,0,.55);font:500 11px/1.5 var(--font-geist);color:#cdddd5;text-align:left;white-space:normal;cursor:default}
+.mode-tip:hover .mode-pop,.mode-tip:focus .mode-pop,.mode-tip:focus-within .mode-pop{display:block}
+.mode-pop>b{display:block;margin-bottom:8px;font-size:11px;color:#fff}
+.mode-pop .mt-row{display:block;margin:5px 0;font-size:10.5px;color:#b9cbc2}
+.mode-pop .mt-row b{color:#eaf2ee}
+.mode-pop .mt-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.mt-dot.g{background:#4ade80}.mt-dot.y{background:#fbbf24}.mt-dot.o{background:#fb923c}.mt-dot.r{background:#f45b5b}.mt-dot.b{background:#4c8dff}
+.mode-pop .mt-note{display:block;margin-top:9px;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:10px}
 .page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .page-head h1{font-size:30px;letter-spacing:-.05em;margin:10px 0 4px}
 .page-head>div>span{color:var(--muted);font-size:13px}
