@@ -3,6 +3,7 @@ const USERNAME = "davy.kim";
 const $ = id => document.getElementById(id);
 const pct = n => (n > 0 ? "+" : "") + Number(n).toFixed(2) + "%";
 const sgn = n => (n > 0 ? "positive" : n < 0 ? "negative" : "");
+const wonS = n => (n > 0 ? "+" : n < 0 ? "−" : "") + "₩" + Math.abs(Math.round(n)).toLocaleString("ko-KR");
 
 async function decryptEnvelope(env, passphrase) {
   const dec = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -31,11 +32,14 @@ function draw(days) {
   const ph = (DATA && DATA.priceHistory) || {};
   const cards = Object.keys(ph).map(code => {
     const item = ph[code], rows = (item.rows || []).slice(0, days);   // rows=최신 먼저
-    const body = rows.map(r => `<tr><td>${r.date}</td><td>₩${r.close.toLocaleString("ko-KR")}</td><td class="${sgn(r.chg)}">${pct(r.chg)}</td></tr>`).join("");
+    const body = rows.map(r => {
+      const amt = r.chgAmt == null ? "—" : wonS(r.chgAmt);
+      return `<tr><td>${r.date}</td><td>₩${r.close.toLocaleString("ko-KR")}</td><td class="${sgn(r.chgAmt)}">${amt}</td><td class="${sgn(r.chg)}">${pct(r.chg)}</td></tr>`;
+    }).join("");
     return `<div class="hist-card">
       <div class="section-title"><div><h3>${item.name}</h3><span class="hcode">${code}</span></div></div>
       <div class="hist-spark">${sparkline(rows)}</div>
-      <div class="hist-table"><table><thead><tr><th>날짜</th><th>종가</th><th>등락률</th></tr></thead><tbody>${body}</tbody></table></div>
+      <div class="hist-table"><table><thead><tr><th>날짜</th><th>종가</th><th>등락금액</th><th>등락률</th></tr></thead><tbody>${body}</tbody></table></div>
     </div>`;
   }).join("");
   $("histGrid").innerHTML = cards || "<p style='color:#7f9a91;font-size:12px'>일자별 데이터가 아직 없습니다.</p>";
