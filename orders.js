@@ -15,8 +15,11 @@ const FILTERS = {
 };
 let ORDERS = [];
 
-function drawRows(filter) {
-  const rows = ORDERS.filter(FILTERS[filter] || FILTERS.all);
+let STATUS_F = "all", STOCK_F = "all";
+
+function drawRows() {
+  const rows = ORDERS.filter(FILTERS[STATUS_F] || FILTERS.all)
+                     .filter(o => STOCK_F === "all" || o.code === STOCK_F);
   document.getElementById("ordRows").innerHTML = rows.length ? rows.map(o => {
     const [ko, tone] = STATUS_KO[o.status] || [o.status, "muted"];
     return `<div class="order-row">
@@ -26,7 +29,21 @@ function drawRows(filter) {
       <span><em class="pill ${tone}">${ko}</em></span>
       <span>${o.reason || "—"}</span>
     </div>`;
-  }).join("") : `<p class="empty-note">해당 상태의 주문이 없습니다.</p>`;
+  }).join("") : `<p class="empty-note">해당 조건의 체결 내역이 없습니다.</p>`;
+}
+
+function buildStockFilter() {
+  const seen = new Map();
+  ORDERS.forEach(o => { if (!seen.has(o.code)) seen.set(o.code, o.name || o.code); });
+  const chips = [`<button class="active" data-s="all">전체 종목</button>`]
+    .concat([...seen].map(([code, name]) => `<button data-s="${code}">${name}</button>`));
+  const box = document.getElementById("ordStockFilters");
+  if (!box) return;
+  box.innerHTML = seen.size ? chips.join("") : "";
+  box.querySelectorAll("button").forEach(b => b.onclick = () => {
+    box.querySelectorAll("button").forEach(x => x.classList.remove("active"));
+    b.classList.add("active"); STOCK_F = b.dataset.s; drawRows();
+  });
 }
 
 function render(d) {
@@ -42,10 +59,11 @@ function render(d) {
     <div><small>차단·취소</small><b>${s.blockedOrCancelledCount ?? 0}</b><em>정책·거절 포함</em></div>
     <div><small>미정합 주문</small><b class="${(s.unreconciledCount || 0) > 0 ? 'down' : 'up'}">${s.unreconciledCount ?? 0}</b><em>${(s.unreconciledCount || 0) > 0 ? "RECONCILING" : "Reconciliation 정상"}</em></div>`;
 
-  drawRows("all");
+  buildStockFilter();
+  drawRows();
   document.querySelectorAll("#ordFilters button").forEach(b => b.onclick = () => {
     document.querySelectorAll("#ordFilters button").forEach(x => x.classList.remove("active"));
-    b.classList.add("active"); drawRows(b.dataset.f);
+    b.classList.add("active"); STATUS_F = b.dataset.f; drawRows();
   });
 
   const healthy = (s.unreconciledCount || 0) === 0;

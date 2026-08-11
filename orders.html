@@ -23,7 +23,7 @@
     <div class="sample-banner"><span>i</span><p id="sampleNote">—</p></div>
     <section class="stats four" id="ordStats"></section>
     <section class="panel3">
-      <div class="panel-title"><div><h2>주문 타임라인</h2><p>주문 생명주기와 결정 근거 · 의도(intent)와 브로커 주문 구분</p></div>
+      <div class="panel-title"><div><h2>체결 내역</h2><p>실제 체결(결과) 기록 · 시간=체결 시각 · PAPER는 결정 즉시 종가로 체결</p></div>
         <div class="filters" id="ordFilters">
           <button class="active" data-f="all">전체</button>
           <button data-f="filled">체결</button>
@@ -31,6 +31,7 @@
           <button data-f="blocked">차단·거절</button>
           <button data-f="cancelled">취소</button>
         </div></div>
+      <div class="filters" id="ordStockFilters" style="margin:-4px 0 10px"></div>
       <div class="order-table">
         <div class="order-row header"><span>시간</span><span>종목</span><span>주문</span><span>상태</span><span>결정 근거</span></div>
         <div id="ordRows"></div>
