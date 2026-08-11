@@ -43,6 +43,20 @@ function greet(h) {
   return `${t}, Davy.`;
 }
 
+function renderHoldingsLive(d) {
+  const held = (d.positions || []).filter(p => p.qty > 0);
+  const upd = document.getElementById("holdLiveUpd");
+  if (upd) upd.textContent = "업데이트 " + (d.marketDate || "");
+  const box = document.getElementById("holdLiveRows");
+  if (!box) return;
+  box.innerHTML = held.length ? held.map(p =>
+    `<div class="hold-live">
+      <div class="hl-name"><b>${p.name}</b><small>${p.code} · ${p.qty}주</small></div>
+      <div class="hl-price">₩${(p.price || 0).toLocaleString("ko-KR")}</div>
+      <div class="hl-chg"><b class="${sign(p.dailyChgRate)}">${pct(p.dailyChgRate)}</b><small class="${sign(p.dailyChg)}">${won(p.dailyChg)}</small></div>
+    </div>`).join("") : `<p style="color:#7f9a91;font-size:12px;padding:4px 2px">보유 종목이 없습니다.</p>`;
+}
+
 function daySummary(d) {
   const a = d.account, s = d.strategy;
   const mkt = { RISK_ON: "매수 가능 국면", RISK_OFF: "관망 국면", UNKNOWN: "데이터 확인 중" }[s.marketState] || s.marketState;
@@ -169,6 +183,9 @@ function render(d) {
       <td>₩${p.avg.toLocaleString("ko-KR")}</td><td>₩${p.price.toLocaleString("ko-KR")}</td>
       <td class="${sign(p.pnl)}">${(p.pnl > 0 ? "+" : "") + won(p.pnl)}</td>
       <td class="${sign(p.pnlRate)}">${pct(p.pnlRate)}</td></tr>`).join("");
+
+  // 보유 종목 실시간 등락(전일 대비)
+  renderHoldingsLive(d);
 
   // 장중 현황
   renderIntradaySection(d.intraday || { stocks: {} });

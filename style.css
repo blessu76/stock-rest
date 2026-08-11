@@ -146,6 +146,16 @@
 .timeline .done{background:var(--green)}.timeline .muted{border:1px solid #587068}.timeline .sell{background:var(--down)}.timeline .buy{background:var(--up)}
 .timeline p{margin:0}.timeline p b,.timeline p small{display:block}.timeline p b{font-size:10px}.timeline p small{font-size:8px;color:var(--muted);margin-top:4px}
 .positions{padding:20px;margin-top:14px}.updated{font:500 8px var(--font-geist-mono);color:var(--muted)}
+.holdings-live{background:linear-gradient(145deg,#0e1d19,#0a1613);border:1px solid var(--line);border-radius:14px;padding:20px;margin:14px 0}
+.hold-live-rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px;margin-top:12px}
+.hold-live{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.hold-live .hl-name{flex:1;min-width:0}
+.hold-live .hl-name b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hold-live .hl-name small{color:var(--muted);font:500 9px var(--font-geist-mono)}
+.hold-live .hl-price{font:600 13px var(--font-geist-mono)}
+.hold-live .hl-chg{text-align:right}
+.hold-live .hl-chg b{display:block;font-size:13px}
+.hold-live .hl-chg small{font:500 11px var(--font-geist-mono)}
 .table-wrap{overflow-x:auto;margin-top:14px}
 table{width:100%;border-collapse:collapse;text-align:left;min-width:640px}
 th{font:500 8px var(--font-geist-mono);color:#668078;text-transform:uppercase;padding:8px 12px;border-bottom:1px solid var(--line)}
