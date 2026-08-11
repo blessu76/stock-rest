@@ -48,8 +48,11 @@ function daySummary(d) {
   const mkt = { RISK_ON: "매수 가능 국면", RISK_OFF: "관망 국면", UNKNOWN: "데이터 확인 중" }[s.marketState] || s.marketState;
   const parts = [`시장 ${mkt}`];
   if (a.dailyPnl) parts.push(`오늘 ${a.dailyReturnPct > 0 ? "+" : ""}${a.dailyReturnPct}%`);
-  const filled = (d.orders || []).filter(o => o.state === "FILLED");
-  if (filled.length) parts.push(`${filled.length}건 체결`);
+  // 당일 체결만 집계 (todayFills=export 정확집계, 없으면 marketDate 매칭 폴백)
+  const todayFilled = (typeof d.todayFills === "number")
+    ? d.todayFills
+    : (d.orders || []).filter(o => o.state === "FILLED" && (!o.date || o.date === d.marketDate)).length;
+  if (todayFilled) parts.push(`오늘 ${todayFilled}건 체결`);
   else if ((d.pendingTrims || []).length) parts.push(`${d.pendingTrims.length}종목 반등 매도 대기`);
   else parts.push("신규 주문 없음");
   if (d.system.killSwitch === "ON") parts.push("⚠️ 킬스위치 ON");
