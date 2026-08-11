@@ -173,7 +173,8 @@ function render(d) {
     const amt = o.amount ? " · ₩" + o.amount.toLocaleString("ko-KR") : "";
     const req = o.requestTime || "—", fil = o.fillTime || "—";
     const times = (req !== fil) ? `요청 ${req} · 체결 ${fil}` : `체결 ${fil}`;
-    return `<div><span class="time">${sideKo}</span><i class="${cls}"></i><p><b>${o.name || o.code} ${o.qty}주${amt}</b><small>${times} · ${o.state}</small></p></div>`;
+    const rsn = o.reason ? `<small class="ord-reason">${o.reason}</small>` : "";
+    return `<div><span class="time">${sideKo}</span><i class="${cls}"></i><p><b>${o.name || o.code} ${o.qty}주${amt}</b><small>${times} · ${o.state}</small>${rsn}</p></div>`;
   }).join("") : `<div><span class="time">—</span><i class="muted"></i><p><b>주문 없음</b><small>기존 포지션 유지</small></p></div>`;
 
   // 종목
