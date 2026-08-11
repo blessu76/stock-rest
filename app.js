@@ -214,6 +214,14 @@ function drawIntraday() {
      <line x1="0" y1="${avgY}" x2="620" y2="${avgY}" class="avg-line"/>
      <text x="616" y="${(avgY - 4)}" fill="#f5c969" font-size="9" text-anchor="end" font-family="Geist Mono">평단 ${avg.toLocaleString("ko-KR")}</text>
      <polyline points="${line}" class="price-line" style="stroke:${col}"/>${times}`;
+  if (typeof attachChartTip === "function")
+    attachChartTip("intradaySvg", pts.map((p, i) => ({
+      x: X(i), label: `${INTRA.date || ""} ${p.t}`,
+      rows: [
+        { k: "주가", v: "₩" + p.price.toLocaleString("ko-KR") },
+        { k: "평단대비", v: (p.price >= avg ? "+" : "") + ((p.price / avg - 1) * 100).toFixed(2) + "%", cls: p.price >= avg ? "positive" : "negative" }
+      ]
+    })), { W: 620, H: 200 });
   const axisV = [vmax, (vmax + vmin) / 2, vmin].map(v => `<span>${Math.round(v / 10000)}만</span>`);
   $("intradayAxis").innerHTML = axisV.join("");
   const last = prices[prices.length - 1], vsAvg = (last / avg - 1) * 100;
@@ -265,6 +273,14 @@ function renderChart(hist, equity, principal) {
      <polyline points="${poly(target)}" class="target-line"/>
      <polygon points="${poly(liveR)} 620,220 0,220" fill="url(#area)"/>
      <polyline points="${poly(liveR)}" class="asset-line" style="stroke:${col}"/>`;
+  if (typeof attachChartTip === "function")
+    attachChartTip("chartSvg", liveR.map((v, i) => ({
+      x: X(i), label: "총자산 추이",
+      rows: [
+        { k: "총자산", v: "₩" + Math.round(v).toLocaleString("ko-KR") },
+        { k: "목표선", v: "₩" + Math.round(target[i]).toLocaleString("ko-KR") }
+      ]
+    })), { W: 620, H: 200 });
   const lo = Math.round(max / 10000), hi = Math.round(min / 10000);
   $("axis").innerHTML = [lo, Math.round((lo + hi) / 2), hi].map(v => `<span>${v}만</span>`).join("");
 }

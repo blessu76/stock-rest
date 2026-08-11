@@ -15,7 +15,7 @@ async function decryptEnvelope(env, passphrase) {
   return JSON.parse(new TextDecoder().decode(pt));
 }
 
-function sparkline(rows) {
+function sparkline(rows, id) {
   // rows: 최신 먼저 → 시간순으로 뒤집어 그림
   const vals = rows.map(r => r.close).reverse();
   if (vals.length < 2) return "";
@@ -23,26 +23,41 @@ function sparkline(rows) {
   const up = vals[vals.length - 1] >= vals[0];
   const pts = vals.map((v, i) => `${(i / (vals.length - 1) * W).toFixed(1)},${(H - (max === min ? H / 2 : (v - min) / (max - min) * H)).toFixed(1)}`).join(" ");
   const col = up ? "#f45b5b" : "#4c8dff";   // 한국식: 상승=빨강, 하락=파랑
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
+  return `<svg id="${id || ""}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
 let DATA = null;
 
 function draw(days) {
   const ph = (DATA && DATA.priceHistory) || {};
+  const attachList = [];
   const cards = Object.keys(ph).map(code => {
     const item = ph[code], rows = (item.rows || []).slice(0, days);   // rows=최신 먼저
     const body = rows.map(r => {
       const amt = r.chgAmt == null ? "—" : wonS(r.chgAmt);
       return `<tr><td>${r.date}</td><td>₩${r.close.toLocaleString("ko-KR")}</td><td class="${sgn(r.chgAmt)}">${amt}</td><td class="${sgn(r.chg)}">${pct(r.chg)}</td></tr>`;
     }).join("");
+    const sid = "spark_" + code;
+    attachList.push({ id: sid, rows });
     return `<div class="hist-card">
       <div class="section-title"><div><h3>${item.name}</h3><span class="hcode">${code}</span></div></div>
-      <div class="hist-spark">${sparkline(rows)}</div>
+      <div class="hist-spark">${sparkline(rows, sid)}</div>
       <div class="hist-table"><table><thead><tr><th>날짜</th><th>종가</th><th>등락금액</th><th>등락률</th></tr></thead><tbody>${body}</tbody></table></div>
     </div>`;
   }).join("");
   $("histGrid").innerHTML = cards || "<p style='color:#7f9a91;font-size:12px'>일자별 데이터가 아직 없습니다.</p>";
+  if (typeof attachChartTip === "function") attachList.forEach(a => {
+    const rr = a.rows.slice().reverse();   // 시간순(오래된→최신)으로 스파크라인과 정렬
+    if (rr.length < 2) return;
+    attachChartTip(a.id, rr.map((r, i) => ({
+      x: (i / (rr.length - 1)) * 300, label: r.date,
+      rows: [
+        { k: "종가", v: "₩" + r.close.toLocaleString("ko-KR") },
+        { k: "등락금액", v: r.chgAmt == null ? "—" : wonS(r.chgAmt), cls: sgn(r.chgAmt) },
+        { k: "등락률", v: pct(r.chg), cls: sgn(r.chg) }
+      ]
+    })), { W: 300, H: 46 });
+  });
 }
 
 function render(d) {

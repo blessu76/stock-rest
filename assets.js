@@ -141,6 +141,15 @@ function renderAssetChart(rows, codes) {
     const pts = weeks.map((w, i) => `${(padL + slot * i + slot / 2).toFixed(1)},${y(w.equity).toFixed(1)}`).join(" ");
     const dots = weeks.map((w, i) => `<circle cx="${(padL + slot * i + slot / 2).toFixed(1)}" cy="${y(w.equity).toFixed(1)}" r="1.8" fill="${LINE_COLOR}"/>`).join("");
     svg.innerHTML = bars + `<polyline points="${pts}" fill="none" stroke="${LINE_COLOR}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>` + dots;
+    if (typeof attachChartTip === "function")
+      attachChartTip("assetChart", weeks.map((w, i) => ({
+        x: padL + slot * i + slot / 2, label: (w.date || w.wkey || ""),
+        rows: [
+          { k: "총자산", v: "₩" + Math.round(w.equity || 0).toLocaleString("ko-KR") }
+        ].concat(codes.map(c => ({
+          k: c.name || c.code, v: "₩" + Math.round((w.perStock || {})[c.code] || 0).toLocaleString("ko-KR")
+        }))).concat([{ k: "현금", v: "₩" + Math.round(w.cash || 0).toLocaleString("ko-KR") }])
+      })), { W: 620, H: 240 });
   }
 
   if (fromEl) fromEl.onchange = draw;

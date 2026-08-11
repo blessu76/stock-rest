@@ -15,7 +15,7 @@ async function decryptEnvelope(env, passphrase) {
   return JSON.parse(new TextDecoder().decode(pt));
 }
 
-function cumBar(rows) {
+function cumBar(rows, id) {
   // 누적 손익 미니 바차트 (시간순)
   const vals = rows.map(r => r.cum).reverse();
   if (!vals.length) return "";
@@ -28,7 +28,7 @@ function cumBar(rows) {
     const col = v >= 0 ? "#f45b5b" : "#4c8dff";
     return `<rect x="${(i * (W / vals.length)).toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" fill="${col}" opacity=".85"/>`;
   }).join("");
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><line x1="0" y1="${mid}" x2="${W}" y2="${mid}" stroke="#1d312c"/>${bars}</svg>`;
+  return `<svg id="${id || ""}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><line x1="0" y1="${mid}" x2="${W}" y2="${mid}" stroke="#1d312c"/>${bars}</svg>`;
 }
 
 function render(d) {
@@ -55,18 +55,34 @@ function render(d) {
   $("pnlTotals").innerHTML = totals.join("");
 
   // 종목별 카드: 누적 바차트 + 일자별 테이블
+  const attachList = [];
   $("pnlGrid").innerHTML = codes.map(c => {
     const rows = ph[c].rows || [];
     const body = rows.map(r =>
       `<tr><td>${r.date}</td><td class="${sgn(r.amount)}">${won(r.amount)}</td>
        <td class="${sgn(r.rate)}">${r.rate > 0 ? "+" : ""}${r.rate.toFixed(2)}%</td>
        <td class="${sgn(r.cum)}">${won(r.cum)}</td></tr>`).join("");
+    const sid = "pcum_" + c;
+    attachList.push({ id: sid, rows });
     return `<div class="hist-card">
       <div class="section-title"><div><h3>${ph[c].name}</h3><span class="hcode">${c}</span></div></div>
-      <div class="hist-spark">${cumBar(rows)}</div>
+      <div class="hist-spark">${cumBar(rows, sid)}</div>
       <div class="hist-table"><table><thead><tr><th>날짜</th><th>일일손익</th><th>등락</th><th>누적</th></tr></thead><tbody>${body}</tbody></table></div>
     </div>`;
   }).join("");
+  if (typeof attachChartTip === "function") attachList.forEach(a => {
+    const rr = a.rows.slice().reverse();   // 시간순
+    if (!rr.length) return;
+    const n = rr.length;
+    attachChartTip(a.id, rr.map((r, i) => ({
+      x: (i + 0.5) * (300 / n), label: r.date,
+      rows: [
+        { k: "일일손익", v: won(r.amount), cls: sgn(r.amount) },
+        { k: "등락", v: (r.rate > 0 ? "+" : "") + r.rate.toFixed(2) + "%", cls: sgn(r.rate) },
+        { k: "누적", v: won(r.cum), cls: sgn(r.cum) }
+      ]
+    })), { W: 300, H: 46 });
+  });
   $("lockBtn").onclick = e => { e.preventDefault(); sessionStorage.removeItem("auth"); location.href = "index.html"; };
 }
 
