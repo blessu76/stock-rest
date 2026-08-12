@@ -46,7 +46,11 @@ function greet(h) {
 function renderHoldingsLive(d) {
   const held = (d.positions || []).filter(p => p.qty > 0);
   const upd = document.getElementById("holdLiveUpd");
-  if (upd) upd.textContent = "업데이트 " + (d.marketDate || "");
+  if (upd) {
+    const g = d.generatedAt || "";   // "2026-08-13T08:50:03+09:00" → 날짜+시:분
+    const stamp = g.length >= 16 ? `${g.slice(0, 10)} ${g.slice(11, 16)}` : (d.marketDate || "");
+    upd.textContent = "업데이트 " + stamp;
+  }
   const box = document.getElementById("holdLiveRows");
   if (!box) return;
   box.innerHTML = held.length ? held.map(p =>
