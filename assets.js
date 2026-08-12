@@ -135,8 +135,7 @@ function renderAssetChart(rows, codes) {
         bars += `<rect x="${x.toFixed(1)}" y="${y1.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, y0 - y1).toFixed(1)}" fill="${SEG_COLORS[ci % SEG_COLORS.length]}"/>`;
         acc += val;
       });
-      const y0 = y(acc), y1 = y(acc + (w.cash || 0));
-      bars += `<rect x="${x.toFixed(1)}" y="${y1.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, y0 - y1).toFixed(1)}" fill="${CASH_COLOR}"/>`;
+      // 예수금(cash)은 총자산에서 제외 → 스택에 미포함(바=주식 평가액=총자산). 현금은 툴팁에만 표기.
     });
     const pts = weeks.map((w, i) => `${(padL + slot * i + slot / 2).toFixed(1)},${y(w.equity).toFixed(1)}`).join(" ");
     const dots = weeks.map((w, i) => `<circle cx="${(padL + slot * i + slot / 2).toFixed(1)}" cy="${y(w.equity).toFixed(1)}" r="1.8" fill="${LINE_COLOR}"/>`).join("");
