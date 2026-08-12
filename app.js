@@ -127,6 +127,8 @@ function render(d) {
 
   // 총자산 카드
   $("equity").textContent = won(a.equity);
+  if ($("cashNote")) $("cashNote").innerHTML =
+    `예수금 <b>${won(a.cash)}</b> <small>· 예수금 포함 합계 ${won((a.equity || 0) + (a.cash || 0))}</small>`;
   const dp = $("dailyPnl"); dp.textContent = (a.dailyPnl > 0 ? "+" : "") + won(a.dailyPnl); dp.className = sign(a.dailyPnl);
   $("dailyRate").textContent = pct(a.dailyReturnPct) + " 오늘";
   $("recoveryPct").textContent = a.recoveryPct + "%";

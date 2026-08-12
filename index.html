@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260811b">
+<link rel="stylesheet" href="style.css?v=20260812b">
 </head>
 <body>
 
@@ -70,9 +70,10 @@
 
     <section class="hero-grid">
       <article class="balance-card">
-        <div class="card-head"><span>현재 총자산</span><em>KRW</em></div>
+        <div class="card-head"><span>현재 총자산 <small style="opacity:.6">(주식·예수금 별도)</small></span><em>KRW</em></div>
         <div class="balance" id="equity">—</div>
         <div class="day-change"><b id="dailyPnl">—</b><span id="dailyRate">—</span></div>
+        <div class="cash-note" id="cashNote"></div>
         <div class="progress-meta"><span>원금 회복 진행률</span><strong id="recoveryPct">—</strong></div>
         <div class="progress"><i id="progressFill" style="width:0%"></i></div>
         <div class="balance-foot"><div><small>회복 목표</small><b id="principal">—</b></div><div><small>남은 금액</small><b id="shortfall">—</b></div></div>
@@ -142,7 +143,7 @@
 </main>
 
 <script src="charttip.js?v=20260811"></script>
-<script src="app.js?v=20260811b"></script>
+<script src="app.js?v=20260812b"></script>
 <script src="drawer.js"></script>
 <script src="swipe.js"></script>
 </body>

@@ -22,12 +22,13 @@ function drawRows() {
                      .filter(o => STOCK_F === "all" || o.code === STOCK_F);
   document.getElementById("ordRows").innerHTML = rows.length ? rows.map(o => {
     const [ko, tone] = STATUS_KO[o.status] || [o.status, "muted"];
-    const unit = o.price ? "@₩" + o.price.toLocaleString("ko-KR") : "";
-    const amt = (o.qty > 1 && o.amount) ? " · ₩" + o.amount.toLocaleString("ko-KR") : "";
+    const price = o.price ? "₩" + o.price.toLocaleString("ko-KR") : "—";
+    const totAmt = (o.qty > 1 && o.amount) ? `<small>총 ₩${o.amount.toLocaleString("ko-KR")}</small>` : "";
     return `<div class="order-row">
       <span class="mono">${o.time}</span>
       <span><b>${o.name}</b><small>${o.code}</small></span>
-      <span><b class="${o.side === "BUY" ? "up" : "down"}">${o.side === "BUY" ? "매수" : "매도"}</b><small>${o.qty}주 ${unit}${amt} · PAPER</small></span>
+      <span><b class="${o.side === "BUY" ? "up" : "down"}">${o.side === "BUY" ? "매수" : "매도"}</b><small>${o.qty}주 · PAPER</small></span>
+      <span><b class="${o.side === "BUY" ? "up" : "down"}">${price}</b>${totAmt}</span>
       <span><em class="pill ${tone}">${ko}</em></span>
       <span>${o.reason || "—"}</span>
     </div>`;

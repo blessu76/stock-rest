@@ -92,6 +92,7 @@
 .balance{font:500 34px var(--font-geist-mono);letter-spacing:-.06em;margin-top:18px}
 .day-change{display:flex;gap:10px;align-items:center;margin-top:6px}
 .day-change b{font:600 11px var(--font-geist-mono);color:#c2d3cd}.day-change span{font-size:10px;color:#719087}
+.cash-note{font-size:10px;color:#719087;margin-top:10px}.cash-note b{color:#c2d3cd;font:600 11px var(--font-geist-mono)}.cash-note small{opacity:.75}
 .progress-meta{display:flex;justify-content:space-between;margin-top:24px;font-size:10px;color:#799187}
 .progress-meta strong{color:#d7e8e2;font:600 11px var(--font-geist-mono)}
 .progress{height:4px;background:#193029;border-radius:9px;margin-top:8px}
