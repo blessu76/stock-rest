@@ -286,27 +286,35 @@ function renderPlan(plan, marketDate) {
 
 function renderChart(hist, equity, principal) {
   const W = 620, H = 200;
-  const live = hist.length >= 2 ? hist.slice() : [equity, equity];
-  const n = Math.max(live.length, 11);
-  const start = live[0];
+  // hist = [{date, equity}] (하루 1점, 신규) 또는 [숫자] (구버전 호환)
+  const dated = hist.length && typeof hist[0] === "object";
+  let eqs = dated ? hist.map(h => h.equity) : hist.slice();
+  const dates = dated ? hist.map(h => h.date) : [];
+  if (eqs.length < 2) eqs = [equity, equity];
+  const n = eqs.length;
+  const start = eqs[0];
   const target = Array.from({ length: n }, (_, i) => start * Math.pow(principal / start, i / (n - 1)));
-  const liveR = Array.from({ length: n }, (_, i) => live[Math.min(i, live.length - 1)]);
-  const all = liveR.concat(target);
+  const all = eqs.concat(target);
   const min = Math.min(...all) * 0.98, max = Math.max(...all) * 1.02;
-  const X = i => (i / (n - 1)) * W;
+  const X = i => n < 2 ? W / 2 : (i / (n - 1)) * W;
   const Y = v => H - ((v - min) / (max - min)) * H;
   const poly = arr => arr.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
   // 한국식: 기간 상승=빨강, 하락=파랑
-  const col = liveR[liveR.length - 1] >= liveR[0] ? "#f45b5b" : "#4c8dff";
+  const col = eqs[n - 1] >= eqs[0] ? "#f45b5b" : "#4c8dff";
+  // x축 날짜 라벨(시작·중간·끝) — MM-DD
+  const dlabel = (i, anch) => dates[i]
+    ? `<text x="${X(i).toFixed(1)}" y="214" fill="#526a62" font-size="8" text-anchor="${anch}" font-family="Geist Mono">${dates[i].slice(5)}</text>` : "";
+  const xlabels = (dated && n > 1)
+    ? dlabel(0, "start") + dlabel(Math.floor((n - 1) / 2), "middle") + dlabel(n - 1, "end") : "";
   $("chartSvg").innerHTML =
     `<defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".26"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
      <line x1="0" y1="44" x2="620" y2="44" class="grid-line"/><line x1="0" y1="99" x2="620" y2="99" class="grid-line"/><line x1="0" y1="154" x2="620" y2="154" class="grid-line"/>
      <polyline points="${poly(target)}" class="target-line"/>
-     <polygon points="${poly(liveR)} 620,220 0,220" fill="url(#area)"/>
-     <polyline points="${poly(liveR)}" class="asset-line" style="stroke:${col}"/>`;
+     <polygon points="${poly(eqs)} 620,200 0,200" fill="url(#area)"/>
+     <polyline points="${poly(eqs)}" class="asset-line" style="stroke:${col}"/>${xlabels}`;
   if (typeof attachChartTip === "function")
-    attachChartTip("chartSvg", liveR.map((v, i) => ({
-      x: X(i), label: "총자산 추이",
+    attachChartTip("chartSvg", eqs.map((v, i) => ({
+      x: X(i), label: dates[i] || "총자산 추이",
       rows: [
         { k: "총자산", v: "₩" + Math.round(v).toLocaleString("ko-KR") },
         { k: "목표선", v: "₩" + Math.round(target[i]).toLocaleString("ko-KR") }
