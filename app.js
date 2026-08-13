@@ -290,10 +290,15 @@ function renderChart(hist, equity, principal) {
   const dated = hist.length && typeof hist[0] === "object";
   let eqs = dated ? hist.map(h => h.equity) : hist.slice();
   const dates = dated ? hist.map(h => h.date) : [];
-  if (eqs.length < 2) eqs = [equity, equity];
+  let tgts = dated ? hist.map(h => h.target) : null;
+  if (eqs.length < 2) { eqs = [equity, equity]; if (tgts) tgts = [tgts[0] || equity, tgts[0] || equity]; }
   const n = eqs.length;
   const start = eqs[0];
-  const target = Array.from({ length: n }, (_, i) => start * Math.pow(principal / start, i / (n - 1)));
+  // 목표선: 서버가 챌린지 경과일 기준으로 계산한 값(있으면) 사용 — 초반엔 완만, 90일에 원금 도달.
+  //   (구버전 폴백: 보이는 구간 등비 — 부정확)
+  const target = (tgts && tgts.length === n && tgts.every(t => typeof t === "number"))
+    ? tgts
+    : Array.from({ length: n }, (_, i) => start * Math.pow(principal / start, i / (n - 1)));
   const all = eqs.concat(target);
   const min = Math.min(...all) * 0.98, max = Math.max(...all) * 1.02;
   const X = i => n < 2 ? W / 2 : (i / (n - 1)) * W;
