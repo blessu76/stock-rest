@@ -71,6 +71,18 @@
 .pnl-total.grand .pnl-cum{font-size:23px}
 .pnl-total small{font:500 9px var(--font-geist-mono);color:var(--muted)}
 .pnl-total .card-head span{font-size:11px}.pnl-total.grand .card-head span{font-size:12px}
+/* 모바일: 상단 합계 카드는 크기만 줄이지 않고 레이아웃을 재배치한다 */
+@media(max-width:760px){
+  .pnl-hero{flex-wrap:wrap;gap:8px}
+  .pnl-total.grand{flex:1 0 100%}                 /* 전체 누적 = 한 줄 전체폭 */
+  .pnl-total{flex:1 1 calc(50% - 4px);min-width:0} /* 개별 3장 = 2열 */
+  .pnl-cum{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;font-size:16px} /* 숫자 잘림 금지 */
+  .pnl-total.grand .pnl-cum{font-size:22px}
+}
+@media(max-width:420px){
+  .pnl-total{flex:1 0 100%}                        /* 개별도 세로 스택 */
+  .pnl-cum{font-size:17px}
+}
 .drill h4{margin:0 0 10px;font-size:11px;color:#9db8ae}
 .drill .hist-table{max-height:280px}
 .market{font:600 10px var(--font-geist-mono);padding:9px 12px;border:1px solid var(--line);border-radius:99px;color:#9ab0a9}

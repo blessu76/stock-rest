@@ -205,4 +205,7 @@ tr.today-row td:first-child b{color:var(--green)}
 .hist td:nth-child(3) .lb{width:13px;height:13px;font-size:7px}
 .hist td:nth-child(4) .lb{width:15px;height:15px;font-size:8px}}
 @media(max-width:1100px){.cards3{grid-template-columns:1fr}.stats.four{grid-template-columns:repeat(2,1fr)}.risk-grid3{grid-template-columns:1fr}.split3{grid-template-columns:1fr}}
-@media(max-width:760px){.stats.four{grid-template-columns:1fr 1fr}.stats.three{grid-template-columns:1fr}.risk-hero3{grid-template-columns:1fr}.risk-hero3>aside{border-left:0;border-top:1px solid var(--line)}.page-head h1{font-size:24px}.content{padding:64px 16px 24px}.page-head{padding-top:0}}
+@media(max-width:760px){.stats.four{grid-template-columns:1fr 1fr}.stats.three{grid-template-columns:1fr}.risk-hero3{grid-template-columns:1fr}.risk-hero3>aside{border-left:0;border-top:1px solid var(--line)}.page-head h1{font-size:24px}.content{padding:64px 16px 24px}.page-head{padding-top:0}
+.stats b{font-size:17px;word-break:break-word}}
+/* 좁은 폰: 2열에서도 큰 숫자가 잘리면 1열로 완전히 재배치 */
+@media(max-width:420px){.stats.four{grid-template-columns:1fr}.stats b{font-size:18px}}
