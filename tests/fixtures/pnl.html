@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIXTURE — Daily P&amp;L (style.css + three.css)</title>
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../three.css">
+<style>:root{--font-geist-sans:system-ui,Arial,sans-serif;--font-geist-mono:ui-monospace,'Courier New',monospace}</style>
+</head>
+<body>
+<main class="app-shell" id="app">
+  <aside class="sidebar">
+    <div class="brand"><span>R</span><strong>recovery<br>.console</strong></div>
+    <nav aria-label="Main menu"><a href="index.html"><i>⌁</i>Overview</a><a class="active" href="pnl.html"><i>Σ</i>Daily P&amp;L</a></nav>
+    <div class="sidebar-bottom"><a href="settings.html"><i>⚙</i>Settings</a><a href="#" id="lockBtn"><i>⏻</i>Log out</a></div>
+  </aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">DAILY P&amp;L</p><h1>일일손익 이력</h1><span>보유 종목별 일일손익과 누적 합계</span></div>
+      <span class="date-pill" id="asOf"><i></i> 2026-08-14</span>
+    </header>
+    <!-- pnl-hero: THE ORIGINAL BUG. Grand card + 2-up card ladder; .pnl-cum must
+         never ellipsize/clip. Values are intentionally wide (8-digit KRW). -->
+    <section class="pnl-hero" id="pnlTotals">
+      <article class="pnl-total grand"><div class="card-head"><span>전체 누적</span></div>
+        <div class="pnl-cum positive">+12,345,678원</div><small>최근 거래일 합계 +234,567원</small></article>
+      <article class="pnl-total"><div class="card-head"><span>삼성전자</span></div>
+        <div class="pnl-cum positive">+3,456,789원</div><small>누적 · 최근 +45,678원</small></article>
+      <article class="pnl-total"><div class="card-head"><span>SK하이닉스</span></div>
+        <div class="pnl-cum negative">-1,234,567원</div><small>누적 · 최근 -12,345원</small></article>
+      <article class="pnl-total"><div class="card-head"><span>NAVER</span></div>
+        <div class="pnl-cum positive">+2,345,678원</div><small>누적 · 최근 +23,456원</small></article>
+    </section>
+    <div class="head-actions" style="justify-content:flex-end;margin:16px 0 6px">
+      <div class="range-tabs" id="pnlRangeTabs">
+        <button data-d="7">7일</button><button data-d="14">14일</button>
+        <button class="active" data-d="30">30일</button><button data-d="60">60일</button>
+      </div>
+    </div>
+    <div class="hist-grid" id="pnlGrid">
+      <div class="hist-card"><h3>삼성전자 <span class="hcode">005930</span></h3>
+        <div class="hist-spark"></div>
+        <div class="hist-table"><table><thead><tr><th>날짜</th><th>종가</th><th>등락금액</th><th>등락률</th></tr></thead>
+          <tbody><tr><td>08-14</td><td>73,400</td><td class="up">+900</td><td class="up">+1.24%</td></tr></tbody></table></div></div>
+    </div>
+    <footer><span><i></i> READ-ONLY</span><p>일일손익은 토스 API 기준이며 매 거래일 자동 기록됩니다.</p><div class="foot-brand"><span>R</span>recovery.console</div></footer>
+  </section>
+</main>
+<script src="../../drawer.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIXTURE — .stats.four grid (Assets/Positions/Risk/Orders)</title>
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../three.css">
+<style>:root{--font-geist-sans:system-ui,Arial,sans-serif;--font-geist-mono:ui-monospace,'Courier New',monospace}</style>
+</head>
+<!-- The 4-stat reflow ladder (4→2→2→1 across 1100/760/420). Markup identical to
+     what assets.js / positions.js / risk.js / orders.js inject into #assetStats etc.
+     .stats b holds the primary number — must not overflow/ellipsize; ≥16px floor. -->
+<body>
+<main class="app-shell" id="app">
+  <aside class="sidebar">
+    <div class="brand"><span>R</span><strong>recovery<br>.console</strong></div>
+    <nav aria-label="Main menu"><a class="active" href="assets.html"><i>₩</i>Assets</a></nav>
+    <div class="sidebar-bottom"><a href="settings.html"><i>⚙</i>Settings</a></div>
+  </aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">ASSETS</p><h1>자산 원장</h1><span>총자산의 일별 증감 · 종목별 평가액 · 현금</span></div>
+      <span class="date-pill" id="metaDate"><i></i> 2026-08-14</span>
+    </header>
+    <!-- Assets stat grid -->
+    <section class="stats four" id="assetStats">
+      <div><small>오늘 총자산</small><b>111,111,111원</b><em>주식 + 예수금 합계</em></div>
+      <div><small>주식대금</small><b>98,765,432원</b><em>회복 기준 · 주식 평가액</em></div>
+      <div><small>예수금</small><b>12,345,679원</b><em>미투자 현금</em></div>
+      <div><small>목표까지 잔여</small><b class="down">38,888,889원</b><em>회복률 74.07%</em></div>
+    </section>
+    <!-- Positions stat grid (same class, different content) -->
+    <section class="stats four" id="posStats">
+      <div><small>총 평가금액</small><b>98,765,432원</b><em>현금 제외</em></div>
+      <div><small>평가손익</small><b class="up">+5,432,109원</b><em class="up">+5.82%</em></div>
+      <div><small>현금 비중</small><b>12.5%</b><em>최소 10% 이상</em></div>
+      <div><small>최대 집중도</small><b>28.3%</b><em>한도 60% · 추천슬롯 25%</em></div>
+    </section>
+    <!-- Positions cards (.cards3) -->
+    <section class="panel3">
+      <div class="panel-title"><div><h2>현재 보유 종목</h2><p>종가 기준 · 전략 상태 포함</p></div><span class="health">RECONCILED</span></div>
+      <div class="cards3" id="posCards">
+        <article class="position">
+          <div class="ticker"><div><h3>삼성전자 <em class="pill green" title="코어">CORE</em></h3><small>005930</small></div><span>RS 82</span></div>
+          <div class="price"><b>73,400원</b><em class="up">+7.15%</em></div>
+          <dl><div><dt>보유수량</dt><dd>120주</dd></div><div><dt>평단</dt><dd>68,500원</dd></div></dl>
+          <div class="level"><span>손절선 <b>65,000</b></span><span>익절선 <b>82,000</b></span></div>
+          <footer><span class="pill green">HOLD</span><span class="mono" style="color:#75968a;font-size:9px">005930</span></footer>
+        </article>
+        <article class="position">
+          <div class="ticker"><div><h3>SK하이닉스 <em class="pill muted" title="프리슬롯">FREE</em></h3><small>000660</small></div><span>RS 71</span></div>
+          <div class="price"><b>198,500원</b><em class="down">-1.24%</em></div>
+          <dl><div><dt>보유수량</dt><dd>15주</dd></div><div><dt>평단</dt><dd>201,000원</dd></div></dl>
+          <div class="level"><span>손절선 <b>185,000</b></span><span>익절선 <b>230,000</b></span></div>
+          <footer><span class="pill blue">TRIM</span><span class="mono" style="color:#75968a;font-size:9px">000660</span></footer>
+        </article>
+        <article class="position">
+          <div class="ticker"><div><h3>NAVER <em class="pill green" title="코어">CORE</em></h3><small>035420</small></div><span>RS 65</span></div>
+          <div class="price"><b>215,000원</b><em class="up">+2.86%</em></div>
+          <dl><div><dt>보유수량</dt><dd>10주</dd></div><div><dt>평단</dt><dd>209,000원</dd></div></dl>
+          <div class="level"><span>손절선 <b>195,000</b></span><span>익절선 <b>245,000</b></span></div>
+          <footer><span class="pill amber">WATCH</span><span class="mono" style="color:#75968a;font-size:9px">035420</span></footer>
+        </article>
+      </div>
+    </section>
+    <!-- Orders wide grid table (.order-row min-width:780 inside .order-table wrapper) -->
+    <section class="panel3">
+      <div class="panel-title"><div><h2>주문 내역</h2><p>오늘의 체결·차단 내역</p></div></div>
+      <div class="order-table" id="ordTableWrap">
+        <div class="order-row header"><span>시간</span><span>종목</span><span>주문</span><span>체결가</span><span>상태</span><span>결정 근거</span></div>
+        <div class="order-row">
+          <span class="mono">09:12</span>
+          <span><b>삼성전자</b><small>005930</small></span>
+          <span><b class="up">매수</b><small>10주 · PAPER</small></span>
+          <span><b class="up">₩73,400</b><small>총 ₩734,000</small></span>
+          <span><em class="pill green">체결</em></span>
+          <span>RS 상위 · 눌림목 반등 신호</span>
+        </div>
+      </div>
+    </section>
+    <!-- Risk hero + wide risk-row table (min-width:540 inside .risk-table wrapper) -->
+    <section class="risk-hero3">
+      <article><div class="gauge" id="gauge"><div><b id="riskScore">32</b><small>/ 100</small></div></div><div><h2>안정</h2><div><span>시장 정상 · 변동성 낮음</span></div></div></article>
+      <aside><small>가용 현금</small><b>12,345,679원</b></aside>
+    </section>
+    <section class="stats four" id="riskStats">
+      <div><small>일일 손익</small><b class="up">+1.27%</b><em>한도 -3%</em></div>
+      <div><small>낙폭(MDD)</small><b>-8.4%</b><em>한도 -15%</em></div>
+      <div><small>최대 종목 비중</small><b>28.3%</b><em>한도 60%</em></div>
+      <div><small>가용 현금</small><b>12,345,679원</b><em>12.5%</em></div>
+    </section>
+    <section class="split3 risk-grid3">
+      <article class="panel3"><div class="panel-title"><div><h2>계좌 손실 방어선</h2><p>현재 평가액과 자동 대응 기준</p></div></div>
+        <div class="risk-table" id="riskTableWrap">
+          <div class="risk-row header"><span>규칙</span><span>현재</span><span>기준</span><span>상태</span></div>
+          <div class="risk-row"><span>일일 손실 한도</span><span>+1.27%</span><span>-3.00%</span><span class="up">정상</span></div>
+        </div>
+      </article>
+      <article class="panel3"><div class="panel-title"><div><h2>주문 허용 게이트</h2><p>현재 사이클의 정책 판단</p></div></div>
+        <ul class="gates" id="gateList"><li><i class="ok">✓</i><span><b>현금 비중</b><small>최소 10% 충족</small></span><em class="pass">PASS</em></li></ul></article>
+    </section>
+    <footer><span><i></i> READ-ONLY</span><p>모니터링 도구입니다.</p><div class="foot-brand"><span>R</span>recovery.console</div></footer>
+  </section>
+</main>
+<script src="../../drawer.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# test tooling — never deployed to Pages
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+.playwright/

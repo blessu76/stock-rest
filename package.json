@@ -1,0 +1,13 @@
+{
+  "name": "stock-rest-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Responsive regression test suite (green-gate) for stock.ipe.rest dashboard. Not shipped to Pages.",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0"
+  }
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIXTURE — Overview (style.css)</title>
+<!-- Real production CSS. Fixture lives in tests/fixtures/, so climb two levels. -->
+<link rel="stylesheet" href="../../style.css">
+<style>
+  /* Fonts are network (Google) in prod; force a local mono fallback so headless
+     measurements are deterministic and don't depend on webfont load timing.
+     Metrics we assert (overflow, ellipsis, font-size floors) are font-agnostic. */
+  :root{--font-geist-sans:system-ui,Arial,sans-serif;--font-geist-mono:ui-monospace,'Courier New',monospace}
+</style>
+</head>
+<!-- app-shell is NOT [hidden] here: the fixture represents the unlocked dashboard.
+     drawer.js is loaded so the #navToggle hamburger + #navDim overlay are injected,
+     exactly as they are on the live page after login. -->
+<body>
+<main class="app-shell" id="app">
+  <aside class="sidebar">
+    <div class="brand"><span>R</span><strong>recovery<br>.console</strong></div>
+    <nav aria-label="Main menu">
+      <a class="active" href="#overview"><i>⌁</i>Overview</a>
+      <a href="history.html"><i>↗</i>Daily changes</a>
+      <a href="pnl.html"><i>Σ</i>Daily P&amp;L</a>
+      <a href="assets.html"><i>₩</i>Assets</a>
+      <a href="positions.html"><i>▦</i>Positions</a>
+      <a href="sectors.html"><i>▤</i>Sectors</a>
+      <a href="orders.html"><i>⇄</i>Orders</a>
+      <a href="risk.html"><i>◇</i>Risk monitor</a>
+      <a href="lotto.html"><i>◎</i>Lotto</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="settings.html"><i>⚙</i>Settings</a>
+      <a href="#" id="lockBtn"><i>⏻</i>Log out</a>
+      <div class="profile"><span>DK</span><div><b>Davy Kim</b><small>Private account</small></div></div>
+    </div>
+  </aside>
+
+  <section class="content" id="overview">
+    <header class="topbar">
+      <div><p class="eyebrow" id="dateLine">2026년 8월 14일 (목)</p><h1 id="greeting">좋은 아침이에요, Davy</h1></div>
+      <div class="top-actions">
+        <span class="badge-mode paper" id="modeBadge">PAPER
+          <span class="mode-tip" tabindex="0">i<span class="mode-pop"><b>전략 모드</b>
+            <span class="mt-row"><span class="mt-dot g"></span><b>정상</b> 평시 로직</span>
+            <span class="mt-row"><span class="mt-dot r"></span><b>방어</b> 손실 확대 시</span>
+            <span class="mt-note">모드는 위험 점수와 시장 상태로 자동 전환됩니다.</span>
+          </span></span>
+        </span>
+        <span class="market" id="dataBadge"><i></i> 실시간 · 16:41</span>
+      </div>
+    </header>
+
+    <div class="sample-banner" id="stateBanner"><span>i</span><p id="summaryText">오늘 총자산은 어제보다 소폭 늘었습니다. 회복 진행률 63.42%.</p></div>
+
+    <!-- pnl-hero is the ORIGINAL BUG surface (768px number clipping). Included on
+         Overview fixture too so the ellipsis/overflow asserts have a target here. -->
+    <section class="pnl-hero" id="pnlHeroCheck">
+      <article class="pnl-total grand"><div class="card-head"><span>전체 누적</span></div>
+        <div class="pnl-cum positive">+12,345,678원</div><small>최근 거래일 합계 +234,567원</small></article>
+      <article class="pnl-total"><div class="card-head"><span>삼성전자</span></div>
+        <div class="pnl-cum positive">+3,456,789원</div><small>누적 · 최근 +45,678원</small></article>
+      <article class="pnl-total"><div class="card-head"><span>SK하이닉스</span></div>
+        <div class="pnl-cum negative">-1,234,567원</div><small>누적 · 최근 -12,345원</small></article>
+    </section>
+
+    <section class="hero-grid">
+      <article class="balance-card">
+        <div class="card-head"><span>현재 총자산 <small style="opacity:.6">(주식·예수금 별도)</small></span><em>KRW</em></div>
+        <div class="balance" id="equity">98,765,432원</div>
+        <div class="day-change"><b id="dailyPnl" class="positive">+1,234,567원</b><span id="dailyRate">+1.27%</span></div>
+        <div class="cash-note" id="cashNote"><b>예수금 12,345,678원</b> <small>미투자 현금</small></div>
+        <div class="progress-meta"><span>원금 회복 진행률</span><strong id="recoveryPct">63.42%</strong></div>
+        <div class="progress"><i id="progressFill" style="width:63%"></i></div>
+        <div class="balance-foot"><div><small>회복 목표</small><b id="principal">150,000,000원</b></div><div><small>남은 금액</small><b id="shortfall">51,234,568원</b></div></div>
+      </article>
+
+      <article class="challenge-card">
+        <div class="card-head"><span>3개월 회복 도전</span><em class="green-dot">ACTIVE</em></div>
+        <div class="challenge-main"><div class="ring" id="ring"><span><b id="daysLeft">47</b><small>days left</small></span></div><div><small>목표일까지 필요 수익률</small><b id="needReturn">+34.2%</b><p id="monthlyNeed">월 +10.3% 필요</p></div></div>
+        <div class="checkpoint"><span>1차 체크포인트</span><strong id="ckptAmt">120,000,000원</strong><small id="ckptDate">2026-09-15까지</small></div>
+      </article>
+
+      <article class="risk-card" id="risk">
+        <div class="card-head"><span>위험 상태</span><em class="safe-dot" id="riskBadge">SAFE</em></div>
+        <div class="risk-score"><strong id="riskState">안정</strong><span id="marketStateLine">시장 정상 · 변동성 낮음</span></div>
+        <div class="risk-bars" id="riskBars"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <ul><li><span>일일 손익</span><b id="riskDaily">+1.27%</b></li><li><span>회복까지</span><b id="riskShort">51,234,568원</b></li><li><span>현금</span><b id="riskCash">12.5%</b></li></ul>
+      </article>
+    </section>
+
+    <section class="holdings-live" id="holdingsLive">
+      <div class="section-title"><div><h2>내 보유 종목 실시간 등락</h2><p>전일 종가 대비 오늘 등락 (금액·%)</p></div><span class="updated" id="holdLiveUpd">16:41 기준</span></div>
+      <div class="hold-live-rows" id="holdLiveRows">
+        <div class="hold-live"><div class="hl-name"><b>삼성전자우선주락</b><small>005935</small></div><div class="hl-price">73,400원</div><div class="hl-chg"><b class="positive">+1,200원</b><small class="positive">+1.66%</small></div></div>
+        <div class="hold-live"><div class="hl-name"><b>SK하이닉스</b><small>000660</small></div><div class="hl-price">198,500원</div><div class="hl-chg"><b class="negative">-2,500원</b><small class="negative">-1.24%</small></div></div>
+        <div class="hold-live"><div class="hl-name"><b>NAVER</b><small>035420</small></div><div class="hl-price">215,000원</div><div class="hl-chg"><b class="positive">+3,000원</b><small class="positive">+1.41%</small></div></div>
+      </div>
+    </section>
+
+    <section class="chart-card intraday-card" id="intraday">
+      <div class="chart-head"><div><h2>장중 현황</h2><p>10분 간격 주가 · 평단가 대비 · 차트를 클릭하면 상세</p></div><div class="tabs" id="intradayTabs"><button class="active">삼성전자</button><button>SK하이닉스</button><button>NAVER</button></div></div>
+      <div class="chart-summary"><b id="intradayNow">73,400원</b><span id="intradayVs">평단 대비 +2.1%</span></div>
+      <div class="chart-wrap"><div class="axis" id="intradayAxis"><span>74k</span><span>73k</span><span>72k</span></div><svg viewBox="0 0 620 220" id="intradaySvg" preserveAspectRatio="none"></svg></div>
+      <div class="chart-legend"><span><i class="legend-price"></i>주가</span><span><i class="legend-avg"></i>평단가</span><span class="drill-hint">↳ 클릭 시 시간대별 상세</span></div>
+    </section>
+
+    <section class="positions" id="positions">
+      <div class="section-title"><div><h2>전략 대상 종목</h2><p>보유 현황과 손익</p></div><span class="updated" id="posUpdated">16:41 기준</span></div>
+      <div class="table-wrap"><table><thead><tr><th>종목</th><th>수량</th><th>평단</th><th>현재가</th><th>평가손익</th><th>수익률</th></tr></thead>
+        <tbody id="posBody">
+          <tr><td><b>삼성전자</b><small>005930</small></td><td>120</td><td>68,500원</td><td>73,400원</td><td class="positive">+588,000원</td><td class="positive">+7.15%</td></tr>
+          <tr><td><b>SK하이닉스</b><small>000660</small></td><td>15</td><td>201,000원</td><td>198,500원</td><td class="negative">-37,500원</td><td class="negative">-1.24%</td></tr>
+        </tbody></table></div>
+    </section>
+
+    <footer><span><i></i> <span id="killLabel">Trading engine · ON</span></span><p>본 화면은 모니터링 도구이며 수익을 보장하지 않습니다. READ-ONLY.</p><div class="foot-brand"><span>R</span>recovery.console</div></footer>
+  </section>
+</main>
+
+<script src="../../drawer.js"></script>
+</body>
+</html>

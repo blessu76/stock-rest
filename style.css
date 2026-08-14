@@ -26,6 +26,8 @@
 .top-actions{display:flex;gap:12px;align-items:center}
 /* 일자별 등락 페이지 */
 .hist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:6px}
+/* 좁은 폰(≤420, incl. 320): 320px 고정 최소트랙이 뷰포트를 넘겨 가로 스크롤 유발 → 1열 재배치(RESPONSIVE_UI §2·§4) */
+@media(max-width:420px){.hist-grid{grid-template-columns:1fr}.hist-card{min-width:0}}
 .hist-card{background:linear-gradient(145deg,#0e1d19,#0a1613);border:1px solid var(--line);border-radius:14px;padding:18px}
 .hist-card h3{margin:0;font-size:14px}.hist-card .hcode{font:500 9px var(--font-geist-mono);color:var(--muted)}
 .hist-spark{margin:12px 0;height:46px}
@@ -228,7 +230,7 @@ footer{display:flex;justify-content:space-between;align-items:center;gap:12px;pa
 body.nav-open .sidebar{transform:translateX(0);box-shadow:14px 0 44px rgba(0,0,0,.55)}
 .brand{padding:0 8px 26px}.brand strong{display:block}
 .sidebar nav{display:grid;gap:6px;margin:0}
-.sidebar nav a{padding:12px;font-size:14px;background:transparent}
+.sidebar nav a{padding:12px;font-size:14px;background:transparent;min-height:44px;box-sizing:border-box} /* WCAG 2.5.5 / RESPONSIVE_UI §4: 44px tap target */
 .sidebar nav a i{font-size:16px}
 .sidebar-bottom{display:block;margin-top:auto}
 /* 햄버거(좌상단 고정) */
