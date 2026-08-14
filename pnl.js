@@ -31,35 +31,13 @@ function cumBar(rows, id) {
   return `<svg id="${id || ""}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><line x1="0" y1="${mid}" x2="${W}" y2="${mid}" stroke="#1d312c"/>${bars}</svg>`;
 }
 
-function render(d) {
-  $("app").hidden = false;
-  $("asOf").innerHTML = `<i></i> ${d.marketDate || ""}`;
-  const ph = d.dailyPnlHistory || {};
-  const ord = d.displayOrder || [];                     // 표시순서(JS 정수키 재정렬 보정)
-  const oi = k => { const i = ord.indexOf(k); return i < 0 ? 999 : i; };
-  const codes = Object.keys(ph).sort((a, b) => oi(a) - oi(b));
-  if (!codes.length) {
-    $("pnlGrid").innerHTML = "<p style='color:#7f9a91;font-size:12px'>기록이 아직 없습니다. 거래일마다 자동 누적됩니다.</p>";
-    return;
-  }
-  // 상단 합계 카드: 종목별 누적 + 전체
-  let grandCum = 0, grandToday = 0;
-  const totals = codes.map(c => {
-    const rows = ph[c].rows || [];
-    const cum = rows.length ? rows[0].cum : 0;
-    const today = rows.length ? rows[0].amount : 0;
-    grandCum += cum; grandToday += today;
-    return `<article class="pnl-total"><div class="card-head"><span>${ph[c].name}</span></div>
-      <div class="pnl-cum ${sgn(cum)}">${won(cum)}</div><small>누적 · 최근 ${won(today)}</small></article>`;
-  });
-  totals.unshift(`<article class="pnl-total grand"><div class="card-head"><span>전체 누적</span></div>
-    <div class="pnl-cum ${sgn(grandCum)}">${won(grandCum)}</div><small>최근 거래일 합계 ${won(grandToday)}</small></article>`);
-  $("pnlTotals").innerHTML = totals.join("");
+let PH = {}, CODES = [], PNL_DAYS = 30;
 
-  // 종목별 카드: 누적 바차트 + 일자별 테이블
+function drawCards(days) {
+  PNL_DAYS = days;
   const attachList = [];
-  $("pnlGrid").innerHTML = codes.map(c => {
-    const rows = ph[c].rows || [];
+  $("pnlGrid").innerHTML = CODES.map(c => {
+    const rows = (PH[c].rows || []).slice(0, days);   // 최근 N 거래일
     const body = rows.map(r =>
       `<tr><td>${r.date}</td><td class="${sgn(r.amount)}">${won(r.amount)}</td>
        <td class="${sgn(r.rate)}">${r.rate > 0 ? "+" : ""}${r.rate.toFixed(2)}%</td>
@@ -67,7 +45,7 @@ function render(d) {
     const sid = "pcum_" + c;
     attachList.push({ id: sid, rows });
     return `<div class="hist-card">
-      <div class="section-title"><div><h3>${ph[c].name}</h3><span class="hcode">${c}</span></div></div>
+      <div class="section-title"><div><h3>${PH[c].name}</h3><span class="hcode">${c}</span></div></div>
       <div class="hist-spark">${cumBar(rows, sid)}</div>
       <div class="hist-table"><table><thead><tr><th>날짜</th><th>일일손익</th><th>등락</th><th>누적</th></tr></thead><tbody>${body}</tbody></table></div>
     </div>`;
@@ -85,6 +63,38 @@ function render(d) {
       ]
     })), { W: 300, H: 46 });
   });
+  document.querySelectorAll("#pnlRangeTabs button").forEach(b => b.classList.toggle("active", +b.dataset.d === days));
+}
+
+function render(d) {
+  $("app").hidden = false;
+  $("asOf").innerHTML = `<i></i> ${d.marketDate || ""}`;
+  const ph = d.dailyPnlHistory || {};
+  const ord = d.displayOrder || [];                     // 표시순서(JS 정수키 재정렬 보정)
+  const oi = k => { const i = ord.indexOf(k); return i < 0 ? 999 : i; };
+  const codes = Object.keys(ph).sort((a, b) => oi(a) - oi(b));
+  if (!codes.length) {
+    $("pnlGrid").innerHTML = "<p style='color:#7f9a91;font-size:12px'>기록이 아직 없습니다. 거래일마다 자동 누적됩니다.</p>";
+    return;
+  }
+  PH = ph; CODES = codes;
+  // 상단 합계 카드: 종목별 누적 + 전체 (전체 누적=all-time, 기간 필터 무관)
+  let grandCum = 0, grandToday = 0;
+  const totals = codes.map(c => {
+    const rows = ph[c].rows || [];
+    const cum = rows.length ? rows[0].cum : 0;
+    const today = rows.length ? rows[0].amount : 0;
+    grandCum += cum; grandToday += today;
+    return `<article class="pnl-total"><div class="card-head"><span>${ph[c].name}</span></div>
+      <div class="pnl-cum ${sgn(cum)}">${won(cum)}</div><small>누적 · 최근 ${won(today)}</small></article>`;
+  });
+  totals.unshift(`<article class="pnl-total grand"><div class="card-head"><span>전체 누적</span></div>
+    <div class="pnl-cum ${sgn(grandCum)}">${won(grandCum)}</div><small>최근 거래일 합계 ${won(grandToday)}</small></article>`);
+  $("pnlTotals").innerHTML = totals.join("");
+
+  // 종목별 카드(기간 필터: 7·14·30·60일 = 최근 N 거래일)
+  drawCards(PNL_DAYS);
+  document.querySelectorAll("#pnlRangeTabs button").forEach(b => b.onclick = () => drawCards(+b.dataset.d));
   $("lockBtn").onclick = e => { e.preventDefault(); sessionStorage.removeItem("auth"); location.href = "index.html"; };
 }
 
