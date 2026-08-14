@@ -79,7 +79,7 @@ tr.today-row td:first-child b{color:var(--green)}
 .order-row{display:grid;grid-template-columns:92px 1fr 0.9fr 1fr 0.9fr 1.5fr;align-items:center;min-width:780px;border-bottom:1px solid #142a22;padding:13px 8px;color:#abc0b8;font-size:11px}
 .order-row.header{color:#5e7e72;font:600 9px var(--font-geist-mono);padding-top:2px}
 .order-row b,.order-row small{display:block}
-.order-row small{color:var(--muted);font-size:9px;margin-top:3px}
+.order-row small{color:var(--muted);font-size:10px;margin-top:3px}
 .mono{font:500 10px var(--font-geist-mono)}
 .filters{display:flex;background:#08130f;padding:3px;border-radius:7px}
 .filters button{border:0;background:none;color:#607d72;padding:7px 10px;border-radius:5px;font-size:9px;cursor:pointer}

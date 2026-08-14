@@ -55,7 +55,13 @@ async function box(locator) {
 // GROUP A — No horizontal PAGE scroll (§4 "No horizontal page scroll"; §1 320px)
 // The exact failure mode of shrink-only layouts: page scrolls sideways on a phone.
 // =============================================================================
-for (const fixture of ["overview.html", "pnl.html", "stats.html"]) {
+for (const fixture of [
+  "overview.html",
+  "pnl.html",
+  "stats.html",
+  "login.html", // passphrase gate — split→1col ≤760; big display h1 overflow risk @320
+  "settings.html", // uni-search + .order-table wide grid; off-canvas nav page
+]) {
   for (const [name, vp] of Object.entries(VIEWPORTS)) {
     test(`[A] no horizontal page scroll — ${fixture} @ ${name}(${vp.width})`, async ({
       page,
@@ -207,6 +213,39 @@ test.describe("[C] mobile font-size floors", () => {
     }
     const eyebrow = page.locator(".eyebrow").first();
     expect(await fontPx(eyebrow)).toBeGreaterThanOrEqual(10);
+  });
+
+  // R3b meta floor — extend §3 "meta ≥10px" to the two nodes Dane flagged at 9px:
+  // .pnl-total small (style.css) and .order-row small (three.css). Consistent with
+  // the earlier `.stats em` 9→10 fix. A drop back to 9px must go RED.
+  test("R3b — .pnl-total small ≥10px on mobile (pnl.html)", async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.mobile);
+    await page.goto(fixtureURL("pnl.html"));
+    const n = page.locator(".pnl-total small");
+    const c = await n.count();
+    expect(c, ".pnl-total small missing from fixture").toBeGreaterThan(0);
+    for (let i = 0; i < c; i++) {
+      expect(
+        await fontPx(n.nth(i)),
+        `pnl-total small[${i}] below 10px meta floor on mobile ` +
+          `(RESPONSIVE_UI §3; Dane P1 R3b — was 9px)`
+      ).toBeGreaterThanOrEqual(10);
+    }
+  });
+
+  test("R3b — .order-row small ≥10px on mobile (stats.html)", async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.mobile);
+    await page.goto(fixtureURL("stats.html"));
+    const n = page.locator(".order-row small");
+    const c = await n.count();
+    expect(c, ".order-row small missing from fixture").toBeGreaterThan(0);
+    for (let i = 0; i < c; i++) {
+      expect(
+        await fontPx(n.nth(i)),
+        `order-row small[${i}] below 10px meta floor on mobile ` +
+          `(RESPONSIVE_UI §3; Dane P1 R3b — was 9px)`
+      ).toBeGreaterThanOrEqual(10);
+    }
   });
 });
 
@@ -385,5 +424,110 @@ test.describe("[F] off-canvas mobile nav", () => {
       transform,
       "≤760 sidebar should be translated off-canvas before open (§4)"
     ).not.toBe("none");
+  });
+});
+
+// =============================================================================
+// GROUP G — (i) mode-pop popover stays ON-SCREEN on mobile  (Dane P0 / reg②)
+// §4 "No horizontal page scroll" is BLIND to this: the popover is
+// position:fixed/absolute, so it does NOT grow documentElement.scrollWidth —
+// Group A can never catch it. The real failure: without the ≤760 bottom-sheet fix
+// the desktop rule (position:absolute; right:0) on the tiny (i) anchor pushes the
+// 290px popover off the LEFT edge (measured: @375 left≈-90px, @320 left≈-73.6px).
+//
+// This test TRIGGERS the popover (focus the .mode-tip so :focus → display:block),
+// then asserts the popover's own rect is fully within the viewport
+// (rect.left ≥ 0 && rect.right ≤ innerWidth) at 320 and 375.
+//
+// PROVEN: removing the `@media(max-width:760px){.mode-pop{position:fixed;…}}`
+// bottom-sheet fix in style.css makes THIS test RED at both widths (left goes
+// negative), while Group A stays green — i.e. this is the test that actually
+// guards reg②. See tests/RESPONSIVE_QA.md "Proving the gate…".
+// =============================================================================
+test.describe("[G] (i) mode-pop popover on-screen on mobile (Dane P0 reg②)", () => {
+  for (const w of [320, 375]) {
+    test(`.mode-pop within viewport when opened @ ${w}`, async ({ page }) => {
+      await page.setViewportSize({ width: w, height: 800 });
+      await page.goto(fixtureURL("overview.html"));
+
+      // Trigger display: the popover is display:none until the (i) tip is
+      // hovered/focused (.mode-tip:focus .mode-pop{display:block}). Focus is the
+      // deterministic, headless-safe trigger.
+      const tip = page.locator(".mode-tip").first();
+      await tip.focus();
+
+      const pop = page.locator(".mode-pop").first();
+      // Must actually be shown, else the measurement is meaningless.
+      const display = await computed(pop, "display");
+      expect(
+        display.trim(),
+        `.mode-pop did not become visible on focus @${w}px — trigger broken, ` +
+          `test would silently pass on a hidden element`
+      ).not.toBe("none");
+
+      const rect = await pop.evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        return { left: r.left, right: r.right, iw: window.innerWidth };
+      });
+
+      // LEFT edge on-screen (the exact off-canvas-left failure Dane reproduced).
+      expect(
+        rect.left,
+        `.mode-pop left edge off-screen @${w}px (left=${rect.left.toFixed(1)} < 0) — ` +
+          `RESPONSIVE_UI §4 / Dane reg②: popover must stay in viewport. ` +
+          `Restore the ≤760 bottom-sheet fix in style.css/three.css.`
+      ).toBeGreaterThanOrEqual(0);
+
+      // RIGHT edge on-screen (guards the mirror overflow too).
+      expect(
+        rect.right,
+        `.mode-pop right edge off-screen @${w}px ` +
+          `(right=${rect.right.toFixed(1)} > innerWidth=${rect.iw})`
+      ).toBeLessThanOrEqual(rect.iw + 1); // +1px sub-pixel tolerance
+    });
+  }
+});
+
+// =============================================================================
+// GROUP H — Structural min-width:0 guard on number-holder flex/grid children
+// (Dane P1 R11). The un-clamp fix (§2) only works if the number's flex/grid
+// PARENT-ITEM can shrink below its content — i.e. min-width:0. If three.css:203
+// (`.stats>*,.pnl-hero>*,… {min-width:0}`) or the per-item min-width:0 on
+// .pnl-total is dropped, the min-content default (auto) returns and reg①③
+// (numbers clipped / sideways scroll) silently re-appears. Assert the COMPUTED
+// value directly so a CSS drop is caught structurally, not just by pixel luck.
+// =============================================================================
+test.describe("[H] number-holder children have computed min-width:0 (Dane P1 R11)", () => {
+  test(".stats > div items are min-width:0 (three.css)", async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.mobile);
+    await page.goto(fixtureURL("stats.html"));
+    const items = page.locator("#assetStats > div");
+    const c = await items.count();
+    expect(c, ".stats children missing").toBeGreaterThan(0);
+    for (let i = 0; i < c; i++) {
+      const mw = (await computed(items.nth(i), "min-width")).trim();
+      expect(
+        mw,
+        `.stats>div[${i}] min-width=${mw} (expected 0px) — the min-width:0 guard ` +
+          `(three.css:203) was dropped → number clip / sideways scroll re-enabled ` +
+          `(RESPONSIVE_UI §2; Dane R11)`
+      ).toBe("0px");
+    }
+  });
+
+  test(".pnl-total cards are min-width:0 (style.css)", async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.mobile);
+    await page.goto(fixtureURL("pnl.html"));
+    const items = page.locator(".pnl-hero > .pnl-total");
+    const c = await items.count();
+    expect(c, ".pnl-total cards missing").toBeGreaterThan(0);
+    for (let i = 0; i < c; i++) {
+      const mw = (await computed(items.nth(i), "min-width")).trim();
+      expect(
+        mw,
+        `.pnl-total[${i}] min-width=${mw} (expected 0px) — flex item can't shrink ` +
+          `below content → .pnl-cum clips (the original 768px bug class; RESPONSIVE_UI §2; Dane R11)`
+      ).toBe("0px");
+    }
   });
 });

@@ -71,7 +71,7 @@
 .pnl-total.grand{flex:1.8;box-shadow:inset 3px 0 var(--green)}
 .pnl-cum{font:600 16px var(--font-geist-mono);margin:8px 0 3px;white-space:normal;overflow:visible;word-break:break-word}
 .pnl-total.grand .pnl-cum{font-size:23px}
-.pnl-total small{font:500 9px var(--font-geist-mono);color:var(--muted)}
+.pnl-total small{font:500 10px var(--font-geist-mono);color:var(--muted)}
 .pnl-total .card-head span{font-size:11px}.pnl-total.grand .card-head span{font-size:12px}
 /* 모바일: 상단 합계 카드는 크기만 줄이지 않고 레이아웃을 재배치한다 */
 @media(max-width:760px){
