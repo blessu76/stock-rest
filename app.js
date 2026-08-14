@@ -289,7 +289,7 @@ function renderPlan(plan, marketDate) {
   $("planWait").innerHTML = li(plan.waiting, "대기 종목 없음");
 }
 
-let ASSET_HIST = [], ASSET_EQ = 0, ASSET_PRIN = 0, ASSET_DAYS = 30;
+let ASSET_HIST = [], ASSET_EQ = 0, ASSET_PRIN = 0, ASSET_DAYS = 7;   // 기본 7일(Davy 2026-08-14)
 function drawAssetChart(days) {
   ASSET_DAYS = days;
   const h = (days > 0 && ASSET_HIST.length > days) ? ASSET_HIST.slice(-days) : ASSET_HIST;   // 최근 N 거래일
