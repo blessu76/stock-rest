@@ -40,7 +40,7 @@ tr.today-row td:first-child b{color:var(--green)}
 .stats small,.stats b,.stats em{display:block}
 .stats small{color:var(--muted);font-size:10px}
 .stats b{font:600 19px var(--font-geist-mono);margin:10px 0 5px}
-.stats em{font-style:normal;color:#668278;font-size:9px}
+.stats em{font-style:normal;color:#668278;font-size:10px}
 .panel3{border:1px solid var(--line);background:linear-gradient(145deg,#0e1d19,#0a1613);border-radius:14px;padding:20px;margin-bottom:14px}
 .panel-title{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
 .panel-title h2{font-size:15px;margin:0}

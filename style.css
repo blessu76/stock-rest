@@ -67,7 +67,7 @@
 .pnl-hero{display:flex;gap:10px;margin-bottom:16px;align-items:stretch}
 .pnl-total{flex:1;min-width:0;background:linear-gradient(145deg,#0e1d19,#0a1613);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
 .pnl-total.grand{flex:1.8;box-shadow:inset 3px 0 var(--green)}
-.pnl-cum{font:600 15px var(--font-geist-mono);margin:8px 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pnl-cum{font:600 16px var(--font-geist-mono);margin:8px 0 3px;white-space:normal;overflow:visible;word-break:break-word}
 .pnl-total.grand .pnl-cum{font-size:23px}
 .pnl-total small{font:500 9px var(--font-geist-mono);color:var(--muted)}
 .pnl-total .card-head span{font-size:11px}.pnl-total.grand .card-head span{font-size:12px}
@@ -232,7 +232,7 @@ body.nav-open .sidebar{transform:translateX(0);box-shadow:14px 0 44px rgba(0,0,0
 .sidebar nav a i{font-size:16px}
 .sidebar-bottom{display:block;margin-top:auto}
 /* 햄버거(좌상단 고정) */
-#navToggle{display:flex;flex-direction:column;justify-content:center;gap:5px;position:fixed;top:13px;left:13px;z-index:130;width:42px;height:42px;padding:0 10px;border:1px solid var(--line);border-radius:11px;background:rgba(12,25,22,.92);backdrop-filter:blur(4px);cursor:pointer}
+#navToggle{display:flex;flex-direction:column;justify-content:center;gap:5px;position:fixed;top:13px;left:13px;z-index:130;width:44px;height:44px;padding:0 10px;border:1px solid var(--line);border-radius:11px;background:rgba(12,25,22,.92);backdrop-filter:blur(4px);cursor:pointer}
 #navToggle span{display:block;height:2px;background:var(--green);border-radius:2px;transition:.25s}
 body.nav-open #navToggle{opacity:0;pointer-events:none}
 /* 딤 오버레이 */
