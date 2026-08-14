@@ -163,10 +163,12 @@ function render(d) {
   $("riskCash").textContent = a.equity ? (a.cash / a.equity * 100).toFixed(1) + "%" : "—";
   $("riskBadge").textContent = s.marketState === "RISK_ON" ? "RISK ON" : s.marketState === "RISK_OFF" ? "RISK OFF" : "UNKNOWN";
 
-  // 차트
+  // 차트 — 기간 필터(7·14·30·60일 = 최근 N 거래일)
   $("chartEquity").textContent = won(a.equity);
   $("chartRate").textContent = a.recoveryPct + "%";
-  renderChart(d.assetHistory || [], a.equity, a.principal);
+  ASSET_HIST = d.assetHistory || []; ASSET_EQ = a.equity; ASSET_PRIN = a.principal;
+  drawAssetChart(ASSET_DAYS);
+  document.querySelectorAll("#assetRangeTabs button").forEach(b => b.onclick = () => drawAssetChart(+b.dataset.d));
 
   // 활동 타임라인
   $("ordersDate").textContent = d.marketDate + " 실행 결과";
@@ -285,6 +287,14 @@ function renderPlan(plan, marketDate) {
   $("planBuys").innerHTML = li(plan.buys, "매수 예정 없음");
   $("planSells").innerHTML = li(plan.sells, "매도 예정 없음");
   $("planWait").innerHTML = li(plan.waiting, "대기 종목 없음");
+}
+
+let ASSET_HIST = [], ASSET_EQ = 0, ASSET_PRIN = 0, ASSET_DAYS = 30;
+function drawAssetChart(days) {
+  ASSET_DAYS = days;
+  const h = (days > 0 && ASSET_HIST.length > days) ? ASSET_HIST.slice(-days) : ASSET_HIST;   // 최근 N 거래일
+  renderChart(h, ASSET_EQ, ASSET_PRIN);
+  document.querySelectorAll("#assetRangeTabs button").forEach(b => b.classList.toggle("active", +b.dataset.d === days));
 }
 
 function renderChart(hist, equity, principal) {
