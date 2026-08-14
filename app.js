@@ -103,6 +103,7 @@ function attachModeTip(afterElId) {
 
 function render(d) {
   const a = d.account, s = d.strategy, sys = d.system;
+  DISP = d.displayOrder || [];   // 종목 표시 순서(JS 정수키 재정렬 보정)
 
   // 상태/신선도
   let state = d.dataState || "FRESH";
@@ -205,10 +206,12 @@ function render(d) {
 }
 
 // ---- 장중 현황 ----
-let INTRA = null, INTRA_SEL = null;
+let INTRA = null, INTRA_SEL = null, DISP = [];
+const ordIdx = (k) => { const i = DISP.indexOf(k); return i < 0 ? 999 : i; };   // 표시순서 인덱스
 function renderIntradaySection(intr) {
   INTRA = intr || { stocks: {} };
-  const codes = Object.keys(INTRA.stocks || {});
+  // JS는 "105560" 같은 정수형 키를 앞으로 재정렬 → displayOrder로 강제 정렬
+  const codes = Object.keys(INTRA.stocks || {}).sort((a, b) => ordIdx(a) - ordIdx(b));
   const tabs = $("intradayTabs"), svg = $("intradaySvg");
   if (!codes.length) {
     tabs.innerHTML = ""; svg.innerHTML = ""; $("intradayAxis").innerHTML = "";

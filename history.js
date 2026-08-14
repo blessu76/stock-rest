@@ -30,8 +30,10 @@ let DATA = null;
 
 function draw(days) {
   const ph = (DATA && DATA.priceHistory) || {};
+  const ord = (DATA && DATA.displayOrder) || [];        // 표시순서(JS 정수키 재정렬 보정)
+  const oi = k => { const i = ord.indexOf(k); return i < 0 ? 999 : i; };
   const attachList = [];
-  const cards = Object.keys(ph).map(code => {
+  const cards = Object.keys(ph).sort((a, b) => oi(a) - oi(b)).map(code => {
     const item = ph[code], rows = (item.rows || []).slice(0, days);   // rows=최신 먼저
     const body = rows.map(r => {
       const amt = r.chgAmt == null ? "—" : wonS(r.chgAmt);

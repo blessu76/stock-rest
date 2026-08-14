@@ -35,7 +35,9 @@ function render(d) {
   $("app").hidden = false;
   $("asOf").innerHTML = `<i></i> ${d.marketDate || ""}`;
   const ph = d.dailyPnlHistory || {};
-  const codes = Object.keys(ph);
+  const ord = d.displayOrder || [];                     // 표시순서(JS 정수키 재정렬 보정)
+  const oi = k => { const i = ord.indexOf(k); return i < 0 ? 999 : i; };
+  const codes = Object.keys(ph).sort((a, b) => oi(a) - oi(b));
   if (!codes.length) {
     $("pnlGrid").innerHTML = "<p style='color:#7f9a91;font-size:12px'>기록이 아직 없습니다. 거래일마다 자동 누적됩니다.</p>";
     return;

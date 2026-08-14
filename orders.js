@@ -2,7 +2,7 @@
 const STATUS_KO = {
   INTENT_CREATED: ["의도 생성", "muted"], SUBMITTING: ["전송 중", "amber"],
   ACCEPTED: ["접수", "green"], PARTIALLY_FILLED: ["부분 체결", "amber"],
-  FILLED: ["전량 체결", "green"], REJECTED: ["거절", "red"],
+  FILLED: ["체결완료", "green"], REJECTED: ["거절", "red"],
   CANCEL_PENDING: ["취소 대기", "amber"], CANCELLED: ["취소 완료", "muted"],
   BLOCKED: ["정책 차단", "amber"], UNKNOWN: ["RECONCILING", "amber"],
 };
