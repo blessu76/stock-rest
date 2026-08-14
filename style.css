@@ -64,11 +64,13 @@
 .price-line{fill:none;stroke-width:2.5;vector-effect:non-scaling-stroke}
 .drill{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
 /* 일일손익 이력 */
-.pnl-hero{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:16px}
-.pnl-total{background:linear-gradient(145deg,#0e1d19,#0a1613);border:1px solid var(--line);border-radius:14px;padding:16px}
-.pnl-total.grand{box-shadow:inset 3px 0 var(--green)}
-.pnl-cum{font:600 20px var(--font-geist-mono);margin:10px 0 4px}
+.pnl-hero{display:flex;gap:10px;margin-bottom:16px;align-items:stretch}
+.pnl-total{flex:1;min-width:0;background:linear-gradient(145deg,#0e1d19,#0a1613);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.pnl-total.grand{flex:1.8;box-shadow:inset 3px 0 var(--green)}
+.pnl-cum{font:600 15px var(--font-geist-mono);margin:8px 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pnl-total.grand .pnl-cum{font-size:23px}
 .pnl-total small{font:500 9px var(--font-geist-mono);color:var(--muted)}
+.pnl-total .card-head span{font-size:11px}.pnl-total.grand .card-head span{font-size:12px}
 .drill h4{margin:0 0 10px;font-size:11px;color:#9db8ae}
 .drill .hist-table{max-height:280px}
 .market{font:600 10px var(--font-geist-mono);padding:9px 12px;border:1px solid var(--line);border-radius:99px;color:#9ab0a9}
