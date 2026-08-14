@@ -21,7 +21,8 @@ function renderAssets(d) {
   if (!rows.length) {
     $("assetStats").innerHTML =
       `<div><small>오늘 총자산</small><b>—</b><em>데이터 없음</em></div>
-       <div><small>어제 증감</small><b>—</b><em>—</em></div>
+       <div><small>주식대금</small><b>—</b><em>—</em></div>
+       <div><small>예수금</small><b>—</b><em>—</em></div>
        <div><small>목표까지 잔여</small><b>—</b><em>—</em></div>`;
     $("assetTable").innerHTML =
       `<tbody><tr><td style="color:#7f9a91">보유 종목 종가 이력이 아직 없습니다. 거래일마다 재구성됩니다.</td></tr></tbody>`;
@@ -31,17 +32,14 @@ function renderAssets(d) {
   const today = rows[0];               // 최신이 위(desc)
   const yest = rows[1] || null;        // 직전 거래일
 
-  // 요약카드 3장: ①오늘 총자산+오늘 증감 ②어제 증감 ③목표까지 잔여+회복률
-  const tChg = today.change, tPct = today.changePct;
-  const yChg = yest ? yest.change : null, yPct = yest ? yest.changePct : null;
-  const shortfall = target - today.equity;
-  const chgCell = (c, p) => c == null
-    ? `<b>—</b><em>기준일</em>`
-    : `<b class="${sgnK(c)}">${wonS(c)}</b><em class="${sgnK(p)}">${p == null ? "—" : pctS(p)}</em>`;
+  // 요약카드 4장: ①오늘 총자산(주식+예수금) ②주식대금 ③예수금 ④목표까지 잔여+회복률
+  const cash = today.cash || 0;
+  const netWorth = today.equity + cash;
+  const shortfall = target - today.equity;                       // 회복 프레임=주식만
   $("assetStats").innerHTML =
-    `<div><small>오늘 총자산</small><b>${won0(today.equity)}</b>` +
-      (tChg == null ? `<em>기준일</em>` : `<em class="${sgnK(tChg)}">${wonS(tChg)} · ${tPct == null ? "—" : pctS(tPct)}</em>`) + `</div>
-     <div><small>어제 증감</small>${chgCell(yChg, yPct)}</div>
+    `<div><small>오늘 총자산</small><b>${won0(netWorth)}</b><em>주식 + 예수금 합계</em></div>
+     <div><small>주식대금</small><b>${won0(today.equity)}</b><em>회복 기준 · 주식 평가액</em></div>
+     <div><small>예수금</small><b>${won0(cash)}</b><em>미투자 현금</em></div>
      <div><small>목표까지 잔여</small><b class="${sgnK(-shortfall)}">${won0(shortfall)}</b><em>회복률 ${Number(today.recoveryPct || 0).toFixed(2)}%</em></div>`;
 
   // 차트(주별 스택막대 + 총자산 라인) — from~to 주 선택
