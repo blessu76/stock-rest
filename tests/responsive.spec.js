@@ -572,17 +572,17 @@ test.describe("[I] lotto won-set border highlight (Founder)", () => {
     ).toBe(true);
   });
 
-  test("5+ match uses win-green (distinct from 3/4-match gold)", async ({
+  // 등수 위계상 인접 티어끼리 테두리색이 모두 달라야 함(5등 브론즈·4등 앰버·3등 green).
+  // 5등(브론즈)과 1등(골드)이 구분되도록 5등을 골드에서 분리한 뒤의 회귀.
+  test("tier borders are all distinct across ranks (5등/4등/3등)", async ({
     page,
   }) => {
     await page.setViewportSize(VIEWPORTS.desktop);
     await page.goto(fixtureURL("lotto.html"));
-    const gold = (await computed(page.locator(".pred-sg-item.won.hit3").first(), "border-top-color")).trim();
-    const green = (await computed(page.locator(".pred-sg-item.won.hit5:not(.rank2)").first(), "border-top-color")).trim();
-    expect(
-      gold,
-      "3-match gold tier and 5-match green tier should differ (tiered emphasis)"
-    ).not.toBe(green);
+    const r5 = (await computed(page.locator(".pred-sg-item.won.hit3").first(), "border-top-color")).trim();
+    const r4 = (await computed(page.locator(".pred-sg-item.won.hit4").first(), "border-top-color")).trim();
+    const r3 = (await computed(page.locator(".pred-sg-item.won.hit5:not(.rank2)").first(), "border-top-color")).trim();
+    expect(new Set([r5, r4, r3]).size, `5등/4등/3등 테두리색 중복 (${r5},${r4},${r3})`).toBe(3);
   });
 
   // 등수 표기 — 각 당첨 세트 뱃지가 "N등 당첨"인지 (Founder 후속: match+bonus → 1~5등).
@@ -655,6 +655,12 @@ test.describe("[I] lotto won-set border highlight (Founder)", () => {
       bg,
       `1등 뱃지 배경=${bg} — 골드(rgb(255,211,77))여야 하며 hit6 green이면 안 됨`
     ).toBe("rgb(255, 211, 77)");
+    // 위계 핵심: 1등 골드가 5등(브론즈)과 테두리색이 달라야 함(Dane CONCERN 반영).
+    const r5 = (await computed(page.locator(".pred-sg-item.won.hit3").first(), "border-top-color")).trim();
+    expect(
+      bc,
+      `1등(골드)과 5등(브론즈) 테두리색이 같음(${bc}) — 위계 중복 회귀`
+    ).not.toBe(r5);
   });
 
   test("legend present + no horizontal page scroll @375/1280", async ({
