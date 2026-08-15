@@ -531,3 +531,94 @@ test.describe("[H] number-holder children have computed min-width:0 (Dane P1 R11
     }
   });
 });
+
+// =============================================================================
+// GROUP I — Lotto 예측 채점: 3개+ 일치 세트에 "당첨" 테두리 강조 (Founder request)
+// A prediction set (.pred-sg-item) with match ≥3 gets a distinct wrapping border
+// (.won → gold; .hit5/.hit6 → win-green) so users don't have to count matches by
+// eye. This guards BOTH (1) the highlight actually renders (border color differs
+// from the neutral --line set) AND (2) no horizontal page scroll / subgrid stacks
+// to 1 col on mobile (responsive CI gate — no number clipping introduced).
+// =============================================================================
+test.describe("[I] lotto won-set border highlight (Founder)", () => {
+  const NEUTRAL_BORDER = ["rgb(29, 49, 44)", "rgba(0, 0, 0, 0)"]; // --line #1d312c / transparent
+
+  test("won sets have a non-neutral border, non-won stay neutral (desktop)", async ({
+    page,
+  }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto(fixtureURL("lotto.html"));
+
+    const won = page.locator(".pred-sg-item.won");
+    const wonCount = await won.count();
+    expect(
+      wonCount,
+      "fixture must contain ≥1 winning (match≥3) set"
+    ).toBeGreaterThan(0);
+    for (let i = 0; i < wonCount; i++) {
+      const bc = (await computed(won.nth(i), "border-top-color")).trim();
+      expect(
+        NEUTRAL_BORDER.includes(bc),
+        `won set[${i}] border=${bc} is still the neutral --line — highlight not applied`
+      ).toBe(false);
+    }
+
+    // non-won set keeps the neutral border (no false-positive highlight).
+    const notWon = page.locator(".pred-sg-item:not(.won)").first();
+    const nbc = (await computed(notWon, "border-top-color")).trim();
+    expect(
+      NEUTRAL_BORDER.includes(nbc),
+      `non-won set border=${nbc} was highlighted — should stay neutral --line`
+    ).toBe(true);
+  });
+
+  test("5+ match uses win-green (distinct from 3/4-match gold)", async ({
+    page,
+  }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto(fixtureURL("lotto.html"));
+    const gold = (await computed(page.locator(".pred-sg-item.won.hit3").first(), "border-top-color")).trim();
+    const green = (await computed(page.locator(".pred-sg-item.won.hit5").first(), "border-top-color")).trim();
+    expect(
+      gold,
+      "3-match gold tier and 5-match green tier should differ (tiered emphasis)"
+    ).not.toBe(green);
+  });
+
+  test("legend present + no horizontal page scroll @375/1280", async ({
+    page,
+  }) => {
+    for (const vp of [VIEWPORTS.mobile, VIEWPORTS.desktop]) {
+      await page.setViewportSize(vp);
+      await page.goto(fixtureURL("lotto.html"));
+      await expect(
+        page.locator(".pred-sg-legend.won"),
+        `legend "3개+ 당첨" missing @${vp.width}px`
+      ).toBeVisible();
+      const overflow = await page.evaluate(() => {
+        const el = document.scrollingElement || document.documentElement;
+        return { sw: el.scrollWidth, cw: el.clientWidth };
+      });
+      expect(
+        overflow.sw,
+        `lotto page scrolls sideways @${vp.width}px (RESPONSIVE_UI §4)`
+      ).toBeLessThanOrEqual(overflow.cw + 1);
+    }
+  });
+
+  test("subgrid stacks to 1 column ≤760 (no cramming, three.css @204)", async ({
+    page,
+  }) => {
+    await page.goto(fixtureURL("lotto.html"));
+    const grid = page.locator(".pred-subgrid");
+    const cols = (el) =>
+      el.evaluate((n) => {
+        const t = getComputedStyle(n).gridTemplateColumns;
+        return t.trim() === "none" ? 0 : t.split(" ").filter(Boolean).length;
+      });
+    await page.setViewportSize({ width: 1280, height: 900 });
+    expect(await cols(grid), "desktop subgrid should be 2 columns").toBe(2);
+    await page.setViewportSize({ width: 375, height: 812 });
+    expect(await cols(grid), "≤760 subgrid should stack to 1 column").toBe(1);
+  });
+});

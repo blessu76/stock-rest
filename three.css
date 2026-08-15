@@ -186,9 +186,19 @@ tr.today-row td:first-child b{color:var(--green)}
 .pred-sg-title{font:600 11px var(--font-geist-mono);color:#ffd34d;margin-bottom:8px}
 .pred-subgrid{display:none;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
 .pred-subgrid.open{display:grid}
-.pred-sg-item{display:flex;flex-direction:column;gap:3px;padding:5px 7px;border:1px solid var(--line);border-radius:7px}
+.pred-sg-item{display:flex;flex-direction:column;gap:3px;padding:5px 7px;border:1px solid var(--line);border-radius:7px;transition:border-color .15s,box-shadow .15s}
+/* 3개 이상 일치 = 당첨: 세트 감싸는 테두리 골드 강조 */
+.pred-sg-item.won{border-color:#ffd34d;box-shadow:0 0 0 1px #ffd34d,0 0 12px rgba(255,211,77,.35);background:rgba(255,211,77,.06)}
+.pred-sg-item.won.hit4{border-color:#ffca28;box-shadow:0 0 0 1px #ffca28,0 0 14px rgba(255,202,40,.45)}
+.pred-sg-item.won.hit5,.pred-sg-item.won.hit6{border-color:#32d69b;box-shadow:0 0 0 2px #32d69b,0 0 16px rgba(50,214,155,.5);background:rgba(50,214,155,.08)}
 .pred-sg-label{font:600 7px var(--font-geist-mono);color:var(--muted);letter-spacing:-.2px}
 .pred-sg-label .bh{color:#ffd34d;font-style:normal;margin-left:3px}
+.pred-sg-label .wb{color:#052118;background:#ffd34d;font-style:normal;font-weight:700;margin-left:3px;padding:1px 4px;border-radius:4px}
+.pred-sg-item.won.hit5 .pred-sg-label .wb,.pred-sg-item.won.hit6 .pred-sg-label .wb{background:#32d69b}
+/* 범례 바 */
+.pred-sg-legendbar{margin-top:8px}
+.pred-sg-legend{font:600 9px var(--font-geist-mono);color:var(--muted)}
+.pred-sg-legend.won{color:#ffd34d}
 .pred-sg-item .lotto-balls{gap:7px;margin-top:2px}
 .pred-sg-item .lotto-balls .lb{width:16px;height:16px;font-size:8px;box-shadow:none}
 /* 지난회차 표: 각 열을 내용폭에 맞춤(당첨번호=공6개 딱맞게) */

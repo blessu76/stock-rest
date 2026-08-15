@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIXTURE — lotto 예측 채점 서브그리드 (won border highlight)</title>
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../three.css">
+<style>:root{--font-geist-sans:system-ui,Arial,sans-serif;--font-geist-mono:ui-monospace,'Courier New',monospace}</style>
+</head>
+<!-- Mirrors the markup lotto.js injects for the "지난 회차" prediction-grading subgrid.
+     .pred-sg-item.won (m>=3) gets the wrapping gold/green border highlight.
+     Balls with .lb.hit are the individually-matched numbers. This fixture pre-opens
+     the subgrid (.open) so the border strategy is decisively visible offline. -->
+<body>
+<main class="app-shell" id="app">
+  <aside class="sidebar">
+    <div class="brand"><span>R</span><strong>recovery<br>.console</strong></div>
+    <nav aria-label="Main menu"><a class="active" href="lotto.html"><i>🎱</i>Lotto</a></nav>
+  </aside>
+  <section class="content">
+    <header class="page-head">
+      <div><p class="eyebrow">LOTTO 6/45</p><h1>로또</h1><span>예측번호 채점</span></div>
+      <span class="date-pill" id="metaDate"><i></i> 2026-08-16</span>
+    </header>
+    <section class="panel3">
+      <div class="panel-title"><div><h2>지난 회차</h2><p>예측번호 채점 · 3개+ 당첨 테두리 강조</p></div></div>
+      <div class="table-wrap"><table class="hist"><thead><tr><th>회차</th><th>날짜</th><th>당첨번호</th><th>보너스</th></tr></thead>
+      <tbody id="lottoRows">
+        <tr><td><b>1237회</b></td><td class="mono">2026-08-16</td>
+          <td><div class="lotto-balls sm"><span class="lb" style="background:#fbc400">3</span><span class="lb" style="background:#69c8f2">14</span><span class="lb" style="background:#ff7272">27</span><span class="lb" style="background:#aaa">33</span><span class="lb" style="background:#b0d840">41</span><span class="lb" style="background:#b0d840">45</span></div></td>
+          <td><span class="lb sm bonus" style="background:#69c8f2">18</span></td></tr>
+        <tr class="pred-row"><td colspan="4">
+          <button class="pred-sg-toggle open"><span class="chev">▶</span> 🎯 1237회 예측번호 채점<span class="pred-sg-best hit">최고 5개 적중</span></button>
+          <div class="pred-sg-legendbar"><span class="pred-sg-legend won">● 3개+ 당첨 3세트</span></div>
+          <div class="pred-subgrid open">
+            <!-- 미당첨(2개) -->
+            <div class="pred-sg-item"><span class="pred-sg-label">🎲 알고리즘형1-2/6</span>
+              <div class="lotto-balls sm"><span class="lb hit" style="background:#fbc400">3</span><span class="lb" style="background:#fbc400">7</span><span class="lb" style="background:#69c8f2">14</span><span class="lb" style="background:#ff7272">29</span><span class="lb" style="background:#aaa">36</span><span class="lb" style="background:#b0d840">44</span></div></div>
+            <!-- 당첨(3개) -->
+            <div class="pred-sg-item won hit3"><span class="pred-sg-label">📊 통계형(빈도)-3/6<i class="wb">당첨</i></span>
+              <div class="lotto-balls sm"><span class="lb hit" style="background:#fbc400">3</span><span class="lb hit" style="background:#69c8f2">14</span><span class="lb hit" style="background:#ff7272">27</span><span class="lb" style="background:#aaa">31</span><span class="lb" style="background:#b0d840">42</span><span class="lb" style="background:#b0d840">45</span></div></div>
+            <!-- 당첨(4개) -->
+            <div class="pred-sg-item won hit4"><span class="pred-sg-label">⚖️ 구간균형형-4/6<i class="wb">당첨</i></span>
+              <div class="lotto-balls sm"><span class="lb hit" style="background:#fbc400">3</span><span class="lb hit" style="background:#69c8f2">14</span><span class="lb hit" style="background:#ff7272">27</span><span class="lb hit" style="background:#aaa">33</span><span class="lb" style="background:#b0d840">42</span><span class="lb" style="background:#b0d840">44</span></div></div>
+            <!-- 당첨(5개) + 보너스 -->
+            <div class="pred-sg-item won hit5"><span class="pred-sg-label">🔥 핫·미출현형-5/6<i class="wb">당첨</i><i class="bh">+B</i></span>
+              <div class="lotto-balls sm"><span class="lb hit" style="background:#fbc400">3</span><span class="lb hit" style="background:#69c8f2">14</span><span class="lb hit" style="background:#ff7272">27</span><span class="lb hit" style="background:#aaa">33</span><span class="lb hit" style="background:#b0d840">41</span><span class="lb" style="background:#b0d840">43</span></div></div>
+          </div>
+        </td></tr>
+      </tbody></table></div>
+    </section>
+    <footer><span><i></i> READ-ONLY · 참고용</span><p>재미용.</p><div class="foot-brand"><span>R</span>recovery.console</div></footer>
+  </section>
+</main>
+</body>
+</html>
