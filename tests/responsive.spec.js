@@ -596,6 +596,7 @@ test.describe("[I] lotto won-set border highlight (Founder)", () => {
       [".pred-sg-item.won.hit4 .wb", "4등 당첨"],
       [".pred-sg-item.won.hit5:not(.rank2) .wb", "3등 당첨"],
       [".pred-sg-item.won.rank2 .wb", "2등 당첨"],
+      [".pred-sg-item.won.rank1 .wb", "1등 당첨"],
     ]) {
       await expect(
         page.locator(sel).first(),
@@ -626,6 +627,34 @@ test.describe("[I] lotto won-set border highlight (Founder)", () => {
       r2,
       "2등(rank2) and 3등 borders should differ (2등 시각 구분)"
     ).not.toBe(r3);
+  });
+
+  // 1등(6개)은 최상위 잭팟 티어: rank1 클래스 + 골드 뱃지 + 굵은 골드 링(hit6 green 위 override).
+  test("rank1 (6/6) has top-tier gold badge + ring (overrides hit6 green)", async ({
+    page,
+  }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto(fixtureURL("lotto.html"));
+    const r1 = page.locator(".pred-sg-item.won.rank1").first();
+    await expect(r1, "1등 세트가 픽스처에 있어야 함").toHaveCount(1);
+    // border-color 골드 — hit6의 green(#32d69b=rgb(50,214,155))을 override.
+    const bc = (await computed(r1, "border-top-color")).trim();
+    expect(
+      bc,
+      `rank1 border-color=${bc} — 골드(rgb(255,211,77))여야 하며 hit6 green이면 안 됨`
+    ).toBe("rgb(255, 211, 77)");
+    // 링은 box-shadow(0 0 0 4px)로 렌더 — hit6 대비 강화됨.
+    const shadow = (await computed(r1, "box-shadow")).trim();
+    expect(
+      shadow,
+      `rank1 box-shadow ring missing (=${shadow})`
+    ).toContain("4px");
+    // 뱃지 배경이 골드(hit6 green #32d69b이 아님).
+    const bg = (await computed(r1.locator(".wb"), "background-color")).trim();
+    expect(
+      bg,
+      `1등 뱃지 배경=${bg} — 골드(rgb(255,211,77))여야 하며 hit6 green이면 안 됨`
+    ).toBe("rgb(255, 211, 77)");
   });
 
   test("legend present + no horizontal page scroll @375/1280", async ({

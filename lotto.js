@@ -110,8 +110,9 @@ function render(d) {
         const rank = lottoRank(m, bonusHit);
         const won = rank > 0;
         if (won) wonCount++;
-        // 2등(5개+보너스)은 3등과 시각 구분: rank2 클래스로 추가 강조.
-        const wonCls = won ? ` won hit${Math.min(m, 6)}${rank === 2 ? " rank2" : ""}` : "";
+        // 1등(6개)·2등(5개+보너스)은 각각 rank1·rank2 클래스로 최상위 시각 강조.
+        const rankCls = rank === 1 ? " rank1" : rank === 2 ? " rank2" : "";
+        const wonCls = won ? ` won hit${Math.min(m, 6)}${rankCls}` : "";
         return `<div class="pred-sg-item${wonCls}"><span class="pred-sg-label">${k.label}-${m}/6${won ? `<i class="wb">${rank}등 당첨</i>` : ""}${bonusHit ? `<i class="bh">+B</i>` : ""}</span>` +
           `<div class="lotto-balls sm">${nums.map(n => ball(n, actual.has(n))).join("") || "—"}</div></div>`;
       }).join("");
