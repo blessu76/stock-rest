@@ -578,11 +578,54 @@ test.describe("[I] lotto won-set border highlight (Founder)", () => {
     await page.setViewportSize(VIEWPORTS.desktop);
     await page.goto(fixtureURL("lotto.html"));
     const gold = (await computed(page.locator(".pred-sg-item.won.hit3").first(), "border-top-color")).trim();
-    const green = (await computed(page.locator(".pred-sg-item.won.hit5").first(), "border-top-color")).trim();
+    const green = (await computed(page.locator(".pred-sg-item.won.hit5:not(.rank2)").first(), "border-top-color")).trim();
     expect(
       gold,
       "3-match gold tier and 5-match green tier should differ (tiered emphasis)"
     ).not.toBe(green);
+  });
+
+  // 등수 표기 — 각 당첨 세트 뱃지가 "N등 당첨"인지 (Founder 후속: match+bonus → 1~5등).
+  test("won badges show rank text (N등 당첨), non-won have none", async ({
+    page,
+  }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto(fixtureURL("lotto.html"));
+    for (const [sel, txt] of [
+      [".pred-sg-item.won.hit3 .wb", "5등 당첨"],
+      [".pred-sg-item.won.hit4 .wb", "4등 당첨"],
+      [".pred-sg-item.won.hit5:not(.rank2) .wb", "3등 당첨"],
+      [".pred-sg-item.won.rank2 .wb", "2등 당첨"],
+    ]) {
+      await expect(
+        page.locator(sel).first(),
+        `rank badge missing/wrong for ${sel}`
+      ).toHaveText(txt);
+    }
+    // non-won set carries no .wb badge.
+    expect(
+      await page.locator(".pred-sg-item:not(.won) .wb").count(),
+      "non-won set must not have a rank badge"
+    ).toBe(0);
+    // match count N/6 still present alongside rank (accessibility redundancy).
+    await expect(
+      page.locator(".pred-sg-item.won.hit3 .pred-sg-label"),
+      "N/6 count must remain beside rank for accessibility"
+    ).toContainText("3/6");
+  });
+
+  // 2등(5+보너스)은 3등(5 무보너스)과 테두리로 시각 구분되어야 함.
+  test("rank2 (5+bonus) border differs from rank3 (5 no bonus)", async ({
+    page,
+  }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto(fixtureURL("lotto.html"));
+    const r2 = (await computed(page.locator(".pred-sg-item.won.rank2").first(), "border-top-color")).trim();
+    const r3 = (await computed(page.locator(".pred-sg-item.won.hit5:not(.rank2)").first(), "border-top-color")).trim();
+    expect(
+      r2,
+      "2등(rank2) and 3등 borders should differ (2등 시각 구분)"
+    ).not.toBe(r3);
   });
 
   test("legend present + no horizontal page scroll @375/1280", async ({

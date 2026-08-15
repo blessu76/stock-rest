@@ -191,10 +191,13 @@ tr.today-row td:first-child b{color:var(--green)}
 .pred-sg-item.won{border-color:#ffd34d;box-shadow:0 0 0 1px #ffd34d,0 0 12px rgba(255,211,77,.35);background:rgba(255,211,77,.06)}
 .pred-sg-item.won.hit4{border-color:#ffca28;box-shadow:0 0 0 1px #ffca28,0 0 14px rgba(255,202,40,.45)}
 .pred-sg-item.won.hit5,.pred-sg-item.won.hit6{border-color:#32d69b;box-shadow:0 0 0 2px #32d69b,0 0 16px rgba(50,214,155,.5);background:rgba(50,214,155,.08)}
+/* 2등(5개+보너스): 3등과 구분 — 더 밝은 청록+강한 링 */
+.pred-sg-item.won.rank2{border-color:#5eead4;box-shadow:0 0 0 3px #5eead4,0 0 20px rgba(94,234,212,.6);background:rgba(94,234,212,.1)}
 .pred-sg-label{font:600 7px var(--font-geist-mono);color:var(--muted);letter-spacing:-.2px}
 .pred-sg-label .bh{color:#ffd34d;font-style:normal;margin-left:3px}
 .pred-sg-label .wb{color:#052118;background:#ffd34d;font-style:normal;font-weight:700;margin-left:3px;padding:1px 4px;border-radius:4px}
 .pred-sg-item.won.hit5 .pred-sg-label .wb,.pred-sg-item.won.hit6 .pred-sg-label .wb{background:#32d69b}
+.pred-sg-item.won.rank2 .pred-sg-label .wb{background:#5eead4}
 /* 범례 바 */
 .pred-sg-legendbar{margin-top:8px}
 .pred-sg-legend{font:600 9px var(--font-geist-mono);color:var(--muted)}

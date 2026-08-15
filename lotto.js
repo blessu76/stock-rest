@@ -27,6 +27,16 @@ function predKinds(pred) {
   return PRED_ORDER.filter(k => Array.isArray(pred[k]) && pred[k].length).map(k => ({ key: k, label: PRED_LABELS[k] }));
 }
 
+// 로또 6/45 등수 산출: match=당첨6개와의 일치수, bonusHit=보너스 일치 여부.
+// 6→1등 · 5+보너스→2등 · 5→3등 · 4→4등 · 3→5등 · 2개 이하→0(낙첨).
+function lottoRank(match, bonusHit) {
+  if (match >= 6) return 1;
+  if (match === 5) return bonusHit ? 2 : 3;
+  if (match === 4) return 4;
+  if (match === 3) return 5;
+  return 0;
+}
+
 function render(d) {
   document.getElementById("sideNav").innerHTML = sideNav("lotto");
   wireLock(); metaBadge(d);
@@ -95,18 +105,20 @@ function render(d) {
         const nums = pred[k.key] || [];
         const m = nums.filter(n => actual.has(n)).length;
         if (m > best) best = m;
-        // 3개 이상 일치 = 당첨(최소 5등). 세트 테두리 강조 클래스 부여(4·5·6개는 단계 강조).
-        const won = m >= 3;
-        if (won) wonCount++;
-        const wonCls = won ? ` won hit${Math.min(m, 6)}` : "";
         const bonusHit = nums.includes(r.bonus);
-        return `<div class="pred-sg-item${wonCls}"><span class="pred-sg-label">${k.label}-${m}/6${won ? `<i class="wb">당첨</i>` : ""}${bonusHit ? `<i class="bh">+B</i>` : ""}</span>` +
+        // 등수 산출(0=낙첨). 3개 이상 일치 = 당첨(최소 5등). 세트 테두리 강조(4·5·6개 단계 + 2등 별도).
+        const rank = lottoRank(m, bonusHit);
+        const won = rank > 0;
+        if (won) wonCount++;
+        // 2등(5개+보너스)은 3등과 시각 구분: rank2 클래스로 추가 강조.
+        const wonCls = won ? ` won hit${Math.min(m, 6)}${rank === 2 ? " rank2" : ""}` : "";
+        return `<div class="pred-sg-item${wonCls}"><span class="pred-sg-label">${k.label}-${m}/6${won ? `<i class="wb">${rank}등 당첨</i>` : ""}${bonusHit ? `<i class="bh">+B</i>` : ""}</span>` +
           `<div class="lotto-balls sm">${nums.map(n => ball(n, actual.has(n))).join("") || "—"}</div></div>`;
       }).join("");
       const summary = best > 0 ? `최고 ${best}개 적중` : "적중 없음";
       const legend = wonCount > 0
-        ? `<span class="pred-sg-legend won">● 3개+ 당첨 ${wonCount}세트</span>`
-        : `<span class="pred-sg-legend">● 3개+ 당첨 없음</span>`;
+        ? `<span class="pred-sg-legend won">● 당첨 ${wonCount}세트 · 3개=5등 · 4개=4등 · 5개=3등(+보너스 2등) · 6개=1등</span>`
+        : `<span class="pred-sg-legend">● 당첨 없음(3개+ 일치 시 5등)</span>`;
       row += `<tr class="pred-row"><td colspan="4">` +
         `<button class="pred-sg-toggle"><span class="chev">▶</span> 🎯 ${r.round}회 예측번호 채점` +
         `<span class="pred-sg-best${best > 0 ? " hit" : ""}">${summary}</span></button>` +
