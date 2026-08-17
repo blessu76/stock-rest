@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260814f">
+<link rel="stylesheet" href="style.css?v=20260817a">
 </head>
 <body>
 
@@ -142,12 +142,39 @@
       <div class="table-wrap"><table><thead><tr><th>종목</th><th>수량</th><th>평단</th><th>현재가</th><th>평가손익</th><th>수익률</th></tr></thead><tbody id="posBody"></tbody></table></div>
     </section>
 
+    <!-- ⓒ 병행(dual-tracking, ADR 0111): 자동매매 '전략 시뮬 성과' 축.
+         위 '실계좌 회복'(내 실제 토스 계좌)과 명확히 구분 — 앰버 테마 + "SIM" 배지 + 낙관편향 주석.
+         data.strategySim.available !== true 이면 renderStrategySim()이 섹션을 숨김. -->
+    <section class="strategy-sim" id="strategySim" hidden>
+      <div class="sim-divider"><span>자동매매 전략 축</span></div>
+      <div class="section-title">
+        <div><h2>전략 시뮬 성과 <em class="sim-badge">SIM</em></h2>
+          <p>자동매매 전략 자체의 성과(SHADOW 원장) · <b>실계좌 회복률과 별개</b></p></div>
+        <span class="updated" id="simUpdated">—</span>
+      </div>
+
+      <div class="sim-summary" id="simSummary">
+        <div class="sim-kpi"><small>미실현 손익</small><b id="simUnreal">—</b></div>
+        <div class="sim-kpi"><small>누적 실현 손익</small><b id="simRealized">—</b></div>
+        <div class="sim-kpi grand"><small>전략 총손익</small><b id="simTotal">—</b></div>
+        <div class="sim-kpi"><small>시뮬 평가액</small><b id="simMktVal">—</b></div>
+      </div>
+
+      <div class="table-wrap"><table class="sim-table"><thead><tr>
+        <th>종목</th><th>수량</th><th>시뮬 평단</th><th>현재가</th><th>미실현손익</th><th>%</th><th>실현손익</th>
+      </tr></thead><tbody id="simBody"></tbody></table></div>
+
+      <p class="sim-caveat" id="simCaveat">
+        <span class="ci">⚠</span> 시뮬은 <b>즉시·전량 체결</b>을 가정하므로 실제보다 낙관적일 수 있습니다.
+      </p>
+    </section>
+
     <footer><span><i></i> <span id="killLabel">Trading engine</span></span><p>본 화면은 모니터링 도구이며 수익을 보장하지 않습니다. READ-ONLY.</p><div class="foot-brand"><span>R</span>recovery.console</div></footer>
   </section>
 </main>
 
 <script src="charttip.js?v=20260811"></script>
-<script src="app.js?v=20260814g"></script>
+<script src="app.js?v=20260817a"></script>
 <script src="drawer.js"></script>
 <script src="swipe.js"></script>
 </body>

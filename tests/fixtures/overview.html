@@ -116,6 +116,30 @@
         </tbody></table></div>
     </section>
 
+    <!-- 전략 시뮬 성과 축(ⓒ 병행) — NOT hidden here: fixture = 사이클 실행됨(available:true)
+         상태를 재현해 반응형 게이트(가로스크롤·숫자잘림 금지)로 검증. -->
+    <section class="strategy-sim" id="strategySim">
+      <div class="sim-divider"><span>자동매매 전략 축</span></div>
+      <div class="section-title">
+        <div><h2>전략 시뮬 성과 <em class="sim-badge">SIM</em></h2>
+          <p>자동매매 전략 자체의 성과(SHADOW 원장) · <b>실계좌 회복률과 별개</b></p></div>
+        <span class="updated" id="simUpdated">업데이트 2026-08-17 09:01</span>
+      </div>
+      <div class="sim-summary" id="simSummary">
+        <div class="sim-kpi"><small>미실현 손익</small><b id="simUnreal" class="positive">+2,345,678원</b></div>
+        <div class="sim-kpi"><small>누적 실현 손익</small><b id="simRealized" class="positive">+1,234,567원</b></div>
+        <div class="sim-kpi grand"><small>전략 총손익</small><b id="simTotal" class="positive">+3,580,245원</b></div>
+        <div class="sim-kpi"><small>시뮬 평가액</small><b id="simMktVal">45,678,900원</b></div>
+      </div>
+      <div class="table-wrap"><table class="sim-table"><thead><tr>
+        <th>종목</th><th>수량</th><th>시뮬 평단</th><th>현재가</th><th>미실현손익</th><th>%</th><th>실현손익</th>
+      </tr></thead><tbody id="simBody">
+        <tr><td><b>삼성전자</b><small>005930</small></td><td>120</td><td>₩66,200</td><td>₩73,400</td><td class="positive">+864,000원</td><td class="positive">+10.88%</td><td class="positive">+320,000원</td></tr>
+        <tr><td><b>SK하이닉스</b><small>000660</small></td><td>15</td><td>₩205,000</td><td>₩198,500</td><td class="negative">-97,500원</td><td class="negative">-3.17%</td><td class="positive">+45,000원</td></tr>
+      </tbody></table></div>
+      <p class="sim-caveat" id="simCaveat"><span class="ci">⚠</span> 전략 시뮬 성과(SHADOW 원장) — 실계좌 회복률과 별개 · 즉시체결 낙관 편향 있음</p>
+    </section>
+
     <footer><span><i></i> <span id="killLabel">Trading engine · ON</span></span><p>본 화면은 모니터링 도구이며 수익을 보장하지 않습니다. READ-ONLY.</p><div class="foot-brand"><span>R</span>recovery.console</div></footer>
   </section>
 </main>

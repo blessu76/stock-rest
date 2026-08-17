@@ -61,6 +61,52 @@ function renderHoldingsLive(d) {
     </div>`).join("") : `<p style="color:#7f9a91;font-size:12px;padding:4px 2px">보유 종목이 없습니다.</p>`;
 }
 
+// ---- 전략 시뮬 성과 축 (ⓒ 병행, ADR 0111) ----
+// data.strategySim = {available, note, positions:[{code,name,qty,avgCost,markPrice,
+//   marketValue,unrealizedPnl,unrealizedPnlRate,realizedPnl,totalPnl}],
+//   summary:{realizedPnl,unrealizedPnl,totalPnl,marketValue}}
+// available !== true 이거나 필드 없으면 섹션 숨김(graceful). 실계좌 축은 절대 건드리지 않음.
+function renderStrategySim(d) {
+  const sec = $("strategySim");
+  if (!sec) return;
+  const sim = d.strategySim;
+  const rows = sim && Array.isArray(sim.positions) ? sim.positions : [];
+  // 백엔드 사이클 미실행/데이터 없음 → 숨김 (실계좌 축과 헷갈리지 않게)
+  if (!sim || sim.available !== true || !rows.length) { sec.hidden = true; return; }
+  sec.hidden = false;
+
+  const g = d.generatedAt || "";
+  const stamp = g.length >= 16 ? `${g.slice(0, 10)} ${g.slice(11, 16)}` : (d.marketDate || "");
+  if ($("simUpdated")) $("simUpdated").textContent = "업데이트 " + stamp;
+
+  const s = sim.summary || {};
+  const setKpi = (id, v) => {
+    const el = $(id); if (!el) return;
+    el.textContent = (v > 0 ? "+" : "") + won(v);
+    el.className = sign(v);
+  };
+  setKpi("simUnreal", s.unrealizedPnl);
+  setKpi("simRealized", s.realizedPnl);
+  setKpi("simTotal", s.totalPnl);
+  const mv = $("simMktVal");
+  if (mv) { mv.textContent = won(s.marketValue); mv.className = ""; }
+
+  $("simBody").innerHTML = rows.map(p => `
+    <tr><td><b>${p.name || p.code}</b><small>${p.code}</small></td>
+      <td>${p.qty}</td>
+      <td>₩${Math.round(p.avgCost || 0).toLocaleString("ko-KR")}</td>
+      <td>₩${Math.round(p.markPrice || 0).toLocaleString("ko-KR")}</td>
+      <td class="${sign(p.unrealizedPnl)}">${(p.unrealizedPnl > 0 ? "+" : "") + won(p.unrealizedPnl)}</td>
+      <td class="${sign(p.unrealizedPnlRate)}">${pct(p.unrealizedPnlRate)}</td>
+      <td class="${sign(p.realizedPnl)}">${(p.realizedPnl > 0 ? "+" : "") + won(p.realizedPnl)}</td></tr>`).join("");
+
+  // 낙관편향 주석 — 백엔드 note가 있으면 그 문구 병기(우선), 없으면 기본 문구 유지
+  const cav = $("simCaveat");
+  if (cav && sim.note) {
+    cav.innerHTML = `<span class="ci">⚠</span> ${sim.note}`;
+  }
+}
+
 function daySummary(d) {
   const a = d.account, s = d.strategy;
   const mkt = { RISK_ON: "매수 가능 국면", RISK_OFF: "관망 국면", UNKNOWN: "데이터 확인 중" }[s.marketState] || s.marketState;
@@ -196,6 +242,9 @@ function render(d) {
 
   // 보유 종목 실시간 등락(전일 대비)
   renderHoldingsLive(d);
+
+  // 전략 시뮬 성과 축(ⓒ 병행) — 실계좌 회복과 별개, 없으면 섹션 숨김
+  renderStrategySim(d);
 
   // 장중 현황
   renderIntradaySection(d.intraday || { stocks: {} });

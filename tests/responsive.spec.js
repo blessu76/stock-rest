@@ -533,6 +533,118 @@ test.describe("[H] number-holder children have computed min-width:0 (Dane P1 R11
 });
 
 // =============================================================================
+// GROUP J — 전략 시뮬 성과 축(ⓒ 병행, ADR 0111) — 실계좌 회복과 명확 분리 (Founder)
+// The dual-tracking section adds a SECOND performance axis ("전략 시뮬 성과") below
+// the real-account recovery cards. Guards: (1) it is visually separated from the
+// real-account balance card (distinct box + amber left-rule, NOT the green recovery
+// theme), (2) its KPI numbers never clip/ellipsize (the founding bug class), and
+// (3) the extra section introduces no horizontal page scroll at 375/1280.
+// =============================================================================
+test.describe("[J] 전략 시뮬 성과 축 — 분리 + 숫자 무결 (ADR 0111)", () => {
+  test("sim section present & visually distinct from real-account balance card", async ({
+    page,
+  }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto(fixtureURL("overview.html"));
+
+    const sim = page.locator("#strategySim");
+    await expect(sim, "전략 시뮬 성과 섹션이 렌더되어야 함").toBeVisible();
+
+    // amber left-rule (box-shadow inset with --amber #f5c969) — distinct from the
+    // green recovery axis (.balance-card / .progress fill use --green #32d69b).
+    const simShadow = await computed(sim, "box-shadow");
+    expect(
+      simShadow.includes("245, 201, 105"),
+      `sim section missing amber inset rule (box-shadow=${simShadow}) — ` +
+        "must be visually separated from the green 실계좌 회복 axis (ADR 0111 라벨)"
+    ).toBe(true);
+
+    // SIM 배지 존재 — 라벨로 두 축 구분.
+    await expect(page.locator("#strategySim .sim-badge")).toHaveText("SIM");
+    // 낙관편향 주석 노출.
+    await expect(
+      page.locator("#strategySim .sim-caveat"),
+      "낙관편향(즉시·전량 체결) 주석이 노출되어야 함"
+    ).toBeVisible();
+  });
+
+  test("sim KPI numbers never clipped or ellipsized (375/320/768)", async ({
+    page,
+  }) => {
+    for (const vp of [VIEWPORTS.tablet, VIEWPORTS.mobile, VIEWPORTS.small]) {
+      await page.setViewportSize(vp);
+      await page.goto(fixtureURL("overview.html"));
+      const nums = page.locator("#simSummary .sim-kpi b");
+      const c = await nums.count();
+      expect(c, "sim KPI numbers missing").toBeGreaterThan(0);
+      for (let i = 0; i < c; i++) {
+        const n = nums.nth(i);
+        expect(
+          (await computed(n, "text-overflow")).trim(),
+          `sim KPI[${i}] ellipsized @${vp.width}px (RESPONSIVE_UI §4)`
+        ).not.toBe("ellipsis");
+        expect(
+          await scrollsHorizontally(n),
+          `sim KPI[${i}] number clipped @${vp.width}px (RESPONSIVE_UI §2/§4)`
+        ).toBe(false);
+        expect(
+          await fontPx(n),
+          `sim KPI[${i}] below 16px floor @${vp.width}px (RESPONSIVE_UI §3)`
+        ).toBeGreaterThanOrEqual(16);
+      }
+    }
+  });
+
+  test("sim KPI items are min-width:0 (reflow, not clip) + no page scroll @375/1280", async ({
+    page,
+  }) => {
+    // min-width:0 guard (same class of fix as Group H) so the amber KPI cards can
+    // shrink below content instead of forcing sideways scroll.
+    await page.setViewportSize(VIEWPORTS.mobile);
+    await page.goto(fixtureURL("overview.html"));
+    const items = page.locator("#simSummary .sim-kpi");
+    const c = await items.count();
+    expect(c).toBeGreaterThan(0);
+    for (let i = 0; i < c; i++) {
+      expect(
+        (await computed(items.nth(i), "min-width")).trim(),
+        `sim-kpi[${i}] min-width not 0 → number clip / sideways scroll re-enabled`
+      ).toBe("0px");
+    }
+    for (const vp of [VIEWPORTS.mobile, VIEWPORTS.desktop]) {
+      await page.setViewportSize(vp);
+      await page.goto(fixtureURL("overview.html"));
+      const overflow = await page.evaluate(() => {
+        const el = document.scrollingElement || document.documentElement;
+        return { sw: el.scrollWidth, cw: el.clientWidth };
+      });
+      expect(
+        overflow.sw,
+        `overview page scrolls sideways @${vp.width}px with sim section (RESPONSIVE_UI §4)`
+      ).toBeLessThanOrEqual(overflow.cw + 1);
+    }
+  });
+
+  test("sim summary reflows 4→2→1 across breakpoints (§2 ladder)", async ({
+    page,
+  }) => {
+    await page.goto(fixtureURL("overview.html"));
+    const grid = page.locator("#simSummary");
+    const cols = (loc) =>
+      loc.evaluate((el) => {
+        const t = getComputedStyle(el).gridTemplateColumns;
+        return t.trim() === "none" ? 0 : t.split(" ").filter(Boolean).length;
+      });
+    await page.setViewportSize({ width: 1280, height: 900 });
+    expect(await cols(grid), "desktop sim-summary = 4 cols").toBe(4);
+    await page.setViewportSize({ width: 600, height: 812 });
+    expect(await cols(grid), "≤760 sim-summary = 2 cols").toBe(2);
+    await page.setViewportSize({ width: 400, height: 800 });
+    expect(await cols(grid), "≤420 sim-summary = 1 col").toBe(1);
+  });
+});
+
+// =============================================================================
 // GROUP I — Lotto 예측 채점: 3개+ 일치 세트에 "당첨" 테두리 강조 (Founder request)
 // A prediction set (.pred-sg-item) with match ≥3 gets a distinct wrapping border
 // (.won → gold; .hit5/.hit6 → win-green) so users don't have to count matches by
