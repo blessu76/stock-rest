@@ -207,6 +207,9 @@ footer{display:flex;justify-content:space-between;align-items:center;gap:12px;pa
 .sim-divider::before,.sim-divider::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,#3a3418,transparent)}
 .strategy-sim h2{color:#f0e6c4}
 .sim-badge{font:600 8px var(--font-geist-mono)!important;font-style:normal;color:#1c1804;background:var(--amber);border:0!important;padding:3px 6px!important;border-radius:5px;letter-spacing:.08em;vertical-align:middle;margin-left:6px}
+/* 실계좌 축 배지 — 시뮬(SIM 앰버)과 대칭되는 초록 라벨. 두 축 기준선 즉시 매칭용(Dane R2 대칭화). */
+.axis-badge.real{font:600 8px var(--font-geist-mono);font-style:normal;color:#052118;background:var(--green);padding:3px 6px;border-radius:5px;letter-spacing:.08em;vertical-align:middle;margin-right:7px}
+.balance-card .card-head span{display:flex;align-items:center;flex-wrap:wrap;gap:2px 0}
 .strategy-sim .section-title p b{color:#e6d99f}
 .sim-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0 4px}
 .sim-kpi{min-width:0;background:rgba(245,201,105,.05);border:1px solid #33301a;border-radius:11px;padding:13px 14px}

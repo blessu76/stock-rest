@@ -568,6 +568,28 @@ test.describe("[J] 전략 시뮬 성과 축 — 분리 + 숫자 무결 (ADR 0111
     ).toBeVisible();
   });
 
+  // Dane R2 대칭화: 실계좌 카드에도 "실계좌" 배지(초록), 시뮬은 SIM 배지(앰버) —
+  // 두 축 라벨이 대칭이고 색이 서로 달라야 사용자가 기준선을 즉시 매칭한다.
+  test("both axes labeled — 실계좌(green) vs SIM(amber), distinct colors", async ({
+    page,
+  }) => {
+    await page.setViewportSize(VIEWPORTS.desktop);
+    await page.goto(fixtureURL("overview.html"));
+    const real = page.locator(".balance-card .axis-badge.real");
+    const sim = page.locator("#strategySim .sim-badge");
+    await expect(real, "실계좌 카드에 '실계좌' 축 배지 필요(대칭화)").toHaveText("실계좌");
+    await expect(sim).toHaveText("SIM");
+    const realBg = (await computed(real, "background-color")).trim();
+    const simBg = (await computed(sim, "background-color")).trim();
+    expect(
+      realBg === simBg,
+      `두 축 배지 배경색이 동일(${realBg}) — 초록(실계좌)/앰버(시뮬)로 구분되어야 함`
+    ).toBe(false);
+    // 실계좌 = 초록(--green rgb(50,214,155)), 시뮬 = 앰버(--amber rgb(245,201,105)).
+    expect(realBg, `실계좌 배지 배경=${realBg} (초록 아님)`).toBe("rgb(50, 214, 155)");
+    expect(simBg, `SIM 배지 배경=${simBg} (앰버 아님)`).toBe("rgb(245, 201, 105)");
+  });
+
   test("sim KPI numbers never clipped or ellipsized (375/320/768)", async ({
     page,
   }) => {
