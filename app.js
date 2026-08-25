@@ -179,7 +179,7 @@ function render(d) {
   // 총자산 카드
   $("equity").textContent = won(a.equity);
   if ($("cashNote")) $("cashNote").innerHTML =
-    `주식 ${won(a.equity)} <b>+ 예수금 ${won(a.cash)}</b> <small>= 순자산 ${won(a.netWorth != null ? a.netWorth : (a.equity || 0) + (a.cash || 0))}</small>`;
+    `주식 ${won(a.stockValue != null ? a.stockValue : (a.equity || 0) - (a.cash || 0))} <b>+ 예수금 ${won(a.cash)}</b> <small>= 순자산 ${won(a.netWorth != null ? a.netWorth : a.equity)}</small>`;
   const dp = $("dailyPnl"); dp.textContent = (a.dailyPnl > 0 ? "+" : "") + won(a.dailyPnl); dp.className = sign(a.dailyPnl);
   $("dailyRate").textContent = pct(a.dailyReturnPct) + " 오늘";
   $("recoveryPct").textContent = a.recoveryPct + "%";
