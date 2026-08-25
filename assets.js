@@ -34,11 +34,12 @@ function renderAssets(d) {
 
   // 요약카드 4장: ①오늘 총자산(주식+예수금) ②주식대금 ③예수금 ④목표까지 잔여+회복률
   const cash = today.cash || 0;
-  const netWorth = today.equity + cash;
-  const shortfall = target - today.equity;                       // 회복 프레임=주식만
+  const netWorth = today.equity;                                 // 원장 행 equity = 이미 순자산(주식+예수금). +cash 재가산 금지(이중계상)
+  const stockValue = today.equity - cash;                        // 주식 평가액 = 순자산 − 예수금
+  const shortfall = target - netWorth;                           // 회복 프레임=순자산(ADR 0116)
   $("assetStats").innerHTML =
     `<div><small>오늘 총자산</small><b>${won0(netWorth)}</b><em>주식 + 예수금 합계</em></div>
-     <div><small>주식대금</small><b>${won0(today.equity)}</b><em>회복 기준 · 주식 평가액</em></div>
+     <div><small>주식대금</small><b>${won0(stockValue)}</b><em>주식 평가액(순자산−예수금)</em></div>
      <div><small>예수금</small><b>${won0(cash)}</b><em>미투자 현금</em></div>
      <div><small>목표까지 잔여</small><b class="${sgnK(-shortfall)}">${won0(shortfall)}</b><em>회복률 ${Number(today.recoveryPct || 0).toFixed(2)}%</em></div>`;
 
