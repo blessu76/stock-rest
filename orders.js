@@ -22,13 +22,16 @@ function drawRows() {
                      .filter(o => STOCK_F === "all" || o.code === STOCK_F);
   document.getElementById("ordRows").innerHTML = rows.length ? rows.map(o => {
     const [ko, tone] = STATUS_KO[o.status] || [o.status, "muted"];
-    const price = o.price ? "₩" + o.price.toLocaleString("ko-KR") : "—";
-    const totAmt = (o.qty > 1 && o.amount) ? `<small>총 ₩${o.amount.toLocaleString("ko-KR")}</small>` : "";
+    const won = v => "₩" + Number(v).toLocaleString("ko-KR");
+    const limitP = o.limitPrice ? won(o.limitPrice) : "—";                          // 주문가
+    const fillP = o.fillPrice ? won(o.fillPrice) : (o.status === "FILLED" ? "—" : "미체결");  // 체결가
+    const totAmt = (o.qty > 1 && o.amount) ? `<small>총 ${won(o.amount)}</small>` : "";
+    const srcTag = o.source === "MANUAL" ? "수동" : "LIVE";                          // 실거래 축(PAPER 아님)
     return `<div class="order-row">
       <span class="mono">${o.time}</span>
       <span><b>${o.name}</b><small>${o.code}</small></span>
-      <span><b class="${o.side === "BUY" ? "up" : "down"}">${o.side === "BUY" ? "매수" : "매도"}</b><small>${o.qty}주 · PAPER</small></span>
-      <span><b class="${o.side === "BUY" ? "up" : "down"}">${price}</b>${totAmt}</span>
+      <span><b class="${o.side === "BUY" ? "up" : "down"}">${o.side === "BUY" ? "매수" : "매도"}</b><small>${o.qty}주 · ${srcTag}</small></span>
+      <span><b class="${o.side === "BUY" ? "up" : "down"}">체결 ${fillP}</b><small>주문 ${limitP}</small>${totAmt}</span>
       <span><em class="pill ${tone}">${ko}</em></span>
       <span>${o.reason || "—"}</span>
     </div>`;
