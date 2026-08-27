@@ -7,6 +7,7 @@ function render(d) {
   wireLock(); metaBadge(d);
   ADMIN = d.universeAdmin || [];
   drawUniverse();
+  renderSettingsPanel(d);
 
   // KRX 마스터(공개정보, 평문) 로드
   fetch("stocks_master.json?v=1").then(r => r.json()).then(m => {
@@ -66,4 +67,46 @@ function drawUniverse() {
     catch (e) { prompt("직접 복사하세요:", b.dataset.cmd); }
   });
 }
+// ── 현재 설정값(읽기전용) — config.yaml 그룹 카드 렌더 ──────────────
+// data.settings 는 export_dashboard.py 가 채운다(프론트는 렌더만). 없으면 안전한 빈 상태.
+// __MOCK_SETTINGS: data.settings 부재 시에만 쓰이는 무해한 폴백(실배포엔 항상 data.settings 존재).
+function cfgEsc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+function renderSettingsPanel(d) {
+  const grid = $("cfgGrid");
+  if (!grid) return;
+  const s = (d && d.settings) || (typeof window !== "undefined" && window.__MOCK_SETTINGS) || null;
+
+  if (s && s.source) $("cfgSub").textContent = s.source;
+  const meta = $("cfgMeta");
+  if (meta) meta.innerHTML = s && s.updatedAt ? `<i></i> ${cfgEsc(s.updatedAt)}` : `<i></i> —`;
+  const note = $("cfgNote");
+  if (note) { note.innerHTML = s && s.note ? cfgEsc(s.note) : ""; note.hidden = !(s && s.note); }
+
+  const groups = (s && Array.isArray(s.groups)) ? s.groups : [];
+  if (!groups.length) {
+    grid.className = "";                 // 빈 상태는 grid 해제(단일 메시지)
+    grid.innerHTML = `<p class="cfg-empty">설정 데이터 없음 — 다음 export에서 채워집니다.</p>`;
+    return;
+  }
+  grid.className = "cfg-grid";
+
+  grid.innerHTML = groups.map(g => {
+    const locked = !!g.locked;
+    const items = (Array.isArray(g.items) ? g.items : []).map(it =>
+      `<div class="cfg-item">
+        <span class="cfg-item-l"><b>${cfgEsc(it.label)}</b>${it.note ? `<small>${cfgEsc(it.note)}</small>` : ""}</span>
+        <span class="cfg-item-v">${cfgEsc(it.value)}</span>
+      </div>`).join("") || `<p class="cfg-empty">항목 없음</p>`;
+    return `<div class="cfg-card${locked ? " locked" : ""}">
+      <div class="cfg-card-head">
+        <h3>${cfgEsc(g.title)}</h3>
+        ${locked ? `<span class="cfg-lock">🔒 LOCKED</span>` : ""}
+      </div>
+      ${items}
+    </div>`;
+  }).join("");
+}
+
 guardAndLoad(render);

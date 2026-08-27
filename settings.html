@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=20260814f">
-<link rel="stylesheet" href="three.css?v=20260816d">
+<link rel="stylesheet" href="three.css?v=20260828a">
 </head>
 <body>
 <main class="app-shell" id="app" hidden>
@@ -41,6 +41,12 @@
       </div>
     </section>
 
+    <section class="panel3" id="cfgPanel">
+      <div class="panel-title"><div><h2>현재 설정값</h2><p id="cfgSub">자동매매 config.yaml · 읽기전용</p></div><span class="health" id="cfgMeta"><i></i> —</span></div>
+      <p class="cfg-note" id="cfgNote"></p>
+      <div class="cfg-grid" id="cfgGrid"></div>
+    </section>
+
     <section class="panel3">
       <div class="panel-title"><div><h2>계정</h2><p>세션은 브라우저 탭 기준이며 로그아웃 시 비밀번호 재입력이 필요합니다</p></div></div>
       <button class="login-button logout-btn" id="logoutBtn">로그아웃 <span>⏻</span></button>
@@ -50,7 +56,7 @@
   </section>
 </main>
 <script src="common.js?v=20260812c"></script>
-<script src="settings.js"></script>
+<script src="settings.js?v=20260828a"></script>
 <script src="drawer.js"></script>
 <script src="swipe.js"></script>
 </body>
