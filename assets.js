@@ -1,4 +1,8 @@
-// Assets — 총자산 일별 원장. 종가로 재구성(PAPER·수량 불변). 읽기 전용.
+// Assets — 총자산 일별 원장. 종목별 보유수량 = 저장값 우선·역산 추정(ADR 0134). 읽기 전용.
+// perStock[code] 는 신형 {qty,value,estimated} dict 또는 구형 number 를 모두 받는다(배포순서 무관 하위호환).
+function psVal(cell) { return (cell && typeof cell === "object") ? (cell.value || 0) : (cell || 0); }
+function psQty(cell) { return (cell && typeof cell === "object") ? (cell.qty || 0) : null; }   // null=수량 미상(구형)
+function psEst(cell) { return !!(cell && typeof cell === "object" && cell.estimated); }
 function render(d) {
   try { renderAssets(d); }
   catch (e) {
@@ -61,7 +65,13 @@ function renderAssets(d) {
       const cls = r.date === todayDate ? ' class="today-row"' : "";
       const chg = r.change == null ? "—" : `<span class="${sgnK(r.change)}">${wonS(r.change)}</span>`;
       const chgP = r.changePct == null ? "—" : `<span class="${sgnK(r.changePct)}">${pctS(r.changePct)}</span>`;
-      const per = codes.map(c => `<td>${won0((r.perStock || {})[c.code] || 0)}</td>`).join("");
+      const per = codes.map(c => {
+        const cell = (r.perStock || {})[c.code];
+        const q = psQty(cell);
+        const qtxt = q == null ? "" :
+          `<small style="color:#7f9a91">${q.toLocaleString("ko-KR")}주${psEst(cell) ? "<span title='저장기록 없음 — 실매매 역산 추정' style='color:#c9a227'>*</span>" : ""}</small>`;
+        return `<td>${won0(psVal(cell))}${q == null ? "" : "<br>" + qtxt}</td>`;
+      }).join("");
       return `<tr${cls}><td><b>${r.date}</b></td><td>${won0(r.equity)}</td>
         <td>${chg}</td><td>${chgP}</td><td>${Number(r.recoveryPct || 0).toFixed(2)}%</td>
         ${per}<td>${won0(r.cash)}</td></tr>`;
@@ -129,7 +139,7 @@ function renderAssetChart(rows, codes) {
       const cx = padL + slot * i + slot / 2, x = cx - bw / 2;
       let acc = 0;
       codes.forEach((c, ci) => {
-        const val = (w.perStock || {})[c.code] || 0;
+        const val = psVal((w.perStock || {})[c.code]);
         const y0 = y(acc), y1 = y(acc + val);
         bars += `<rect x="${x.toFixed(1)}" y="${y1.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, y0 - y1).toFixed(1)}" fill="${SEG_COLORS[ci % SEG_COLORS.length]}"/>`;
         acc += val;
@@ -144,9 +154,12 @@ function renderAssetChart(rows, codes) {
         x: padL + slot * i + slot / 2, label: (w.date || w.wkey || ""),
         rows: [
           { k: "총자산", v: "₩" + Math.round(w.equity || 0).toLocaleString("ko-KR") }
-        ].concat(codes.map(c => ({
-          k: c.name || c.code, v: "₩" + Math.round((w.perStock || {})[c.code] || 0).toLocaleString("ko-KR")
-        }))).concat([{ k: "현금", v: "₩" + Math.round(w.cash || 0).toLocaleString("ko-KR") }])
+        ].concat(codes.map(c => {
+          const cell = (w.perStock || {})[c.code]; const q = psQty(cell);
+          return { k: c.name || c.code,
+            v: "₩" + Math.round(psVal(cell)).toLocaleString("ko-KR") +
+               (q == null ? "" : ` (${q.toLocaleString("ko-KR")}주${psEst(cell) ? "*" : ""})`) };
+        })).concat([{ k: "현금", v: "₩" + Math.round(w.cash || 0).toLocaleString("ko-KR") }])
       })), { W: 620, H: 240 });
   }
 
